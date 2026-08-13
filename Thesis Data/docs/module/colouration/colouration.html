@@ -1,0 +1,3879 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farbigkeit - Metallkomplexe &amp; Lanthanoide</title>
+    <!-- Fonts Preconnect & CDN -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===================================================================
+           DESIGN-SYSTEM VARIABLEN (konsistent mit assets.html)
+           =================================================================== */
+        :root,
+        [data-theme="light"] {
+            --bg: #f7f4ef;
+            --surface: rgba(255, 255, 255, 0.84);
+            --surface-2: #fffdf9;
+            --border: #d9d2c8;
+            --text: #241f17;
+            --muted: #6f685f;
+            --primary: #8f3d1f;
+            --primary-2: #285f75;
+            --hard: #b13131;
+            --soft: #2355a5;
+            --ok: #3f7d2d;
+            --warn: #bf7a19;
+            --hl-yellow: rgba(255, 235, 59, 0.5);
+            --hl-green: rgba(76, 175, 80, 0.4);
+            --hl-cyan: rgba(0, 188, 212, 0.4);
+            --hl-red: rgba(244, 67, 54, 0.4);
+            --shadow: 0 14px 40px rgba(36, 31, 23, .08);
+            --r-sm: 14px;
+            --r-md: 22px;
+            --r-lg: 30px;
+            --space-1: .25rem;
+            --space-2: .5rem;
+            --space-3: .75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --highlight-bg: rgba(239, 188, 109, 0.4);
+            --text-xs: clamp(.75rem, .72rem+.2vw, .875rem);
+            --text-sm: clamp(.9rem, .84rem+.25vw, 1rem);
+            --text-base: clamp(1rem, .95rem+.25vw, 1.12rem);
+            --text-lg: clamp(1.15rem, 1rem+.6vw, 1.45rem);
+            --text-xl: clamp(1.6rem, 1.2rem+1.4vw, 2.4rem);
+            --text-2xl: clamp(2.2rem, 1.2rem+3vw, 4rem);
+            --font-display: Inter, Arial, sans-serif;
+            --font-body: Inter, Arial, sans-serif;
+            --n1-color: #888888;
+            --n2-color: #e040fb;
+            --n3-color: #ffb300;
+            --n4-color: #e91e63;
+            --n5-color: #4a148c;
+            --n6-color: #4caf50;
+            --n7-color: #00bcd4;
+        }
+
+        [data-theme="dark"] {
+            --bg: #161311;
+            --surface: rgba(30, 26, 23, 0.9);
+            --surface-2: #201c19;
+            --border: #3d332c;
+            --text: #f1e7dc;
+            --muted: #b7a99b;
+            --primary: #e49372;
+            --primary-2: #7bc0dd;
+            --hard: #ff8c8c;
+            --soft: #8ab6ff;
+            --ok: #97d480;
+            --warn: #efbc6d;
+            --hl-yellow: rgba(255, 235, 59, 0.3);
+            --hl-green: rgba(76, 175, 80, 0.3);
+            --hl-cyan: rgba(0, 188, 212, 0.3);
+            --hl-red: rgba(244, 67, 54, 0.3);
+            --highlight-bg: rgba(239, 188, 109, 0.3);
+            --shadow: 0 18px 45px rgba(0, 0, 0, .35);
+            --n1-color: #aaaaaa;
+            --n2-color: #ea80fc;
+            --n3-color: #ffd54f;
+            --n4-color: #f48fb1;
+            --n5-color: #7e57c2;
+            --n6-color: #81c784;
+            --n7-color: #4dd0e1;
+        }
+
+        /* ===================================================================
+           BASIS-STYLES
+           =================================================================== */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: var(--font-body);
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(143, 61, 31, .14), transparent 28%),
+                radial-gradient(circle at right bottom, rgba(40, 95, 117, .14), transparent 24%),
+                var(--bg);
+            line-height: 1.6;
+        }
+
+        .wrap {
+            width: min(1200px, calc(100% - 2rem));
+            margin: 0 auto;
+            padding: 1rem 0 3rem;
+        }
+
+        /* Skip Link for Accessibility */
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            left: 1rem;
+            top: 1rem;
+            background: var(--surface-2);
+            color: var(--text);
+            padding: .8rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        /* ===================================================================
+           TOPBAR (sticky, glassmorphism)
+           =================================================================== */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin: 0 -1rem 2rem -1rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(var(--surface-rgb, 255, 255, 255), 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: .9rem;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            color: white;
+            box-shadow: var(--shadow);
+            font-weight: bold;
+        }
+
+        .brand-title {
+            font-weight: 700;
+            font-size: var(--text-lg);
+        }
+
+        .brand-sub {
+            font-size: var(--text-xs);
+            color: var(--muted);
+        }
+
+        /* ===================================================================
+           BUTTONS & TOOLS
+           =================================================================== */
+        .theme-toggle {
+            min-width: 44px;
+            min-height: 44px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 1.15rem;
+        }
+
+        .lang-toggle {
+            min-width: 60px;
+            min-height: 44px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            padding: 0 1rem;
+        }
+
+        .tool-btn {
+            min-width: 44px;
+            min-height: 44px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .tool-btn:hover,
+        .tool-btn.active {
+            background: var(--surface-2);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .theme-toggle,
+        .lang-toggle,
+        .tool-btn {
+            touch-action: manipulation;
+        }
+
+        /* iOS touch compatibility fixes */
+        button,
+        [role="button"],
+        .theme-toggle,
+        .lang-toggle,
+        .tool-btn,
+        .fe-btn,
+        .ti-btn,
+        .er-btn,
+        .color-swatch,
+        .color-swatch-display,
+        summary,
+        .btn,
+        .cw-segment,
+        .orbital-box {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+        }
+
+        .panel,
+        .trainer,
+        .module-card,
+        .task-card {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
+        .btn {
+            min-height: 44px;
+            padding: .8rem 1.2rem;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            transition: .18s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+            font-size: var(--text-sm);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .orbital-controls .btn-secondary.active {
+            border: 1px solid var(--primary);
+            box-shadow: inset 0 0 0 1px var(--primary);
+            font-weight: bold;
+        }
+
+        /* ===================================================================
+           TYPOGRAFIE
+           =================================================================== */
+        h1,
+        h2,
+        h3 {
+            margin: 0;
+            font-family: var(--font-display);
+            line-height: 1.08;
+        }
+
+        h1 {
+            font-size: var(--text-2xl);
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: var(--text-xl);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: var(--text-lg);
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .lead {
+            color: var(--text);
+            max-width: none;
+            font-size: var(--text-base);
+        }
+
+        sup {
+            font-size: 0.75em;
+            line-height: 0;
+            vertical-align: baseline;
+            position: relative;
+            top: -0.5em;
+        }
+
+        /* ===================================================================
+           PANEL & DETAILS (aufklappbare Abschnitte)
+           =================================================================== */
+        .panel {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(80, 70, 60, .14);
+            border-radius: var(--r-lg);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+        }
+
+        .panel>h2:first-child {
+            margin-top: 0;
+        }
+
+        details {
+            background: var(--surface-2);
+            border: 1px solid rgba(80, 70, 60, .12);
+            border-radius: var(--r-md);
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        summary {
+            font-family: var(--font-display);
+            font-size: var(--text-lg);
+            font-weight: bold;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            position: relative;
+            padding: 0 40px;
+            text-align: center;
+            min-height: 44px;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::after {
+            content: '+';
+            font-size: 1.5rem;
+            line-height: 1;
+            transition: transform 0.3s ease;
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        details[open] summary::after {
+            content: '−';
+            transform: translateY(-50%);
+        }
+
+        /* Hinweis-Details (wie in SelteneErden.html) */
+        details.hint-details summary {
+            display: flex;
+            justify-content: flex-start;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        details.hint-details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details.hint-details summary::before {
+            content: '\25B6';
+            font-size: 0.85em;
+            transition: transform 0.2s ease;
+            display: inline-block;
+        }
+
+        details.hint-details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        details.hint-details summary::after {
+            content: none;
+        }
+
+        .details-content {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(80, 70, 60, .12);
+            color: var(--text);
+        }
+
+        .details-content p {
+            margin-bottom: 1rem;
+        }
+
+        .details-content p:first-child {
+            margin-top: 0;
+        }
+
+        /* ===================================================================
+           LERNPFAD-PFEILE (semi-transparent, zwischen Abschnitten)
+           =================================================================== */
+        .path-arrow {
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem 0;
+            opacity: 0.3;
+            color: var(--primary-2);
+            transition: opacity 0.3s ease;
+        }
+
+        .path-arrow:hover {
+            opacity: 0.55;
+        }
+
+        /* ===================================================================
+           TEXTMARKER (Rangy Highlighting)
+           =================================================================== */
+        .highlight-yellow {
+            background-color: var(--hl-yellow);
+            border-radius: 3px;
+            padding: 0 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .highlight-green {
+            background-color: var(--hl-green);
+            border-radius: 3px;
+            padding: 0 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .highlight-cyan {
+            background-color: var(--hl-cyan);
+            border-radius: 3px;
+            padding: 0 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .highlight-red {
+            background-color: var(--hl-red);
+            border-radius: 3px;
+            padding: 0 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .color-picker {
+            display: none;
+            gap: 0.5rem;
+            align-items: center;
+            margin-left: 0.25rem;
+            padding-left: 0.75rem;
+            border-left: 1px solid var(--border);
+        }
+
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+            touch-action: manipulation;
+            border: 2px solid transparent;
+            padding: 0;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.1);
+        }
+
+        .color-swatch.active {
+            border-color: var(--text) !important;
+        }
+
+        /* ===================================================================
+           MEDIEN & BILDER
+           =================================================================== */
+        .media-container img {
+            display: block;
+            margin: 0 auto;
+            max-width: 400px;
+            width: 100%;
+            border-radius: var(--r-sm);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .media-caption {
+            margin-top: 0.75rem;
+            font-size: var(--text-sm);
+            color: var(--text);
+            max-width: 80ch;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        /* ===================================================================
+           FORMULARE (Aufgabe 3)
+           =================================================================== */
+        #taskHint {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #taskHint summary {
+            font-family: inherit;
+            font-size: inherit;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+            padding: 0;
+            min-height: auto;
+            text-align: left;
+            justify-content: flex-start;
+        }
+
+        #taskHint summary::before {
+            content: '\25B6';
+            font-size: 0.85em;
+            transition: transform 0.2s ease;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        #taskHint[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        #taskHint summary::after {
+            content: none;
+        }
+
+        #taskHint summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .task3-textarea {
+            width: 100%;
+            min-height: 140px;
+            padding: 0.85rem 1rem;
+            border-radius: var(--r-md);
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            resize: vertical;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+            transition: border-color 0.2s, outline 0.2s;
+        }
+
+        .task3-textarea:focus {
+            border-color: var(--primary);
+            outline: 2px solid var(--primary);
+        }
+
+        .password-container {
+            position: relative;
+            margin-top: 1rem;
+            padding: 1.25rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            box-shadow: var(--shadow);
+        }
+
+        .password-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font-size: var(--text-sm);
+            transition: border-color 0.2s, outline 0.2s;
+        }
+
+        .password-input:focus {
+            border-color: var(--primary);
+            outline: 2px solid var(--primary);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+            transition: color 0.15s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--primary);
+        }
+
+        /* ===================================================================
+           INFO-BOX (Definitionen, Regeln)
+           =================================================================== */
+        .info-box {
+            padding: 1.25rem;
+            border-radius: var(--r-md);
+            background: var(--surface);
+            border-left: 4px solid var(--primary-2);
+            margin: 1rem 0;
+        }
+
+        .info-box h4 {
+            margin: 0 0 0.5rem 0;
+            font-family: var(--font-display);
+            color: var(--primary-2);
+            font-size: var(--text-base);
+        }
+
+        .info-box p {
+            margin: 0;
+            font-size: var(--text-sm);
+        }
+
+        /* Elektronenzählung als Liste */
+        .electron-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.75rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .electron-list li {
+            padding: 0.4rem 0.8rem;
+            background: var(--surface);
+            border: 1px solid rgba(80, 70, 60, .12);
+            border-radius: var(--r-sm);
+            font-weight: 600;
+            font-size: var(--text-sm);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .electron-list li .orb-type {
+            color: var(--primary-2);
+            font-weight: 700;
+        }
+
+        /* Konfigurations-Beispiele (Fe etc.) */
+        .config-example {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .config-card {
+            padding: 0.75rem 1rem;
+            background: var(--surface);
+            border: 1px solid rgba(80, 70, 60, .12);
+            border-radius: var(--r-sm);
+            font-size: var(--text-sm);
+            font-family: 'Courier New', monospace;
+        }
+
+        .config-card strong {
+            color: var(--primary);
+            font-family: var(--font-display);
+        }
+
+        /* ===================================================================
+           ORBITAL-KOMPONENTE (Kästchenschreibweise & Energiediagramm)
+           =================================================================== */
+        .orbital-module {
+            padding: 1.5rem;
+            border-radius: var(--r-md);
+            background: var(--surface);
+            border: 1px solid rgba(80, 70, 60, .12);
+            margin: 1.5rem 0;
+        }
+
+        .orbital-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .orbital-controls input[type="number"] {
+            width: 80px;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: var(--surface-2);
+            color: var(--text);
+            font-size: var(--text-sm);
+            font-family: inherit;
+        }
+
+        .orbital-controls input[type="number"]:focus {
+            outline: 2px solid var(--primary-2);
+        }
+
+        .orbital-controls label {
+            font-size: var(--text-sm);
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        /* View-Toggle: Kästchen / Energie / Beide */
+        .view-toggle {
+            display: flex;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .view-toggle button {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            background: var(--surface-2);
+            color: var(--text);
+            cursor: pointer;
+            font-size: var(--text-xs);
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.2s;
+            border-right: 1px solid var(--border);
+        }
+
+        .view-toggle button:last-child {
+            border-right: none;
+        }
+
+        .view-toggle button.active {
+            background: var(--primary-2);
+            color: white;
+        }
+
+        /* Kästchenschreibweise */
+        .box-notation {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        .orbital-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: nowrap;
+        }
+
+        .orbital-label {
+            min-width: 30px;
+            font-weight: 700;
+            font-size: var(--text-sm);
+            text-align: right;
+            margin-right: 6px;
+            color: var(--primary-2);
+            flex-shrink: 0;
+        }
+
+        .orbital-box {
+            width: 34px;
+            height: 34px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1px;
+            background: var(--surface-2);
+            font-size: 1rem;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .arrow-up {
+            color: var(--primary);
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .arrow-down {
+            color: var(--primary-2);
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        /* Energieniveau-Diagramm */
+        .energy-diagram {
+            position: relative;
+            padding: 1.5rem 1.5rem 1.5rem 3rem;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .energy-axis {
+            position: absolute;
+            left: 1.5rem;
+            top: 1rem;
+            bottom: 1rem;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .energy-axis::before {
+            content: 'E';
+            position: absolute;
+            top: -18px;
+            left: -6px;
+            font-weight: 700;
+            font-size: var(--text-sm);
+            color: var(--muted);
+        }
+
+        .energy-axis::after {
+            content: '▲';
+            position: absolute;
+            top: -8px;
+            left: -5px;
+            font-size: 0.7rem;
+            color: var(--muted);
+        }
+
+        .energy-level {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding-left: 1rem;
+        }
+
+        .energy-level-label {
+            min-width: 28px;
+            font-weight: 700;
+            font-size: var(--text-xs);
+            color: var(--primary-2);
+            text-align: right;
+            margin-right: 6px;
+            flex-shrink: 0;
+        }
+
+        .energy-box {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--border);
+            border-radius: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1px;
+            background: var(--surface-2);
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        /* Lernmodus */
+        .learning-mode {
+            padding: 1.5rem;
+            border-radius: var(--r-md);
+            background: var(--surface);
+            border: 1px solid rgba(80, 70, 60, .12);
+            margin: 1.5rem 0;
+        }
+
+        .learning-mode .orbital-box {
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .learning-mode .orbital-box:hover {
+            border-color: var(--primary-2);
+            transform: scale(1.08);
+        }
+
+        .learning-mode .orbital-box:active {
+            transform: scale(0.95);
+        }
+
+        .feedback {
+            padding: 1rem;
+            border-radius: var(--r-md);
+            border: 1px solid rgba(80, 70, 60, .1);
+            background: var(--surface);
+            margin-top: 1rem;
+            font-size: var(--text-sm);
+        }
+
+        .feedback.ok {
+            background: rgba(63, 125, 45, .12);
+            border-color: rgba(63, 125, 45, .25);
+        }
+
+        .feedback.bad {
+            background: rgba(177, 49, 49, .12);
+            border-color: rgba(177, 49, 49, .28);
+        }
+
+        .feedback.warn {
+            background: rgba(191, 122, 25, .12);
+            border-color: rgba(191, 122, 25, .25);
+        }
+
+        /* ===================================================================
+           KOMPLEMENTÄRFARBEN-VISUALISIERUNG
+           =================================================================== */
+        .color-wheel-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .color-wheel-container svg {
+            max-width: 320px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .color-wheel-container svg .cw-segment {
+            transition: opacity 0.2s, stroke-width 0.2s;
+            stroke: var(--surface-2);
+            stroke-width: 1;
+        }
+
+        .color-wheel-container svg .cw-segment:hover {
+            opacity: 0.85;
+        }
+
+        .color-wheel-container svg .cw-segment.active {
+            stroke: var(--text);
+            stroke-width: 3;
+        }
+
+        .color-wheel-container svg .cw-segment.complement {
+            stroke: var(--text);
+            stroke-width: 3;
+            stroke-dasharray: 6 3;
+        }
+
+        .color-info {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--r-sm);
+            background: var(--surface-2);
+            border: 1px solid rgba(80, 70, 60, .12);
+            font-size: var(--text-sm);
+            min-height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .color-swatch-display {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* ===================================================================
+           KRISTALLFELD-DIAGRAMM
+           =================================================================== */
+        .crystal-field-container {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .crystal-field-container svg {
+            max-width: 600px;
+        }
+
+        .cf-label {
+            font-family: Inter, Arial, sans-serif;
+            fill: var(--text);
+            font-size: 12px;
+        }
+
+        .cf-label-small {
+            font-family: Inter, Arial, sans-serif;
+            fill: var(--muted);
+            font-size: 10px;
+        }
+
+        .cf-line {
+            stroke: var(--primary-2);
+            stroke-width: 2.5;
+        }
+
+        .cf-arrow {
+            stroke: var(--primary);
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .cf-bracket {
+            stroke: var(--muted);
+            stroke-width: 1;
+            fill: none;
+        }
+
+        /* ===================================================================
+           ELEKTROMAGNETISCHES SPEKTRUM
+           =================================================================== */
+        .em-spectrum-container {
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .em-spectrum-container svg {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .em-label {
+            font-family: Inter, Arial, sans-serif;
+            font-size: 9px;
+            fill: var(--muted);
+        }
+
+        .em-vis-label {
+            font-family: Inter, Arial, sans-serif;
+            font-size: 10px;
+            fill: var(--text);
+            font-weight: 600;
+        }
+
+        /* ===================================================================
+           AUFGABE, TEXTAREA, PASSWORT
+           =================================================================== */
+        .task-box {
+            padding: 1.5rem;
+            border-radius: var(--r-md);
+            background: var(--surface);
+            border: 1px solid rgba(80, 70, 60, .12);
+            margin: 1rem 0;
+        }
+
+        .task-box blockquote {
+            margin: 0;
+            padding: 1rem 1.25rem;
+            border-left: 4px solid var(--primary-2);
+            background: var(--surface-2);
+            border-radius: 0 var(--r-sm) var(--r-sm) 0;
+            font-style: italic;
+            color: var(--text);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border-radius: var(--r-md);
+            border: 1px solid rgba(80, 70, 60, .2);
+            background: var(--surface-2);
+            color: var(--text);
+            font-family: inherit;
+            font-size: var(--text-sm);
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: 2px solid var(--primary-2);
+        }
+
+        .task3-textarea {
+            width: 100%;
+            min-height: 140px;
+            padding: 0.85rem 1rem;
+            border-radius: var(--r-md);
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            resize: vertical;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+            transition: border-color 0.2s, outline 0.2s;
+        }
+
+        .task3-textarea:focus {
+            border-color: var(--primary);
+            outline: 2px solid var(--primary);
+        }
+
+        .password-container {
+            position: relative;
+            margin-top: 1rem;
+            padding: 1.25rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            box-shadow: var(--shadow);
+        }
+
+        .password-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font-size: var(--text-sm);
+            transition: border-color 0.2s, outline 0.2s;
+        }
+
+        .password-input:focus {
+            border-color: var(--primary);
+            outline: 2px solid var(--primary);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+            transition: color 0.15s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--primary);
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--surface);
+            border-radius: var(--r-md);
+            border: 1px solid rgba(63, 125, 45, .25);
+        }
+
+        /* Pill und Badge (aus assets.html) */
+        .pill {
+            font-size: var(--text-xs);
+            font-weight: 700;
+            padding: .45rem .75rem;
+            border-radius: 999px;
+            display: inline-block;
+            background: rgba(143, 61, 31, .1);
+            color: var(--primary);
+            letter-spacing: .05em;
+            text-transform: uppercase;
+        }
+
+        summary .pill {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-right: 0 !important;
+        }
+
+        .counter {
+            font-size: var(--text-xs);
+            font-weight: 700;
+            padding: .45rem .75rem;
+            border-radius: 999px;
+            display: inline-block;
+            background: rgba(127, 127, 127, .12);
+            color: var(--muted);
+        }
+
+        /* ===================================================================
+           RESPONSIVE
+           =================================================================== */
+        @media (max-width: 600px) {
+            .topbar {
+                flex-wrap: wrap;
+            }
+
+            .orbital-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .orbital-box {
+                width: 30px;
+                height: 30px;
+                font-size: 0.85rem;
+            }
+
+            .energy-box {
+                width: 24px;
+                height: 24px;
+                font-size: 0.75rem;
+            }
+
+            .orbital-label,
+            .energy-level-label {
+                font-size: var(--text-xs);
+                min-width: 24px;
+            }
+        }
+
+        @media (hover: none) {
+
+            /* Touch: Vergrößere Klickziele */
+            .learning-mode .orbital-box {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* ===================================================================
+           ENERGIESCHEMA DIAGRAMM
+           =================================================================== */
+        :root {
+            --n1-color: #888888;
+            --n2-color: #d100d1;
+            --n3-color: #e6c300;
+            --n4-color: #ff3366;
+            --n5-color: #5c0099;
+            --n6-color: #2FA52F;
+            --n7-color: #00cccc;
+        }
+
+        .energy-schema-module {
+            margin: 1.5rem 0;
+            background: var(--surface);
+            border-radius: var(--r-md);
+            border: 1px solid var(--border);
+            padding: 2.5rem 1.5rem 1.5rem;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+
+        .schema-container {
+            display: flex;
+            position: relative;
+            min-height: 550px;
+            height: 600px;
+            min-width: 1050px;
+            margin-top: 4rem;
+            padding-left: 2.5rem;
+            padding-right: 1rem;
+        }
+
+        .schema-energy-axis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--text);
+        }
+
+        html[lang="de"] .schema-energy-axis::before {
+            content: 'Energie';
+        }
+
+        html[lang="en"] .schema-energy-axis::before {
+            content: 'Energy';
+        }
+
+        .schema-energy-axis::before {
+            position: absolute;
+            top: -25px;
+            left: -4px;
+            transform: none;
+            font-weight: 700;
+            color: var(--text);
+            font-size: var(--text-sm);
+        }
+
+        .schema-energy-axis::after {
+            content: '▲';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text);
+            font-size: 0.8rem;
+        }
+
+        .schema-levels {
+            display: flex;
+            flex-direction: column-reverse;
+            flex: 1;
+            position: relative;
+            min-width: 1000px;
+            z-index: 2;
+        }
+
+        .schema-level-row {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 28px;
+            transform: translateY(50%);
+        }
+
+        .schema-level-line {
+            position: absolute;
+            left: 0;
+            height: 2px;
+            z-index: -1;
+            border-radius: 1px;
+        }
+
+        .schema-level-boxes {
+            display: flex;
+            gap: 4px;
+            position: absolute;
+            background: var(--surface);
+            padding-left: 5px;
+        }
+
+        .schema-level-label {
+            position: absolute;
+            font-weight: 700;
+            font-size: var(--text-sm);
+            background: var(--surface);
+            padding: 0 4px;
+            z-index: 3;
+        }
+
+        .schema-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .color-n1 {
+            color: var(--n1-color) !important;
+            font-weight: bold;
+        }
+
+        .color-n2 {
+            color: var(--n2-color) !important;
+            font-weight: bold;
+        }
+
+        .color-n3 {
+            color: var(--n3-color) !important;
+            font-weight: bold;
+        }
+
+        .color-n4 {
+            color: var(--n4-color) !important;
+            font-weight: bold;
+        }
+
+        .color-n5 {
+            color: var(--n5-color) !important;
+            font-weight: bold;
+        }
+
+        .color-n6 {
+            color: var(--n6-color) !important;
+            font-weight: bold;
+        }
+
+        .color-n7 {
+            color: var(--n7-color) !important;
+            font-weight: bold;
+        }
+        /* CRC 1573 Logo – fixed bottom-right */
+        .crc-logo-fixed {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            width: 70px;
+            height: auto;
+            opacity: 0.55;
+            pointer-events: auto;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+            user-select: none;
+        }
+        .crc-logo-fixed:hover {
+            opacity: 1;
+        }
+        @media (max-width: 600px) {
+            .crc-logo-fixed {
+                width: 50px;
+                bottom: 12px;
+                right: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="skip-link" href="#inhalt" data-en="Skip to content">Zum Inhalt springen</a>
+    <div class="wrap">
+        <!-- ================================================================
+             TOPBAR: Home-Button, Highlight-Tools, DE/EN Toggle, Theme Toggle
+             ================================================================ -->
+        <header class="topbar">
+            <div class="brand">
+                <a href="../../index.html"
+                    style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: .9rem;">
+                    <div class="logo">
+                        <!-- Home-Icon (Haus) -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="brand-title" id="brandTitle" data-en="Colouration">Farbigkeit</div>
+                        <div class="brand-sub" id="brandSub" data-en="Metal complexes &amp; orbital transitions">
+                            Metallkomplexe &amp;
+                            Orbitalübergänge</div>
+                    </div>
+                </a>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <!-- Textmarker-Tools -->
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <button class="tool-btn highlight-btn" type="button" aria-label="Text markieren"
+                        title="Marker aktivieren">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
+                    </button>
+                    <div class="color-picker" id="colorPicker"
+                        style="margin-left: 0; padding-left: 0; padding-right: 0.75rem; border-left: none; border-right: 1px solid var(--border);">
+                        <button class="color-swatch active" data-color="yellow"
+                            style="background: var(--hl-yellow); border-color: var(--text);"></button>
+                        <button class="color-swatch" data-color="green" style="background: var(--hl-green);"></button>
+                        <button class="color-swatch" data-color="cyan" style="background: var(--hl-cyan);"></button>
+                        <button class="color-swatch" data-color="red" style="background: var(--hl-red);"></button>
+                    </div>
+                    <button class="tool-btn eraser-btn" type="button" aria-label="Markierung entfernen"
+                        title="Radiergummi aktivieren">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21">
+                            </path>
+                            <path d="M22 21H7"></path>
+                            <path d="m5 11 9 9"></path>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Sprach-Toggle -->
+                <button class="lang-toggle" type="button" id="langToggle" aria-label="Sprache wechseln"
+                    data-en-aria-label="Change language">
+                    <span id="langDe" style="font-weight: bold; color: var(--primary);">DE</span>
+                    <span style="margin: 0 6px; color: var(--border);">|</span>
+                    <span id="langEn" style="color: var(--muted);">EN</span>
+                </button>
+                <!-- Theme-Toggle -->
+                <button class="theme-toggle tool-btn" type="button" aria-label="Farbschema wechseln"
+                    data-en-aria-label="Toggle theme">◐</button>
+            </div>
+        </header>
+
+        <!-- ================================================================
+             HAUPTINHALT
+             ================================================================ -->
+        <main id="inhalt">
+            <!-- ────────────────────────────────────────────────────────────
+                 EINLEITUNG (Panel, nicht aufklappbar)
+                 ──────────────────────────────────────────────────────────── -->
+            <div class="panel" style="margin-bottom: 2rem;">
+                <p class="lead" style="margin-top: 0; margin-bottom: 0;"
+                    data-en="In this learning module, you will learn how colouration arises in metal complexes, how orbital transitions and coordination are related to it, and why transition metal complexes are generally much more intensely coloured than lanthanoid complexes.">
+                    In diesem Lernmodul lernst du wie Farbigkeit in Metallkomplexen zustande kommt,
+                    wie Orbitalübergänge und Koordination damit zusammenhängen und warum
+                    Übergangsmetallkomplexe deutlich farbintensiver als Lanthanoidkomplexe sind.
+                </p>
+            </div>
+
+            <!-- ── PFEIL ── -->
+            <div class="path-arrow" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <polyline points="19 12 12 19 5 12" />
+                </svg>
+            </div>
+
+            <!-- ================= WIEDERHOLUNG GROUP ================= -->
+            <div
+                style="border: 2px solid #D4AF37; padding: 1.5rem 1.5rem 0.5rem 1.5rem; border-radius: var(--r-md); position: relative; margin-bottom: 2rem;">
+                <div style="position: absolute; top: -14px; left: 1.5rem; background: var(--bg); padding: 0 0.5rem; color: #D4AF37; font-weight: bold; font-family: var(--font-display); font-size: var(--text-base);"
+                    data-en="Reminder">Wiederholung</div>
+
+                <!-- ────────────────────────────────────────────────────────────
+                 ABSCHNITT 1: WAS SIND ORBITALE? (Vorwissen 1)
+                 ──────────────────────────────────────────────────────────── -->
+                <details>
+                    <summary data-en="What are orbitals?">Was sind Orbitale?</summary>
+                    <div class="details-content">
+                        <p
+                            data-en="Orbitals represent the probability density of an atom's electrons. They can be calculated using the Schrödinger equation, resulting in four orbital types: s, p, d, and f orbitals. These orbitals can be occupied by different numbers of electrons:">
+                            Orbitale stellen die Aufenthaltswahrscheinlichkeitsdichte der Elektronen eines
+                            Atoms dar. Diese lassen sich anhand der Schrödinger-Gleichung berechnen
+                            und es folgen vier Orbitaltypen: s-, p-, d- und f-Orbitale. Diese Orbitale können
+                            mit unterschiedlich vielen Elektronen besetzt werden:
+                        </p>
+                        <ul class="electron-list">
+                            <li data-en="&lt;span class=&quot;orb-type&quot;&gt;s:&lt;/span&gt; 2 electrons"><span
+                                    class="orb-type">s:</span> 2 Elektronen</li>
+                            <li data-en="&lt;span class=&quot;orb-type&quot;&gt;p:&lt;/span&gt; 6 electrons"><span
+                                    class="orb-type">p:</span> 6 Elektronen</li>
+                            <li data-en="&lt;span class=&quot;orb-type&quot;&gt;d:&lt;/span&gt; 10 electrons"><span
+                                    class="orb-type">d:</span> 10 Elektronen</li>
+                            <li data-en="&lt;span class=&quot;orb-type&quot;&gt;f:&lt;/span&gt; 14 electrons"><span
+                                    class="orb-type">f:</span> 14 Elektronen</li>
+                        </ul>
+                        <p data-en="Each orbital subshell can be occupied by a maximum of two electrons.">
+                            Jede Unterschale eines Orbitals kann mit maximal zwei Elektronen besetzt
+                            werden.
+                        </p>
+                    </div>
+                </details>
+
+                <!-- ── PFEIL ── -->
+                <div class="path-arrow" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <polyline points="19 12 12 19 5 12" />
+                    </svg>
+                </div>
+
+                <!-- ────────────────────────────────────────────────────────────
+                 ABSCHNITT 2: PAULI-PRINZIP & HUND'SCHE REGEL (Vorwissen 2)
+                 ──────────────────────────────────────────────────────────── -->
+                <details>
+                    <summary data-en="Pauli exclusion principle &amp; Hund's rule">Pauli-Prinzip &amp; Hund'sche Regel
+                    </summary>
+                    <div class="details-content">
+                        <p
+                            data-en="The orbitals are filled in a specific order according to the Pauli exclusion principle and Hund's rule (First the &lt;span class=&quot;color-n1&quot;&gt;1s&lt;/span&gt; orbital, then up to the &lt;span class=&quot;color-n6&quot;&gt;6d&lt;/span&gt; orbital in the corresponding order).">
+                            Die Orbitale werden hierbei entsprechend dem Pauli-Prinzip und der
+                            Hund'schen Regel in einer bestimmten Reihenfolge aufgefüllt (Zuerst das <span
+                                class="color-n1">1s</span>
+                            Orbital, dann bis hin zum <span class="color-n6">6d</span> Orbital in entsprechender
+                            Reihenfolge).
+                        </p>
+                        <details class="hint-details" style="margin: 1.5rem 0;">
+                            <summary data-en="Energy level diagram (Aufbau principle)">Energieniveaudiagramm
+                                (Aufbauprinzip)</summary>
+                            <div class="details-content">
+                                <div class="energy-schema-module" id="fullEnergySchemaModule">
+                                    <div class="orbital-controls" style="justify-content: center;">
+                                        <label data-en="Atomic number:">Ordnungszahl:</label>
+                                        <input type="number" id="schemaInput" min="1" max="118" value="118"
+                                            aria-label="Ordnungszahl eingeben">
+                                        <div id="schemaElement"
+                                            style="font-weight: bold; font-size: 1.5rem; color: var(--primary); min-width: 40px; text-align: center;">
+                                            Og</div>
+                                    </div>
+                                    <div class="schema-container" id="schemaContainerObj">
+                                        <div class="schema-energy-axis"></div>
+                                        <div class="schema-levels" id="schemaLevels"></div>
+                                        <svg class="schema-lines" id="schemaLines"></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+                        <p data-en="It can be seen that the orbitals have different energy levels.">
+                            Dabei ist zu sehen, dass die Orbitale unterschiedliche Energieniveaus
+                            besitzen.
+                        </p>
+
+                        <!-- Pauli-Prinzip Info-Box -->
+                        <div class="info-box">
+                            <h4 data-en="Pauli exclusion principle:">Pauli-Prinzip:</h4>
+                            <p
+                                data-en="An atom cannot contain two electrons with identical values for all four quantum numbers, because they would otherwise be indistinguishable. (i.e., an electron orbital can only be occupied by a maximum of two electrons of different spins (up and down spin).)">
+                                Ein Atom darf keine Elektronen enthalten, die in allen vier Quantenzahlen
+                                übereinstimmen, weil sie sonst nicht mehr unterscheidbar sind.
+                                (D.h., dass ein Elektronenorbital nur von maximal zwei Elektronen
+                                unterschiedlichen Spins (Up- und Down-Spin) besetzt sein darf.)
+                            </p>
+                        </div>
+
+                        <!-- Hund'sche Regel Info-Box -->
+                        <div class="info-box">
+                            <h4 data-en="Hund's rule:">Hund'sche Regel:</h4>
+                            <p
+                                data-en="The orbitals of a subshell (represented in our case as a box) are occupied such that the number of electrons with the same spin direction is maximized. If several orbitals of the same energy level (degenerate states) are available for electrons of an atom, they are first each occupied with one electron with parallel spin (e.g. only up spin). Only after all orbitals of the same energy level are occupied with one electron each, are these orbitals occupied by a second electron with down spin.">
+                                Die Orbitale einer Unterschale (in unserem Fall als ein Kästchen dargestellt)
+                                werden so besetzt, dass die Anzahl der Elektronen mit gleicher Spinrichtung
+                                maximal wird.
+                                Wenn für Elektronen eines Atoms mehrere Orbitale mit gleiche Energieniveau
+                                (entartete Zustände) zur Verfügung stehen, werden diese zuerst mit je einem
+                                Elektron mit parallelem Spin (z.B. nur Up-Spin) besetzt. Erst danach, wenn
+                                alle Orbitale des gleichen Energieniveaus mit jeweils einem Elektron gefüllt
+                                sind, werden diese Orbitale mit einem zweiten Elektron mit Down-Spin
+                                besetzt.
+                            </p>
+                        </div>
+
+                        <p data-en="&lt;strong&gt;Interactive example for the box representation:&lt;/strong&gt;">
+                            <strong>Interaktives Beispiel für die Kästchendarstellung:</strong>
+                        </p>
+
+                        <!-- ═══ Interaktive Orbital-Komponente: Wasserstoff (Z=1) ═══ -->
+                        <div class="orbital-module" id="oxygenOrbitalModule">
+                            <div class="orbital-controls">
+                                <label data-en="Atomic number:">Ordnungszahl:</label>
+                                <input type="number" id="orbitalInput" min="1" max="118" value="1"
+                                    aria-label="Ordnungszahl eingeben">
+                                <div id="orbitalElement"
+                                    style="font-weight: bold; font-size: 1.5rem; color: var(--primary); min-width: 40px; text-align: center;">
+                                    H</div>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
+                                <!-- Kästchenschreibweise -->
+                                <div id="boxNotationContainer" style="flex: 1; min-width: 280px;">
+                                    <div class="box-notation" id="boxNotation"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </details>
+
+                <!-- ── PFEIL ── -->
+                <div class="path-arrow" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <polyline points="19 12 12 19 5 12" />
+                    </svg>
+                </div>
+
+                <!-- ────────────────────────────────────────────────────────────
+                 ABSCHNITT 3: IONISIERUNG & STABILITÄT (Vorwissen 3)
+                 ──────────────────────────────────────────────────────────── -->
+                <details>
+                    <summary data-en="Stability &amp; electron configuration">Stabilität &amp; Elektronenkonfiguration
+                    </summary>
+                    <div class="details-content">
+                        <p
+                            data-en="It is energetically more favorable to first lose s-orbital electrons instead of d- or f-orbital electrons. In addition, half or fully occupied orbitals are particularly stable.">
+                            Es ist energetisch günstiger, erst s-Elektronen, statt d- bzw. f-Orbitalelektronen
+                            abzugeben. Zudem sind halb- oder vollbesetzte Orbitale besonders stabil.
+                        </p>
+                        <p data-en="&lt;strong&gt;Example using iron and its ions:&lt;/strong&gt;"><strong>Beispiel
+                                anhand von Eisen und seinen Ionen:</strong></p>
+                        <div class="config-example">
+                            <div class="config-card"><strong>Fe:</strong> [Ar]<span
+                                    class="color-n3">3d</span><sup>6</sup><span class="color-n4">4s</span><sup>2</sup>
+                            </div>
+                            <div class="config-card"><strong>Fe<sup>2+</sup>:</strong> [Ar]<span
+                                    class="color-n3">3d</span><sup>6</sup><span class="color-n4">4s</span><sup>0</sup>
+                            </div>
+                            <div class="config-card"><strong>Fe<sup>3+</sup>:</strong> [Ar]<span
+                                    class="color-n3">3d</span><sup>5</sup></div>
+                        </div>
+                        <!-- Interaktive Darstellung Fe / Fe2+ / Fe3+ -->
+                        <div class="orbital-module" id="feOrbitalModule">
+                            <div class="orbital-controls">
+                                <label data-en="Configuration:">Konfiguration:</label>
+                                <button class="btn btn-secondary fe-btn active" data-z="26" data-label="Fe">Fe</button>
+                                <button class="btn btn-secondary fe-btn" data-z="24" data-label="Fe²⁺"
+                                    data-remove="2">Fe²⁺</button>
+                                <button class="btn btn-secondary fe-btn" data-z="23" data-label="Fe³⁺"
+                                    data-remove="3">Fe³⁺</button>
+                            </div>
+                            <div class="box-notation" id="feBoxNotation"></div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- ── PFEIL ── -->
+                <div class="path-arrow" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <polyline points="19 12 12 19 5 12" />
+                    </svg>
+                </div>
+
+                <!-- ────────────────────────────────────────────────────────────
+                 ABSCHNITT 4: WIEDERHOLUNGSAUFGABE (Lernmodus)
+                 ──────────────────────────────────────────────────────────── -->
+                <details>
+                    <summary data-en="Practice exercise">Wiederholungsaufgabe</summary>
+                    <div class="details-content">
+                        <p data-en="Place the electrons into the orbital boxes yourself! Click on a box to add electrons:"
+                            style="margin-bottom: 0.5rem;">
+                            Setze die Elektronen selbst in die Orbitalkästchen ein!<br>
+                            Klicke auf ein Kästchen, um Elektronen hinzuzufügen:
+                        </p>
+                        <ul style="font-size: var(--text-sm); color: var(--muted); margin: 0.5rem 0 1rem 1.5rem;">
+                            <li data-en="1. Click = <span class='arrow-up'>&#x21BF;</span> (Up spin)">1. Klick = <span
+                                    class="arrow-up">&#x21BF;</span> (Up-Spin)</li>
+                            <li
+                                data-en="2. Click = <span class='arrow-up'>&#x21BF;</span><span class='arrow-down'>&#x21C2;</span> (Add down spin)">
+                                2. Klick = <span class="arrow-up">&#x21BF;</span><span
+                                    class="arrow-down">&#x21C2;</span>
+                                (Down-Spin
+                                dazu)</li>
+                            <li data-en="3. Click = Empty (Remove both)">3. Klick = Leer (beide entfernen)</li>
+                        </ul>
+                        <div class="learning-mode" id="learningMode">
+                            <div class="orbital-controls" style="align-items: center; gap: 0.75rem;">
+                                <label data-en="Atomic number:">Ordnungszahl:</label>
+                                <input type="number" id="learnTargetZ" min="1" max="118" value="8"
+                                    aria-label="Ordnungszahl für Lernmodus" style="width: 70px;">
+                                <div id="learnTargetElement"
+                                    style="font-weight: bold; font-size: 1.2rem; color: var(--primary); min-width: 30px; text-align: center;">
+                                    O</div>
+                                <button class="btn btn-primary" id="learnStartBtn" data-en="Start exercise">Übung
+                                    starten</button>
+                                <button class="btn btn-secondary" id="learnCheckBtn" style="display: none;"
+                                    data-en="Check Answer">Überprüfen</button>
+                                <button class="btn btn-secondary" id="learnResetBtn" style="display: none;"
+                                    data-en="Reset">Zurücksetzen</button>
+                            </div>
+                            <div class="box-notation" id="learnBoxNotation"></div>
+                            <div id="learnFeedback"></div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- ── PFEIL ── -->
+            <div class="path-arrow" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <polyline points="19 12 12 19 5 12" />
+                </svg>
+            </div>
+
+            <!-- ────────────────────────────────────────────────────────────
+                 ABSCHNITT 5: KRISTALLFELDTHEORIE
+                 ──────────────────────────────────────────────────────────── -->
+            <details>
+                <summary data-en="Crystal field theory">Kristallfeldtheorie</summary>
+                <div class="details-content">
+                    <p data-en="To explain colouration, some new concepts must first be considered:">
+                        Um Farbigkeit nun erklären zu können, müssen zuvor einige neue Sachverhalte betrachtet werden:
+                    </p>
+                    <p
+                        data-en="In crystal field theory, ligands are regarded as negative point charges. As a result, a central particle is surrounded by an electrostatic field, known as the crystal field. The negative charge leads to repulsive interactions between the ligands and the electrons in the central particle’s orbitals. The symmetrical arrangement (e.g., octahedral complexes) of the ligands relative to the shape of the central particle’s orbitals accordingly influences the various energy levels of the orbital’s subshells. For d- and f-orbitals, this can lead to a splitting of the orbitals into different energy levels. This is known as crystal field splitting.">
+                        In der Kristallfeldtheorie werden Liganden als negative punktuelle Ladungen
+                        betrachtet. Dies hat zur Folge, dass ein Zentralteilchen von einem elektrostatischen
+                        Feld umgeben ist, dem sog. Kristallfeld. Die negative Ladung führt zu Abstoßungen
+                        zwischen den Liganden und Elektronen in den Orbitalen des Zentralteilchen. Die symmetrische
+                        Anordnung (z.B. Oktaeder) der Liganden zur Form der Orbitale des Zentralteilchens hat
+                        dementsprechend einen Einfluss auf die verschiedenen Energieniveaus der Unterschalen des
+                        Orbitals. Dies
+                        kann bei d- und f- Orbitalen zu einer Aufspaltung der Orbitale in verschiedene Energieniveaus
+                        führen, was als Kristallfeldaufspaltung bezeichnet wird.
+                    </p>
+                    <p
+                        data-en="&lt;strong&gt;Example of the complex [Fe(H&lt;sub&gt;2&lt;/sub&gt;O)&lt;sub&gt;6&lt;/sub&gt;]&lt;sup&gt;2+&lt;/sup&gt; with octahedral arrangement:&lt;/strong&gt;">
+                        <strong>Beispiel der Komplex [Fe(H<sub>2</sub>O)<sub>6</sub>]<sup>2+</sup> mit oktaedrischer
+                            Anordnung:</strong>
+                    </p>
+                    <p
+                        data-en="Due to the octahedral arrangement of the ligands relative to the central ion (Fe&lt;sup&gt;2+&lt;/sup&gt;), there are different energy levels within the &lt;span class=&quot;color-n3&quot;&gt;3d&lt;/span&gt; orbitals here. Of these, three are located lower and two are higher:">
+                        Hier liegen aufgrund der oktaedrischen Anordnung der Liganden zum Zentralion
+                        (Fe<sup>2+</sup>) verschiedene Energieniveaus innerhalb der <span
+                            class="color-n3">3d</span>-Orbitale vor. Davon sind 3
+                        tiefer gelegen sind und zwei höher:
+                    </p>
+
+                    <!-- ═══ Interaktives Kristallfeld-Aufspaltungsdiagramm ═══ -->
+                    <div class="crystal-field-container" id="crystalFieldContainer"
+                        style="display: flex; align-items: flex-end; justify-content: flex-start; gap: 1.5rem; flex-wrap: nowrap; text-align: center; margin: 3rem 0; padding: 2rem 1.5rem; background: var(--surface-2); border-radius: var(--r-md); border: 1px solid var(--border); overflow-x: auto;">
+
+                        <!-- Energie-Pfeil links -->
+                        <div
+                            style="display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 2.5rem; min-height: 280px; margin-right: -0.5rem; width: 24px; flex-shrink: 0;">
+                            <div
+                                style="font-weight: bold; font-family: var(--font-display); margin-bottom: 4px; color: var(--text);">
+                                E</div>
+                            <svg height="220" width="14" style="overflow: visible; display: block; margin: 0 auto;">
+                                <line x1="7" y1="220" x2="7" y2="2" stroke="var(--text)" stroke-width="2"
+                                    stroke-linecap="round" />
+                                <polyline points="2 8, 7 2, 12 8" fill="none" stroke="var(--text)" stroke-width="2"
+                                    stroke-linejoin="round" stroke-linecap="round" />
+                            </svg>
+                        </div>
+
+                        <!-- 1. ohne Kristallfeld -->
+                        <div
+                            style="display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 2rem; min-width: 120px; flex-shrink: 0;">
+                            <div style="display: flex; gap: 4px; padding: 0.5rem 0;">
+                                <div class="orbital-box"><span class="arrow-up">↿</span><span
+                                        class="arrow-down">⇂</span></div>
+                                <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                            </div>
+                            <div
+                                style="height: 2.8rem; display: flex; align-items: flex-start; justify-content: center; text-align: center; width: 100%;">
+                                <div style="font-weight: 600; color: var(--text); font-size: 0.9rem;"
+                                    data-en="no crystal field">ohne Kristallfeld
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mitte 1: Pfeil hoch -->
+                        <div
+                            style="display: flex; align-items: center; margin-bottom: 7rem; transform: translate(5px, -20px); flex-shrink: 0;">
+                            <svg width="40" height="40" viewBox="0 0 40 40" style="overflow: visible;">
+                                <line x1="0" y1="40" x2="36" y2="4" stroke="var(--muted)" stroke-width="2"
+                                    stroke-linecap="round" stroke-dasharray="4" />
+                                <polyline points="26 4, 38 2, 36 14" fill="none" stroke="var(--muted)" stroke-width="2"
+                                    stroke-linejoin="round" stroke-linecap="round" />
+                            </svg>
+                        </div>
+
+                        <!-- 2. kugelförmiges Kristallfeld -->
+                        <div
+                            style="display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 2rem; min-width: 120px; flex-shrink: 0;">
+                            <div style="display: flex; gap: 4px; padding: 0.5rem 0; margin-bottom: 4.5rem;">
+                                <div class="orbital-box"><span class="arrow-up">↿</span><span
+                                        class="arrow-down">⇂</span></div>
+                                <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                            </div>
+                            <div
+                                style="height: 2.8rem; display: flex; align-items: flex-start; justify-content: center; text-align: center; width: 100%;">
+                                <div style="font-weight: 600; color: var(--text); font-size: 0.9rem;"
+                                    data-en="spherical&lt;br&gt;crystal field">
+                                    kugelförmiges<br>Kristallfeld</div>
+                            </div>
+                        </div>
+
+                        <!-- Mitte 2: Pfeil rechts -->
+                        <div
+                            style="display: flex; align-items: center; margin-bottom: 11rem; transform: translateX(-5px); flex-shrink: 0;">
+                            <svg width="40" height="20" viewBox="0 0 40 20" style="overflow: visible;">
+                                <line x1="0" y1="10" x2="36" y2="10" stroke="var(--muted)" stroke-width="2"
+                                    stroke-linecap="round" stroke-dasharray="4" />
+                                <polyline points="28 2, 38 10, 28 18" fill="none" stroke="var(--muted)" stroke-width="2"
+                                    stroke-linejoin="round" stroke-linecap="round" />
+                            </svg>
+                        </div>
+
+                        <!-- 3. Oktaedrisches Kristallfeld -->
+                        <div
+                            style="display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 2rem; min-width: 220px; flex-shrink: 0;">
+                            <div
+                                style="display: flex; gap: 1.5rem; align-items: center; justify-content: center; margin-bottom: 0.5rem;">
+                                <!-- Die Niveaus -->
+                                <div style="display: flex; flex-direction: column; gap: 2rem; align-items: center;">
+                                    <!-- Höheres Energieniveau -->
+                                    <div
+                                        style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                                        <div style="font-size: var(--text-sm); color: var(--muted); text-align: center;"
+                                            data-en="two d subshells">
+                                            zwei d-Unterschalen</div>
+                                        <div style="display: flex; gap: 4px;">
+                                            <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                            <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Niedrigeres Energieniveau -->
+                                    <div
+                                        style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                                        <div style="display: flex; gap: 4px;">
+                                            <div class="orbital-box"><span class="arrow-up">↿</span><span
+                                                    class="arrow-down">⇂</span></div>
+                                            <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                            <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                        </div>
+                                        <div style="font-size: var(--text-sm); color: var(--muted); text-align: center;"
+                                            data-en="three d subshells">
+                                            drei d-Unterschalen</div>
+                                    </div>
+                                </div>
+
+                                <!-- ΔE Pfeil -->
+                                <div style="display: flex; align-items: center; transform: translateY(-10px);">
+                                    <svg height="110" width="50" style="overflow: visible;">
+                                        <line x1="15" y1="0" x2="15" y2="110" stroke="var(--text)" stroke-width="2"
+                                            stroke-linecap="round" />
+                                        <polyline points="7 8, 15 0, 23 8" fill="none" stroke="var(--text)"
+                                            stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+                                        <polyline points="7 102, 15 110, 23 102" fill="none" stroke="var(--text)"
+                                            stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+                                        <text x="32" y="55" dominant-baseline="central" font-weight="700"
+                                            fill="var(--text)">ΔE</text>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div
+                                style="height: 2.8rem; display: flex; align-items: flex-start; justify-content: center; text-align: center; width: 100%; box-sizing: border-box; padding-right: calc(50px + 1.5rem);">
+                                <div style="font-weight: 600; color: var(--text); font-size: 0.9rem;"
+                                    data-en="octahedral&lt;br&gt;crystal field">
+                                    oktaedrisches<br>Kristallfeld</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media-caption"
+                        data-en="&lt;b&gt;Fig. 1: Crystal field splitting of the d-orbitals in an octahedral field.&lt;/b&gt; ΔE is the energy difference between the split levels.">
+                        <b>Abb. 1: Kristallfeldaufspaltung der d-Orbitale im oktaedrischen Feld.</b>
+                        ΔE ist die Energiedifferenz zwischen den aufgespalteten Niveaus.
+                    </div>
+                </div>
+            </details>
+
+            <!-- ── PFEIL ── -->
+            <div class="path-arrow" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <polyline points="19 12 12 19 5 12" />
+                </svg>
+            </div>
+
+            <!-- ────────────────────────────────────────────────────────────
+                 ABSCHNITT 6: WAS SORGT FÜR FARBIGKEIT?
+                 ──────────────────────────────────────────────────────────── -->
+            <details id="detailsFarbigkeit">
+                <summary data-en="What causes colouration?">Was sorgt für Farbigkeit?</summary>
+                <div class="details-content">
+                    <p
+                        data-en="Light is a form of energy that can be absorbed. During this process, an electron is excited to a higher energy level (Fig. 2). This energy difference between the two levels corresponds to the energy of the wavelength of the light that can be absorbed. Consequently, only the complementary colour of the absorbed light is observed">
+                        Licht ist eine Form von Energie, die aufgenommen werden kann. Dabei wird ein
+                        Elektron in das nächsthöhere energetische Niveau gebracht (Abb. 2). Diese Energiedifferenz
+                        entspricht der Energie der Wellenlänge des Lichtes, welche absorbiert werden kann.
+                        Folglich bleibt nur die Komplementärfarbe, des absorbierten Lichtes über.
+                    </p>
+
+                    <!-- ═══ d¹-Elektronenübergang (Kristallfeldtheorie) ═══ -->
+                    <div
+                        style="display: flex; align-items: center; justify-content: center; gap: 0; margin: 2rem 0; flex-wrap: wrap;">
+
+                        <!-- Grundzustand (links) mit d¹ Label -->
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="font-size: 1.1rem; font-weight: 600; color: var(--text);">d<sup>1</sup></span>
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                                <!-- eg: 2 leere Kästchen -->
+                                <div style="display: flex; gap: 4px;">
+                                    <div class="orbital-box"></div>
+                                    <div class="orbital-box"></div>
+                                </div>
+                                <!-- t2g: 3 Kästchen, erstes mit ↿ -->
+                                <div style="display: flex; gap: 4px;">
+                                    <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                    <div class="orbital-box"></div>
+                                    <div class="orbital-box"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- hν gestrichelter Pfeil (Mitte) -->
+                        <div style="display: flex; flex-direction: column; align-items: center; margin: 0 0.8rem;">
+                            <span
+                                style="font-size: 0.95rem; font-weight: 700; font-style: italic; color: #C2185B; line-height: 1;">hν</span>
+                            <svg width="80" height="16" viewBox="0 0 80 16" style="display: block; margin-top: 2px;">
+                                <defs>
+                                    <marker id="arrowHvDash" markerWidth="8" markerHeight="6" refX="7" refY="3"
+                                        orient="auto">
+                                        <polygon points="0,0 8,3 0,6" fill="#C2185B" />
+                                    </marker>
+                                </defs>
+                                <line x1="2" y1="8" x2="72" y2="8" stroke="#C2185B" stroke-width="2"
+                                    stroke-dasharray="6,4" stroke-linecap="round" marker-end="url(#arrowHvDash)" />
+                            </svg>
+                        </div>
+
+                        <!-- Angeregter Zustand (rechts) -->
+                        <div style="display: flex; align-items: center; gap: 0.8rem;">
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                                <!-- eg: 2 Kästchen, erstes mit ↿ -->
+                                <div style="display: flex; gap: 4px;">
+                                    <div class="orbital-box"><span class="arrow-up">↿</span></div>
+                                    <div class="orbital-box"></div>
+                                </div>
+                                <!-- t2g: 3 leere Kästchen -->
+                                <div style="display: flex; gap: 4px;">
+                                    <div class="orbital-box"></div>
+                                    <div class="orbital-box"></div>
+                                    <div class="orbital-box"></div>
+                                </div>
+                            </div>
+
+                            <!-- ΔE Pfeil (rot-violett) -->
+                            <div style="display: flex; align-items: center;">
+                                <svg height="90" width="50" style="overflow: visible;">
+                                    <line x1="15" y1="0" x2="15" y2="90" stroke="#C2185B" stroke-width="2"
+                                        stroke-linecap="round" />
+                                    <polyline points="7 8, 15 0, 23 8" fill="none" stroke="#C2185B" stroke-width="2"
+                                        stroke-linejoin="round" stroke-linecap="round" />
+                                    <polyline points="7 82, 15 90, 23 82" fill="none" stroke="#C2185B" stroke-width="2"
+                                        stroke-linejoin="round" stroke-linecap="round" />
+                                    <text x="32" y="45" dominant-baseline="central" font-weight="700"
+                                        fill="#C2185B">ΔE</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="media-caption"
+                        data-en="&lt;b&gt;Figure 2: Example of a d-d transition of an electron excited by light.&lt;/b&gt;">
+                        <b>Abbildung 2: Beispielhafter d-d-Orbitalübergang eines durch Licht angeregten Elektrons.</b>
+                    </div>
+
+                    <p
+                        data-en="As the crystal field splitting increases, higher-energy wavelengths can be absorbed, corresponding to absorption at shorter wavelengths toward the blue region of the visible spectrum.">
+                        Mit zunehmender Aufspaltung werden
+                        auch die Energien, die aufgenommen werden können, höher (in Richtung blaue
+                        Farbe absorbiert).
+                    </p>
+
+                    <!-- ═══ Interaktives Elektromagnetisches Spektrum ═══ -->
+                    <div class="em-spectrum-container" id="emSpectrumContainer">
+                        <svg viewBox="0 0 700 130" id="emSpectrumSvg">
+                            <defs>
+                                <!-- Gradient für sichtbares Licht -->
+                                <linearGradient id="visibleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#8B00FF" />
+                                    <stop offset="12%" stop-color="#4400FF" />
+                                    <stop offset="25%" stop-color="#0000FF" />
+                                    <stop offset="37%" stop-color="#00BFFF" />
+                                    <stop offset="50%" stop-color="#00FF00" />
+                                    <stop offset="62%" stop-color="#CCFF00" />
+                                    <stop offset="75%" stop-color="#FFFF00" />
+                                    <stop offset="87%" stop-color="#FF8000" />
+                                    <stop offset="100%" stop-color="#FF0000" />
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Gesamtspektrum-Balken (grau) -->
+                            <rect x="20" y="30" width="660" height="14" rx="3" fill="var(--border)" opacity="0.5" />
+
+                            <!-- Beschriftungen der Bereiche -->
+                            <text x="45" y="18" class="em-label" text-anchor="middle" data-en="Gamma">Gamma</text>
+                            <text x="115" y="18" class="em-label" text-anchor="middle" data-en="X-ray">Röntgen</text>
+                            <text x="185" y="18" class="em-label" text-anchor="middle" data-en="UV">UV</text>
+                            <text x="350" y="18" class="em-vis-label" text-anchor="middle"
+                                data-en="Visible light">Sichtbares Licht</text>
+                            <text x="515" y="18" class="em-label" text-anchor="middle"
+                                data-en="Infrared">Infrarot</text>
+                            <text x="590" y="18" class="em-label" text-anchor="middle" data-en="Micro">Mikro</text>
+                            <text x="655" y="18" class="em-label" text-anchor="middle" data-en="Radio">Radio</text>
+
+                            <!-- Sichtbarer Bereich (Regenbogen-Gradient) -->
+                            <rect x="220" y="26" width="260" height="22" rx="4" fill="url(#visibleGrad)" />
+                            <rect x="220" y="26" width="260" height="22" rx="4" fill="none" stroke="var(--text)"
+                                stroke-width="1" opacity="0.3" />
+
+                            <!-- Detaillierte Wellenlängen für sichtbares Licht -->
+                            <text x="230" y="68" class="em-label" text-anchor="middle">380</text>
+                            <text x="260" y="68" class="em-label" text-anchor="middle">430</text>
+                            <text x="300" y="68" class="em-label" text-anchor="middle">480</text>
+                            <text x="350" y="68" class="em-label" text-anchor="middle">530</text>
+                            <text x="400" y="68" class="em-label" text-anchor="middle">580</text>
+                            <text x="440" y="68" class="em-label" text-anchor="middle">620</text>
+                            <text x="475" y="68" class="em-label" text-anchor="middle">700</text>
+                            <text x="350" y="82" class="em-label" text-anchor="middle"
+                                data-en="Wavelength in nm">Wellenlänge in nm</text>
+
+                            <!-- Farbnamen unter den Bereichen -->
+                            <text x="235" y="96" class="em-label" text-anchor="middle" fill="#8B00FF"
+                                data-en="Violet">Violett</text>
+                            <text x="275" y="96" class="em-label" text-anchor="middle" fill="#0000FF"
+                                data-en="Blue">Blau</text>
+                            <text x="315" y="96" class="em-label" text-anchor="middle" fill="#00BFFF"
+                                data-en="Cyan">Cyan</text>
+                            <text x="350" y="96" class="em-label" text-anchor="middle" fill="#00AA00"
+                                data-en="Green">Grün</text>
+                            <text x="390" y="96" class="em-label" text-anchor="middle" fill="#CCAA00"
+                                data-en="Yellow">Gelb</text>
+                            <text x="430" y="96" class="em-label" text-anchor="middle" fill="#FF8000"
+                                data-en="Orange">Orange</text>
+                            <text x="465" y="96" class="em-label" text-anchor="middle" fill="#FF0000"
+                                data-en="Red">Rot</text>
+
+                            <!-- Energiepfeil -->
+                            <line x1="220" y1="115" x2="480" y2="115" stroke="var(--muted)" stroke-width="1"
+                                marker-start="url(#emArrowL)" marker-end="url(#emArrowR)" />
+                            <text x="300" y="128" class="em-label" text-anchor="middle" data-en="← higher energy">←
+                                höhere Energie</text>
+                            <text x="420" y="128" class="em-label" text-anchor="middle"
+                                data-en="lower energy →">niedrigere Energie →</text>
+                            <defs>
+                                <marker id="emArrowL" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+                                    <path d="M8,0 L0,3 L8,6" fill="none" stroke="var(--muted)" stroke-width="1" />
+                                </marker>
+                                <marker id="emArrowR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                                    <path d="M0,0 L8,3 L0,6" fill="none" stroke="var(--muted)" stroke-width="1" />
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="media-caption"
+                        data-en="&lt;b&gt;Fig. 3: The electromagnetic spectrum.&lt;/b&gt; Source: N. Hanacek/NIST.">
+                        <b>Abb. 3: Das elektromagnetische Spektrum.</b> Quelle: N. Hanacek/NIST.
+                    </div>
+
+                    <p data-en="&lt;strong&gt;Example:&lt;/strong&gt;"><strong>Beispiel:</strong></p>
+                    <p
+                        data-en="Consider the metal complex [Ti(H&lt;sub&gt;2&lt;/sub&gt;O)&lt;sub&gt;6&lt;/sub&gt;]&lt;sup&gt;3+&lt;/sup&gt;. The electron in the &lt;span class=&quot;color-n3&quot;&gt;3d&lt;/span&gt; orbital of the metal ion absorbs light corresponding to the green region of the visible spectrum. Therefore, the complementary colour, red-violet, remains, and the complex appears red-violet. Upon absorption of light energy, the electron is excited from the lower-energy &lt;span class=&quot;color-n3&quot;&gt;3d&lt;/span&gt; subshell to the higher-energy &lt;span class=&quot;color-n3&quot;&gt;3d&lt;/span&gt; subshell.">
+                        Es liegt ein [Ti(H<sub>2</sub>O)<sub>6</sub>]<sup>3+</sup> Metallkomplex vor. Das Elektron des
+                        <span class="color-n3">3d</span>-Orbitals des Metalls absorbiert
+                        die Lichtenergie der Wellenlängen für die Farbe grün aus dem Licht. Es bleibt also
+                        die Komplementärfarbe rot-violett über. Somit erscheint der Metallkomplex rot-violett. Bei der
+                        Absorption der Lichtenergie wird das Elektron aus der energetisch tiefergelegene Unterschale des
+                        <span class="color-n3">3d</span>-Orbitals in die energetisch höher gelegene Unterschale des
+                        <span class="color-n3">3d</span>-Orbitals angehoben.
+                    </p>
+
+                    <div
+                        style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: flex-start; justify-content: center; margin-top: 1.5rem;">
+                        <!-- Ti / Ti3+ Konfiguration (Energiediagramm) -->
+                        <div
+                            style="display: flex; flex-direction: column; flex: 1; min-width: 400px; max-width: 500px;">
+                            <div class="orbital-module" id="tiOrbitalModule">
+                                <div class="orbital-controls">
+                                    <label data-en="Configuration:">Konfiguration:</label>
+                                    <button class="btn btn-secondary ti-btn active" data-z="22">Ti</button>
+                                    <button class="btn btn-secondary ti-btn" data-z="19" data-label="Ti³⁺">Ti³⁺</button>
+                                    <button class="btn btn-secondary ti-btn" data-z="19" data-label="Ti³⁺ angeregt"
+                                        data-excited="true" data-en="Ti³⁺ excited">Ti³⁺ angeregt</button>
+                                </div>
+                                <div class="box-notation" id="tiBoxNotation"></div>
+                            </div>
+                            <div class="media-caption" data-en="">
+
+                            </div>
+                        </div>
+
+                        <!-- ═══ Interaktives Komplementärfarben-Rad ═══ -->
+                        <div
+                            style="display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 400px;">
+                            <div class="color-wheel-container" id="colorWheelContainer" style="margin-top: 0;">
+                                <svg viewBox="0 0 300 300" id="colorWheelSvg"></svg>
+                                <div class="color-info" id="colorWheelInfo">
+                                    <span
+                                        data-en="Click on a colour in the colour wheel to see its complementary colour.">Klicke
+                                        auf eine Farbe im Farbrad, um die Komplementärfarbe zu sehen.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- ── PFEIL ── -->
+            <div class="path-arrow" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <polyline points="19 12 12 19 5 12" />
+                </svg>
+            </div>
+
+            <!-- ────────────────────────────────────────────────────────────
+                 ABSCHNITT 7: ORBITALÜBERGÄNGE & LAPORTE-REGEL
+                 ──────────────────────────────────────────────────────────── -->
+            <details>
+                <summary data-en="Laporte selection rule">Laporte-Regel</summary>
+                <div class="details-content">
+
+                    <p
+                        data-en="Due to the Laporte selection rule, electronic transitions between orbitals of the same parity are forbidden in centrosymmetric molecules (e.g., octahedral complexes). This means an electronic orbital transition from a d- to a d-orbital is forbidden, as well as a transition from f- to f-orbitals. In this context, &quot;forbidden&quot; does not mean impossible, but rather highly improbable.">
+                        Aufgrund der Laporte-Regel gilt jedoch bei punktsymmetrischen Molekülen (z.B.
+                        oktaedrische Komplexe), dass elektronische Orbitalübergänge mit sogenannter gleicher Parität (=
+                        eine
+                        Symmetrieform) verboten, sind. Das bedeutet, ein elektronischer Orbitalübergang von
+                        einem d- zu einem d- Orbital ist verboten, genau so wie von f- zu f-Orbitalen. "Verboten"
+                        bedeutet
+                        in diesem Sinne, dass solch ein elektronischer Orbitalübergang sehr unwahrscheinlich aber nicht
+                        unmöglich ist.
+                    </p>
+                    <p
+                        data-en="In reality, such transitions can occur because symmetry-breaking effects partially relax the selection rule. One example is vibronic coupling, in which small vibrations occur between the electron and the nucleus.">
+                        In der Realität tritt dies jedoch aufgrund von symmetriestörenden Effekten auf, sodass solche
+                        Übergänge dennoch möglich sind. Ein solcher Effekt ist zum Beispiel die vibronische Kopplung,
+                        bei der es zu kleinen Vibrationen zwischen Elektron und Kern kommt.
+                    </p>
+                </div>
+            </details>
+
+            <!-- ── PFEIL ── -->
+            <div class="path-arrow" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <polyline points="19 12 12 19 5 12" />
+                </svg>
+            </div>
+
+            <!-- ────────────────────────────────────────────────────────────
+                 ABSCHNITT 8: INTENSITÄT DER FARBEN
+                 ──────────────────────────────────────────────────────────── -->
+            <details>
+                <summary data-en="Intensity of colours">Intensität der Farben</summary>
+                <div class="details-content">
+                    <p
+                        data-en="The more probable, and thus more frequent, the energy can be absorbed, the more intense the colouration.">
+                        Je wahrscheinlicher, und somit häufiger, die Energie aufgenommen werden kann, umso intensiver
+                        die
+                        Farbgebung.
+                    </p>
+                    <p
+                        data-en="In transition metal ions, symmetry-breaking effects are relatively pronounced, allowing the Laporte selection rule to be partially circumvented. As a result, d-d transitions of the electrons become more probable. Furthermore, the crystal field effects are often sufficiently large, so the complementary colour of the absorbed energy lies in the visible wavelength range for us. Consequently, transition metal complexes generally appear intensely coloured.">
+                        Da bei Ionen der Übergangsmetallen die symmetriestörenden Effekte relativ groß
+                        sind, kann die Laporte-Regel teils umgangen werden. Das führt zu wahrscheinlicheren
+                        d-d-Orbitalübergängen der Elektronen. Weiterhin sind die
+                        Kristallfeldeffekte ebenfalls relativ groß, sodass die Komplementärfarbe, der absorbierten
+                        Energie im für uns sichtbaren Wellenlängenbereich liegt. Als Folge erscheinen
+                        Übergangsmetallkomplexe in der Regel intensiv farbig.
+                    </p>
+                    <p
+                        data-en="In contrast, lanthanoid ions contain electrons in the &lt;span class=&quot;color-n4&quot;&gt;4f&lt;/span&gt; orbitals, while the &lt;span class=&quot;color-n5&quot;&gt;5d&lt;/span&gt; and &lt;span class=&quot;color-n6&quot;&gt;6s&lt;/span&gt; orbitals are typically unoccupied. Thus, the following electron configuration exists for the Er&lt;sup&gt;3+&lt;/sup&gt; ion in the [Er(H&lt;sub&gt;2&lt;/sub&gt;O)&lt;sub&gt;9&lt;/sub&gt;]&lt;sup&gt;3+&lt;/sup&gt; complex:">
+                        Im Vergleich dazu ist es bei Ionen der Lanthanoide so, dass die <span class="color-n6">6s</span>
+                        und <span class="color-n5">5d</span> Orbitale
+                        leer sind und die <span class="color-n4">4f</span>-Orbitale besetzt bleiben. So liegt besteht
+                        beim
+                        [Er(H<sub>2</sub>O)<sub>9</sub>]<sup>3+</sup>
+                        Komplex folgende Elektronenkonfiguration für das Er<sup>3+</sup>:
+                    </p>
+
+                    <!-- ═══ Er3+ Konfiguration (Z=68, 3+ = 65 Elektronen) ═══ -->
+                    <div class="orbital-module" id="erOrbitalModule">
+                        <div class="orbital-controls">
+                            <label data-en="Configuration:">Konfiguration:</label>
+                            <button class="btn btn-secondary er-btn active" data-z="68">Er</button>
+                            <button class="btn btn-secondary er-btn" data-z="65" data-label="Er³⁺">Er³⁺</button>
+                        </div>
+                        <div class="box-notation" id="erBoxNotation"></div>
+                    </div>
+                    <div class="media-caption" data-en="">
+
+                    </div>
+
+                    <p
+                        data-en="Since the &lt;span class=&quot;color-n4&quot;&gt;4f&lt;/span&gt; orbital electrons of the erbium ion are located close to the nucleus and hardly participate in ligand bonding, their crystal field effect is small. In addition, the proximity of the f-orbital electrons to the nucleus leads to only very small symmetry-breaking effects. Therefore, the Laporte selection rule is weakly circumvented and f-f orbital transitions remain highly improbable. As a result, erbium compounds exhibit only weak colouration (pale pink).">
+                        Da die <span class="color-n4">4f</span>-Orbitalelektronen des Erbiumions jedoch kernnah und kaum
+                        an der
+                        Ligandenbindung beteiligt sind, ist deren Kristallfeldeffekt gering. Zudem sorgt die
+                        Kernnähe der f-Orbitalelektronen für sehr geringe symmetristörenden Effekte, sodass
+                        die Laporte-Regel nur kaum umgangen wird und nur wenige f-f-Orbitalübergänge
+                        vorliegen. Infolgedessen ist die Intensität der Farbe von Erbium gering (blasses
+                        rosa).
+                    </p>
+                </div>
+            </details>
+
+            <!-- ── PFEIL ── -->
+            <div class="path-arrow" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <polyline points="19 12 12 19 5 12" />
+                </svg>
+            </div>
+
+            <!-- ────────────────────────────────────────────────────────────
+                 ABSCHNITT 9: AUFGABE
+                 ──────────────────────────────────────────────────────────── -->
+            <section class="panel trainer" style="margin-top: 1.5rem;" id="aufgabeSection">
+                <h2 style="margin-bottom: .75rem; color: var(--text);" data-en="Exercise">Aufgabe</h2>
+                <p style="margin:0 0 1.25rem 0; color: var(--text);"
+                    data-en="Based on the information provided, &lt;b&gt;explain&lt;/b&gt; why the hexaaquacopper(II) complex ([Cu(H&lt;sub&gt;2&lt;/sub&gt;O)&lt;sub&gt;6&lt;/sub&gt;]&lt;sup&gt;2+&lt;/sup&gt;) exhibits a more intense colouration than the nonaaquaneodymium(III) complex ([Nd(H&lt;sub&gt;2&lt;/sub&gt;O)&lt;sub&gt;9&lt;/sub&gt;]&lt;sup&gt;3+&lt;/sup&gt;). Also address the fundamental origin of colouration. Assume that both complexes are ideally symmetric.">
+                    <b>Begründe</b> anhand der dir gegebenen Informationen warum der Hexaaquakupfer(II)-Komplex
+                    ([Cu(H<sub>2</sub>O)<sub>6</sub>]<sup>2+</sup>)
+                    eine
+                    intensivere Farbgebung besitzt als der Nona-aquaneodym(III)-Komplex
+                    ([Nd(H<sub>2</sub>O)<sub>9</sub>]<sup>3+</sup>). Gehe dabei auch
+                    darauf
+                    ein, wie es grundsätzlich zur Farbgebung kommt.
+                    Beide Komplexe sollen als grundsätzlich symmetrisch angesehen werden.
+                </p>
+
+                <!-- Lösung überprüfen Button -->
+                <div id="taskActionContainer"
+                    style="margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+                    <div>
+                        <button class="btn btn-primary" type="button" id="checkSolutionBtn"
+                            data-en="Check solution">Lösung
+                            überprüfen</button>
+                    </div>
+
+                    <!-- Passwort-Eingabeblock (versteckt) -->
+                    <div class="password-container" id="passwordContainer" style="display: none;">
+                        <button class="close-btn" id="closePasswordBtn" aria-label="Schließen">&times;</button>
+                        <p style="margin: 0 0 .5rem 0; font-size: var(--text-sm);"
+                            data-en="Show your solution to the teacher. They will then give you a password for the model solution.">
+                            Zeige der Lehrkraft deine Lösung. Diese gibt dir dann ein Passwort zur Musterlösung.</p>
+                        <div style="display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;">
+                            <input type="password" id="teacherPassword" class="password-input"
+                                placeholder="Passwort eingeben..." data-en-placeholder="Enter password..." />
+                            <button class="btn btn-primary" type="button" id="submitPasswordBtn"
+                                data-en="Confirm">Bestätigen</button>
+                        </div>
+                        <p id="passwordError"
+                            style="color: var(--hard); font-size: var(--text-xs); margin: .5rem 0 0 0; display: none;"
+                            data-en="Incorrect password.">Falsches Passwort.</p>
+                    </div>
+                </div>
+
+                <!-- Antwort-Textfeld -->
+                <div style="position: relative;">
+                    <textarea class="task3-textarea" id="taskTextarea" maxlength="2500"
+                        placeholder="Begründe deine Antwort hier..."
+                        data-en-placeholder="Write your reasoning here..:"></textarea>
+                </div>
+
+                <!-- Tipp & Zeichenzählung auf einer Zeile -->
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; margin-top: 1.5rem;">
+                    <div style="flex: 1;">
+                        <details id="taskHint" class="hint-details"
+                            style="font-size: var(--text-sm); cursor: pointer; border: none; background: transparent; padding: 0;">
+                            <summary style="font-weight: 600; color: var(--primary-2); list-style: none;"
+                                data-en="&amp;nbsp;Show hint">&nbsp;Tipp anzeigen</summary>
+                            <div class="details-content"
+                                style="border: none; padding-top: 0.5rem; margin-top: 0.5rem; background: transparent;">
+                                <p
+                                    data-en="Structure of the solution: General colour formation &amp;rarr; Classification of the complexes as transition metal or lanthanoid complexes &amp;rarr; Apply crystal field theory to transition metal complex &amp;rarr; Laporte selection rule &amp;rarr; How the Laporte selection rule can be circumvented in transition metal complexes &amp;rarr; How the Laporte selection rule can be circumvented in lanthanoid complexes &amp;rarr; Conclusion">
+                                    Struktur der Lösung: Farbentstehung allgemein &rarr; Klassifikation der
+                                    Komplexe als Übergangsmetall- bzw. Lanthanoidkomplex &rarr; Kristallfeldtheorie auf
+                                    Übergangsmetallkomplex anwenden &rarr; Laporte-Regel &rarr; wie bei
+                                    Übergangsmetallkomplexen die Laporte-Regel umgangen werden kann &rarr; wie bei
+                                    Lanthanoidkomplexen die Laporte-Regel umgangen werden kann &rarr; Fazit</p>
+                            </div>
+                        </details>
+                    </div>
+                    <div id="charCounter"
+                        style="font-size: var(--text-xs); color: var(--muted); flex-shrink: 0; margin-top: 0.1rem;">0 /
+                        2500 Zeichen</div>
+                </div>
+
+                <!-- Musterlösung (versteckt) -->
+                <div id="solutionContent"
+                    style="display: none; margin-top: 1.5rem; padding: 1.25rem; background: rgba(63, 125, 45, 0.08); border-left: 4px solid var(--ok); border-radius: var(--r-md);">
+                    <strong
+                        style="display: block; font-size: var(--text-base); color: var(--ok); margin-bottom: 0.5rem;"
+                        data-en="Model solution:">Musterlösung:</strong>
+                    <div style="margin: 0; color: var(--text); line-height: 1.6; font-size: var(--text-sm);">
+                        <p data-en="The colouration of metal complexes arises from the absorption of light energy by electrons. In this process, electrons are excited from an energetically lower orbital to a higher one. The energy difference between the orbitals corresponds to the energy of a specific wavelength of light that is absorbed. The complementary colour of the absorbed light then remains visible."
+                            style="margin-top: 0;">
+                            Die Farbigkeit von Metallkomplexen entsteht dadurch, dass Lichtenergie von
+                            Elektronen aufgenommen wird. Dabei werden Elektronen von einem energetisch
+                            niedrigeren in ein höheres Orbital angeregt. Die Energiedifferenz zwischen den
+                            Orbitalen entspricht der Energie einer bestimmten Lichtwellenlänge, die absorbiert
+                            wird. Sichtbar bleibt anschließend die Komplementärfarbe des absorbierten Lichtes.
+                        </p>
+                        <p
+                            data-en="The hexaaquacopper(II) complex [Cu(H&lt;sub&gt;2&lt;/sub&gt;O)&lt;sub&gt;6&lt;/sub&gt;]&lt;sup&gt;2+&lt;/sup&gt; is a complex of a transition metal. The symmetrical arrangement of the water molecules around the copper ion creates a crystal field that affects the energies of the d-orbitals differently. As a result, the initially degenerate d-orbitals are split and an energy difference arises between them (crystal field splitting). Electrons can move from the energetically lower to the energetically higher of the split d-orbitals by absorbing light energy (d-d transitions).">
+                            Beim Hexaaquakupfer(II)-Komplex [Cu(H<sub>2</sub>O)<sub>6</sub>]<sup>2+</sup> handelt es
+                            sich um einen Komplex
+                            eines Übergangsmetalls. Durch die symmetrische Anordnung der Wassermoleküle
+                            um das Kupferion entsteht ein Kristallfeld, das die Energien der d-Orbitale
+                            unterschiedlich beeinflusst. Dadurch werden die ursprünglich gleichenergetischen
+                            d-Orbitale aufgespalten und es entsteht eine Energiedifferenz zwischen ihnen
+                            (Kristallfeldaufspaltung).
+                            Elektronen können durch Aufnahme von Lichtenergie aus dem energetisch
+                            niedrigeren in das energetisch höhere der aufgespaltenen d-Orbitale wechseln
+                            (d-d-Übergänge).
+                        </p>
+                        <p
+                            data-en="Although d-d transitions in symmetrical complexes are actually forbidden according to the Laporte selection rule, symmetry-breaking effects, such as vibronic coupling, can partially circumvent this rule in transition metals. Since these effects are comparatively pronounced in transition metals, d-d transitions still occur. Furthermore, the crystal field splitting is relatively large, so the absorbed energy lies in the wavelength range in which the complementary colour is visible to us. All of this leads to an intense colour perception.">
+                            Zwar sind bei symmetrischen Komplexen d-d-Übergänge nach der Laporte-Regel
+                            eigentlich verboten, jedoch können bei Übergangsmetallen symmetriestörende
+                            Effekte, beispielsweise vibronische Kopplungen, diese Regel teilweise umgehen. Da
+                            diese Effekte bei Übergangsmetallen vergleichsweise stark ausgeprägt sind treten
+                            d-d-Übergänge dennoch auf.
+                            Zudem ist die Kristallfeldaufspaltung relativ groß ist, sodass die absorbierte Energie im
+                            Wellenlängenbereich liegt,
+                            in dem die Komplementärfarbe sichtbar für uns ist. All dies führt zu einer intensiven
+                            Farbwahrnehmung.
+                        </p>
+                        <p
+                            data-en="The nonaaquaneodymium(III) complex [Nd(H&lt;sub&gt;2&lt;/sub&gt;O)&lt;sub&gt;9&lt;/sub&gt;]&lt;sup&gt;3+&lt;/sup&gt; in contrast belongs to the lanthanoid complexes. In lanthanoids, the occupied electrons are predominantly located in the &lt;span class=&quot;color-n4&quot;&gt;4f&lt;/span&gt; orbitals. These are located very close to the nucleus and are barely involved in the bonding to the ligands. Therefore, the influence of the crystal field on the f-orbitals is very small, so the splitting of the energy levels is significantly smaller.">
+                            Der Nonaaquaneodym(III)-Komplex [Nd(H<sub>2</sub>O)<sub>9</sub>]<sup>3+</sup> gehört dagegen
+                            zu den
+                            Lanthanoidkomplexen. Bei Lanthanoiden befinden sich die besetzten Elektronen
+                            überwiegend in den <span class="color-n4">4f</span>-Orbitalen. Diese liegen sehr kernnah und
+                            sind kaum an der
+                            Bindung zu den Liganden beteiligt. Deshalb ist der Einfluss des Kristallfeldes auf die
+                            f-Orbitale nur sehr gering, sodass die Aufspaltung der Energieniveaus deutlich kleiner
+                            ausfällt.
+                        </p>
+                        <p data-en="In addition, the symmetry-breaking effects are considerably weaker for the nucleus-proximal f-orbitals. The Laporte selection rule can therefore only be circumvented to a small extent, so that only few f-f transitions occur. The absorption of visible light is therefore significantly weaker than in transition metal complexes. Consequently, the nonaaquaneodymium(III) complex appears considerably paler than the hexaaquacopper(II) complex."
+                            style="margin-bottom: 0;">
+                            Zusätzlich sind die symmetriestörenden Effekte bei den kernnahen f-Orbitalen
+                            wesentlich schwächer. Die Laporte-Regel kann daher nur in geringem Maße
+                            umgangen werden, sodass nur wenige f-f-Übergänge stattfinden. Die Absorption von
+                            sichtbarem Licht ist deshalb deutlich schwächer als bei Übergangsmetallkomplexen.
+                            Folglich erscheint der Nonaaquaneodym(III)-Komplex wesentlich blasser als der
+                            Hexaaquakupfer(II)-Komplex.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+
+
+    <!-- ====================================================================
+         EXTERNE BIBLIOTHEKEN (nur Rangy für Text-Highlighting)
+         ==================================================================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.1/rangy-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.1/rangy-classapplier.min.js"></script>
+
+    <script>
+        /* ===================================================================
+           ORBITAL-KONFIGURATIONSMODUL
+           ===================================================================
+           Berechnet die Elektronenkonfiguration für beliebige Ordnungszahlen
+           nach dem Aufbauprinzip, Pauli-Prinzip und der Hund'schen Regel.
+           =================================================================== */
+
+        /* Safe localStorage helpers */
+        function safeGetItem(key) {
+            try { return localStorage.getItem(key); } catch (e) { return null; }
+        }
+        function safeSetItem(key, val) {
+            try { localStorage.setItem(key, val); } catch (e) { }
+        }
+
+        // Auffüllreihenfolge nach dem Aufbauprinzip (Madelung-Regel)
+        const ORBITAL_ORDER = [
+            { name: '1s', type: 's', subs: 1, max: 2 },
+            { name: '2s', type: 's', subs: 1, max: 2 },
+            { name: '2p', type: 'p', subs: 3, max: 6 },
+            { name: '3s', type: 's', subs: 1, max: 2 },
+            { name: '3p', type: 'p', subs: 3, max: 6 },
+            { name: '4s', type: 's', subs: 1, max: 2 },
+            { name: '3d', type: 'd', subs: 5, max: 10 },
+            { name: '4p', type: 'p', subs: 3, max: 6 },
+            { name: '5s', type: 's', subs: 1, max: 2 },
+            { name: '4d', type: 'd', subs: 5, max: 10 },
+            { name: '5p', type: 'p', subs: 3, max: 6 },
+            { name: '6s', type: 's', subs: 1, max: 2 },
+            { name: '4f', type: 'f', subs: 7, max: 14 },
+            { name: '5d', type: 'd', subs: 5, max: 10 },
+            { name: '6p', type: 'p', subs: 3, max: 6 },
+            { name: '7s', type: 's', subs: 1, max: 2 },
+            { name: '5f', type: 'f', subs: 7, max: 14 },
+            { name: '6d', type: 'd', subs: 5, max: 10 },
+            { name: '7p', type: 'p', subs: 3, max: 6 }
+        ];
+
+        /**
+         * Erzeugt die Elektronenkonfiguration für eine gegebene Elektronenzahl.
+         * Füllt nach Aufbauprinzip + Hund'sche Regel.
+         * @param {number} electronCount - Anzahl der Elektronen
+         * @param {string} ionType - Optionaler Typ für spezifische Ionen (Ti3+, Er3+)
+         * @returns {Array} Konfiguration mit Boxen-Zuständen
+         */
+        function fillOrbitals(electronCount, ionType = null) {
+            let custom = null;
+            if (ionType === 'Ti3+' || ionType === 'Ti3+excited') custom = { '1s': 2, '2s': 2, '2p': 6, '3s': 2, '3p': 6, '4s': 0, '3d': 1 };
+            if (ionType === 'Er3+') custom = { '1s': 2, '2s': 2, '2p': 6, '3s': 2, '3p': 6, '4s': 2, '3d': 10, '4p': 6, '5s': 2, '4d': 10, '5p': 6, '6s': 0, '4f': 11 };
+            if (ionType === 'Fe²⁺') custom = { '1s': 2, '2s': 2, '2p': 6, '3s': 2, '3p': 6, '4s': 0, '3d': 6 };
+            if (ionType === 'Fe³⁺') custom = { '1s': 2, '2s': 2, '2p': 6, '3s': 2, '3p': 6, '4s': 0, '3d': 5 };
+
+            let remaining = electronCount;
+            return ORBITAL_ORDER.map(orb => {
+                const boxes = Array.from({ length: orb.subs }, () => ({ up: false, down: false }));
+                let electrons = 0;
+                let forcedShow = false;
+
+                if (custom) {
+                    if (custom[orb.name] !== undefined) {
+                        let c = custom[orb.name];
+                        electrons = c;
+                        forcedShow = true;
+                        if (ionType === 'Ti3+excited' && orb.name === '3d') {
+                            boxes[3].up = true;
+                        } else {
+                            for (let i = 0; i < orb.subs && c > 0; i++) { boxes[i].up = true; c--; }
+                            for (let i = 0; i < orb.subs && c > 0; i++) { boxes[i].down = true; c--; }
+                        }
+                    }
+                    return { ...orb, boxes, electrons, forcedShow };
+                }
+
+                if (remaining <= 0) return { ...orb, boxes, electrons };
+
+                // 1. Durchlauf: Alle Kästchen mit Up-Spin füllen (Hund'sche Regel)
+                for (let i = 0; i < orb.subs && remaining > 0; i++) {
+                    boxes[i].up = true;
+                    remaining--;
+                    electrons++;
+                }
+                // 2. Durchlauf: Kästchen mit Down-Spin auffüllen
+                for (let i = 0; i < orb.subs && remaining > 0; i++) {
+                    boxes[i].down = true;
+                    remaining--;
+                    electrons++;
+                }
+
+                return { ...orb, boxes, electrons };
+            });
+        }
+
+        function getNobleGasCore(z) {
+            if (z >= 87) return { symbol: '[Rn]', electrons: 86, maxOrbIndex: 14 };
+            if (z >= 55) return { symbol: '[Xe]', electrons: 54, maxOrbIndex: 10 };
+            if (z >= 37) return { symbol: '[Kr]', electrons: 36, maxOrbIndex: 7 };
+            if (z >= 19) return { symbol: '[Ar]', electrons: 18, maxOrbIndex: 4 };
+            return null;
+        }
+
+        /**
+         * Rendert die Kästchenschreibweise in einen Container (mit E-Pfeil und 1s unten).
+         * @param {Array} config - Orbital-Konfiguration
+         * @param {HTMLElement} container - Ziel-Container
+         * @param {boolean} interactive - Ob Klick-Handler aktiv sein sollen
+         * @param {Function} onClick - Callback bei Klick auf ein Kästchen
+         * @param {number} targetZ - Optional target Z for noble gas abbreviation
+         */
+        function renderBoxNotation(config, container, interactive = false, onClick = null, targetZ = null, splitD = false) {
+            const oldHeight = container.offsetHeight;
+            if (oldHeight > 0) {
+                container.style.minHeight = oldHeight + 'px';
+            }
+
+            container.innerHTML = '';
+
+            const wrapper = document.createElement('div');
+            wrapper.style.display = 'flex';
+            wrapper.style.alignItems = 'stretch';
+            wrapper.style.gap = '1.5rem';
+
+            const arrowCol = document.createElement('div');
+            arrowCol.style.display = 'flex';
+            arrowCol.style.flexDirection = 'column';
+            arrowCol.style.alignItems = 'center';
+            arrowCol.style.width = '24px';
+
+            arrowCol.innerHTML = `
+                <div style="font-weight: bold; font-family: var(--font-display); margin-bottom: 2px; color: var(--text);">E</div>
+                <svg width="14" height="100%" style="flex:1; overflow:visible;">
+                    <line x1="7" y1="100%" x2="7" y2="2" stroke="var(--text)" stroke-width="2" stroke-linecap="round" />
+                    <polyline points="2 8, 7 2, 12 8" fill="none" stroke="var(--text)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+                </svg>
+            `;
+
+            const rowsCol = document.createElement('div');
+            rowsCol.style.display = 'flex';
+            rowsCol.style.flexDirection = 'column-reverse';
+            rowsCol.style.gap = '0.5rem';
+            rowsCol.style.flex = '1';
+            rowsCol.style.marginTop = '16px';
+            rowsCol.style.marginBottom = '16px';
+
+            const core = targetZ ? getNobleGasCore(targetZ) : null;
+
+            if (core) {
+                const coreRow = document.createElement('div');
+                coreRow.className = 'orbital-row';
+
+                const label = document.createElement('span');
+                label.className = 'orbital-label';
+                label.textContent = '';
+                coreRow.appendChild(label);
+
+                const text = document.createElement('div');
+                text.textContent = core.symbol;
+                text.style.color = 'var(--text)';
+                text.style.fontSize = '1.5rem';
+                text.style.fontWeight = 'bold';
+                text.style.fontFamily = 'var(--font-display)';
+
+                coreRow.appendChild(text);
+                rowsCol.appendChild(coreRow);
+            }
+
+            config.forEach((orb, orbIndex) => {
+                if (core && orbIndex <= core.maxOrbIndex) return;
+
+                // Nur besetzte Orbitale anzeigen (oder explizit forcierte)
+                if (!interactive && orb.electrons === 0 && !orb.forcedShow) return;
+
+                if (splitD && orb.name === '3d') {
+                    const splitOuter = document.createElement('div');
+                    splitOuter.className = 'orbital-row';
+
+                    const labelCenter = document.createElement('span');
+                    labelCenter.className = 'orbital-label';
+                    labelCenter.textContent = orb.name;
+                    const n = parseInt(orb.name.charAt(0));
+                    if (!isNaN(n)) labelCenter.style.color = `var(--n${n}-color)`;
+                    splitOuter.appendChild(labelCenter);
+
+                    const splitWrapper = document.createElement('div');
+                    splitWrapper.style.display = 'flex';
+                    splitWrapper.style.flexDirection = 'column-reverse';
+                    splitWrapper.style.gap = '0.5rem';
+
+                    // Bottom Row
+                    const t2gRow = document.createElement('div');
+                    t2gRow.style.display = 'flex';
+
+                    const t2gBoxes = document.createElement('div');
+                    t2gBoxes.style.display = 'flex';
+                    t2gBoxes.style.gap = '4px';
+                    t2gRow.appendChild(t2gBoxes);
+
+                    // Top Row
+                    const egRow = document.createElement('div');
+                    egRow.style.display = 'flex';
+
+                    const egBoxes = document.createElement('div');
+                    egBoxes.style.display = 'flex';
+                    egBoxes.style.gap = '4px';
+                    egBoxes.style.marginLeft = '19px'; // Center 2 boxes over 3 boxes
+                    egRow.appendChild(egBoxes);
+
+                    orb.boxes.forEach((box, boxIndex) => {
+                        const boxEl = document.createElement('div');
+                        boxEl.className = 'orbital-box';
+
+                        if (box.up) {
+                            const up = document.createElement('span');
+                            up.className = 'arrow-up';
+                            up.textContent = '↿';
+                            boxEl.appendChild(up);
+                        }
+                        if (box.down) {
+                            const dn = document.createElement('span');
+                            dn.className = 'arrow-down';
+                            dn.textContent = '⇂';
+                            boxEl.appendChild(dn);
+                        }
+
+                        if (interactive && onClick) {
+                            boxEl.style.cursor = 'pointer';
+                            boxEl.addEventListener('click', () => onClick(orbIndex, boxIndex));
+                        }
+
+                        if (boxIndex < 3) {
+                            t2gBoxes.appendChild(boxEl);
+                        } else {
+                            egBoxes.appendChild(boxEl);
+                        }
+                    });
+
+                    splitWrapper.appendChild(t2gRow);
+                    splitWrapper.appendChild(egRow);
+                    splitOuter.appendChild(splitWrapper);
+                    rowsCol.appendChild(splitOuter);
+                    return;
+                }
+
+                const row = document.createElement('div');
+                row.className = 'orbital-row';
+
+                const label = document.createElement('span');
+                label.className = 'orbital-label';
+                label.textContent = orb.name;
+                const n = parseInt(orb.name.charAt(0));
+                if (!isNaN(n)) label.style.color = `var(--n${n}-color)`;
+                row.appendChild(label);
+
+                orb.boxes.forEach((box, boxIndex) => {
+                    const boxEl = document.createElement('div');
+                    boxEl.className = 'orbital-box';
+
+                    if (box.up) {
+                        const up = document.createElement('span');
+                        up.className = 'arrow-up';
+                        up.textContent = '↿';
+                        boxEl.appendChild(up);
+                    }
+                    if (box.down) {
+                        const dn = document.createElement('span');
+                        dn.className = 'arrow-down';
+                        dn.textContent = '⇂';
+                        boxEl.appendChild(dn);
+                    }
+
+                    if (interactive && onClick) {
+                        boxEl.style.cursor = 'pointer';
+                        boxEl.addEventListener('click', () => onClick(orbIndex, boxIndex));
+                    }
+
+                    row.appendChild(boxEl);
+                });
+
+                rowsCol.appendChild(row);
+            });
+
+            wrapper.appendChild(arrowCol);
+            wrapper.appendChild(rowsCol);
+            container.appendChild(wrapper);
+
+            requestAnimationFrame(() => {
+                container.style.minHeight = '';
+                const actualHeight = rowsCol.offsetHeight;
+                const svg = arrowCol.querySelector('svg');
+                if (svg && actualHeight > 0) {
+                    svg.setAttribute('height', actualHeight);
+                    const line = svg.querySelector('line');
+                    if (line) line.setAttribute('y1', actualHeight);
+                }
+            });
+        }
+
+        /* ===================================================================
+           HAUPT-ORBITAL-EXPLORER (Abschnitt 2)
+           =================================================================== */
+        (function () {
+            const input = document.getElementById('orbitalInput');
+            const boxContainer = document.getElementById('boxNotation');
+            if (!input || !boxContainer) return;
+
+            // Initiale Darstellung: Wasserstoff (Z=1)
+            function renderCurrent() {
+                let val = input.value;
+                if (val === '') return;
+                const z = Math.max(1, Math.min(118, parseInt(val) || 1));
+                const config = fillOrbitals(z);
+                renderBoxNotation(config, boxContainer);
+            }
+
+            function sanitizeInput() {
+                const z = Math.max(1, Math.min(118, parseInt(input.value) || 1));
+                input.value = z;
+                input.dispatchEvent(new Event('input'));
+            }
+
+            input.addEventListener('input', renderCurrent);
+            input.addEventListener('change', sanitizeInput);
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter') sanitizeInput(); });
+
+            // Initial generieren
+            sanitizeInput();
+        })();
+
+        /* ===================================================================
+           Fe / Fe²⁺ / Fe³⁺ KONFIGURATIONEN (Abschnitt 3)
+           =================================================================== */
+        (function () {
+            const container = document.getElementById('feBoxNotation');
+            const buttons = document.querySelectorAll('.fe-btn');
+
+            function showFe(electronCount, ionType) {
+                const config = fillOrbitals(electronCount, ionType);
+                renderBoxNotation(config, container);
+            }
+
+            function selectFe(btn) {
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                showFe(parseInt(btn.dataset.z), btn.dataset.label);
+            }
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => selectFe(btn));
+            });
+
+            // Initial: Fe neutral
+            showFe(26, 'Fe');
+        })();
+
+        /* ===================================================================
+           LERNMODUS (Abschnitt 4)
+           ===================================================================
+           Nutzer setzt Elektronen per Klick in leere Kästchen.
+           =================================================================== */
+        (function () {
+            const targetInput = document.getElementById('learnTargetZ');
+            const startBtn = document.getElementById('learnStartBtn');
+            const checkBtn = document.getElementById('learnCheckBtn');
+            const resetBtn = document.getElementById('learnResetBtn');
+            const container = document.getElementById('learnBoxNotation');
+            const feedbackEl = document.getElementById('learnFeedback');
+
+            let userConfig = null;
+            let targetZ = 8;
+            let maxOrbitalIndex = -1; // Höchster benötigter Orbital-Index
+
+            /**
+             * Erstellt eine leere Konfiguration bis zum nötigen Orbital.
+             */
+            function createEmptyConfig(z) {
+                let remaining = z;
+                maxOrbitalIndex = -1;
+                for (let i = 0; i < ORBITAL_ORDER.length; i++) {
+                    maxOrbitalIndex = i;
+                    remaining -= ORBITAL_ORDER[i].max;
+                    if (remaining <= 0) break;
+                }
+                maxOrbitalIndex = Math.min(maxOrbitalIndex + 1, ORBITAL_ORDER.length - 1);
+
+                return ORBITAL_ORDER.slice(0, maxOrbitalIndex + 1).map(orb => ({
+                    ...orb,
+                    boxes: Array.from({ length: orb.subs }, () => ({ up: false, down: false })),
+                    electrons: 0,
+                    forcedShow: true
+                }));
+            }
+
+            function handleBoxClick(orbIndex, boxIndex) {
+                const box = userConfig[orbIndex].boxes[boxIndex];
+                if (!box.up && !box.down) {
+                    box.up = true;
+                } else if (box.up && !box.down) {
+                    box.down = true;
+                } else {
+                    box.up = false;
+                    box.down = false;
+                }
+
+                userConfig[orbIndex].electrons = userConfig[orbIndex].boxes.reduce(
+                    (s, b) => s + (b.up ? 1 : 0) + (b.down ? 1 : 0), 0
+                );
+
+                renderBoxNotation(userConfig, container, true, handleBoxClick, targetZ);
+                showLiveFeedback();
+            }
+
+            function prefillNobleGasCore() {
+                const core = getNobleGasCore(targetZ);
+                if (core && userConfig) {
+                    for (let i = 0; i <= core.maxOrbIndex; i++) {
+                        if (userConfig[i]) {
+                            userConfig[i].boxes.forEach(b => { b.up = true; b.down = true; });
+                            userConfig[i].electrons = userConfig[i].subs * 2;
+                        }
+                    }
+                }
+            }
+
+            function showLiveFeedback() {
+                const errors = validateConfig(userConfig);
+                const totalPlaced = userConfig.reduce(
+                    (s, o) => s + o.boxes.reduce((ss, b) => ss + (b.up ? 1 : 0) + (b.down ? 1 : 0), 0), 0
+                );
+
+                feedbackEl.innerHTML = '';
+
+                if (errors.length > 0) {
+                    errors.forEach(err => {
+                        const div = document.createElement('div');
+                        div.className = 'feedback warn';
+                        div.textContent = '⚠ ' + err;
+                        feedbackEl.appendChild(div);
+                    });
+                } else if (totalPlaced > 0 && totalPlaced < targetZ) {
+                    const div = document.createElement('div');
+                    div.className = 'feedback';
+                    const isEn = document.documentElement.lang === 'en';
+                    div.textContent = isEn
+                        ? `✓ No rule violations so far. ${targetZ - totalPlaced} electron(s) left to place.`
+                        : `✓ Bisher keine Regelverstöße. Noch ${targetZ - totalPlaced} Elektron(en) zu platzieren.`;
+                    feedbackEl.appendChild(div);
+                } else if (totalPlaced === targetZ) {
+                    const div = document.createElement('div');
+                    div.className = 'feedback';
+                    const isEn = document.documentElement.lang === 'en';
+                    div.textContent = isEn
+                        ? '✓ All electrons placed. Click "Check solution" to verify your result!'
+                        : '✓ Alle Elektronen platziert. Klicke "Überprüfen" um dein Ergebnis zu kontrollieren!';
+                    feedbackEl.appendChild(div);
+                }
+            }
+
+            function validateConfig(config) {
+                const errors = [];
+
+                let highestOccupied = -1;
+                for (let i = config.length - 1; i >= 0; i--) {
+                    if (config[i].boxes.some(b => b.up || b.down)) {
+                        highestOccupied = i;
+                        break;
+                    }
+                }
+                if (highestOccupied === -1) return errors;
+
+                for (let i = 0; i <= highestOccupied; i++) {
+                    const orb = config[i];
+                    const totalE = orb.boxes.reduce((s, b) => s + (b.up ? 1 : 0) + (b.down ? 1 : 0), 0);
+                    const isFull = totalE === orb.subs * 2;
+
+                    if (i < highestOccupied && !isFull) {
+                        for (let j = i + 1; j <= highestOccupied; j++) {
+                            if (config[j].boxes.some(b => b.up || b.down)) {
+                                const isEn = document.documentElement.lang === 'en';
+                                if (totalE === 0) {
+                                    errors.push(isEn
+                                        ? `Aufbau principle: ${orb.name} is empty, but ${config[j].name} is occupied.`
+                                        : `Aufbauprinzip: ${orb.name} ist leer, aber ${config[j].name} ist besetzt.`);
+                                } else {
+                                    errors.push(isEn
+                                        ? `Aufbau principle: ${orb.name} is not fully occupied, but ${config[j].name} contains electrons.`
+                                        : `Aufbauprinzip: ${orb.name} ist nicht vollständig besetzt, aber ${config[j].name} enthält Elektronen.`);
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    if (orb.subs > 1 && totalE > 0) {
+                        const hasDown = orb.boxes.some(b => b.down);
+                        const emptyBoxes = orb.boxes.filter(b => !b.up).length;
+                        if (hasDown && emptyBoxes > 0) {
+                            const isEn = document.documentElement.lang === 'en';
+                            errors.push(isEn
+                                ? `Hund's rule: Electrons in ${orb.name} are paired, although there are still empty boxes.`
+                                : `Hund'sche Regel: In ${orb.name} sind Elektronen gepaart, obwohl noch leere Kästchen vorhanden sind.`);
+                        }
+                    }
+                }
+
+                return errors;
+            }
+
+            function checkAnswer() {
+                const correct = fillOrbitals(targetZ);
+                let isCorrect = true;
+
+                for (let i = 0; i < userConfig.length; i++) {
+                    for (let j = 0; j < userConfig[i].boxes.length; j++) {
+                        const user = userConfig[i].boxes[j];
+                        const corr = correct[i] ? correct[i].boxes[j] : { up: false, down: false };
+                        if (!corr) { if (user.up || user.down) isCorrect = false; continue; }
+                        if (user.up !== corr.up || user.down !== corr.down) {
+                            isCorrect = false;
+                            break;
+                        }
+                    }
+                    if (!isCorrect) break;
+                }
+
+                feedbackEl.innerHTML = '';
+                const div = document.createElement('div');
+                const isEn = document.documentElement.lang === 'en';
+                if (isCorrect) {
+                    div.className = 'feedback ok';
+                    div.innerHTML = isEn
+                        ? '🎉 <strong>Correct!</strong> You have built the electron configuration correctly!'
+                        : '🎉 <strong>Korrekt!</strong> Du hast die Elektronenkonfiguration richtig aufgebaut!';
+                } else {
+                    div.className = 'feedback bad';
+                    div.innerHTML = isEn
+                        ? '✗ <strong>Not quite right.</strong> Check the filling order and the rules.'
+                        : '✗ <strong>Nicht ganz richtig.</strong> Überprüfe die Besetzungsreihenfolge und die Regeln.';
+                }
+                feedbackEl.appendChild(div);
+            }
+
+            function startExercise() {
+                targetZ = Math.max(1, Math.min(118, parseInt(targetInput.value) || 1));
+                targetInput.value = targetZ;
+                userConfig = createEmptyConfig(targetZ);
+                prefillNobleGasCore();
+                renderBoxNotation(userConfig, container, true, handleBoxClick, targetZ);
+                checkBtn.style.display = '';
+                resetBtn.style.display = '';
+                feedbackEl.innerHTML = '';
+            }
+            startBtn.addEventListener('click', startExercise);
+            checkBtn.addEventListener('click', checkAnswer);
+
+            function resetExercise() {
+                userConfig = createEmptyConfig(targetZ);
+                prefillNobleGasCore();
+                renderBoxNotation(userConfig, container, true, handleBoxClick, targetZ);
+                feedbackEl.innerHTML = '';
+            }
+            resetBtn.addEventListener('click', resetExercise);
+        })();
+
+        /* ===================================================================
+           Ti / Ti³⁺ KONFIGURATIONEN (Abschnitt 6)
+           =================================================================== */
+        (function () {
+            const container = document.getElementById('tiBoxNotation');
+            const buttons = document.querySelectorAll('.ti-btn');
+
+            function selectTi(btn) {
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const isIon = btn.textContent.trim().includes('³⁺');
+                const isExcited = btn.dataset.excited === "true";
+                const z = parseInt(btn.dataset.z);
+                const config = fillOrbitals(z, isExcited ? 'Ti3+excited' : (isIon ? 'Ti3+' : null));
+                renderBoxNotation(config, container, false, null, z, isIon);
+            }
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => selectTi(btn));
+            });
+
+            // Initial: Ti neutral
+            renderBoxNotation(fillOrbitals(22), container, false, null, 22, false);
+        })();
+
+        /* ===================================================================
+           Er / Er³⁺ KONFIGURATIONEN (Abschnitt 8)
+           =================================================================== */
+        (function () {
+            const container = document.getElementById('erBoxNotation');
+            const buttons = document.querySelectorAll('.er-btn');
+
+            function selectEr(btn) {
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const isIon = btn.textContent.trim().includes('³⁺');
+                const z = parseInt(btn.dataset.z);
+                const config = fillOrbitals(z, isIon ? 'Er3+' : null);
+                renderBoxNotation(config, container, false, null, z, false);
+            }
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => selectEr(btn));
+            });
+
+            // Initial: Er neutral
+            renderBoxNotation(fillOrbitals(68), container, false, null, 68, false);
+        })();
+
+        /* ===================================================================
+           KOMPLEMENTÄRFARBEN-RAD (Abschnitt 5)
+           ===================================================================
+           Interaktives SVG-Farbrad mit 12 Segmenten.
+           Klick auf eine Farbe zeigt die Komplementärfarbe an.
+           =================================================================== */
+        (function () {
+            const svg = document.getElementById('colorWheelSvg');
+            const info = document.getElementById('colorWheelInfo');
+
+            // 10 Farbsegmente mit Name und HSL
+            const colors = [
+                { name: 'Rot', nameEn: 'Red', hsl: 'hsl(0, 85%, 50%)', hex: '#DD2222' },
+                { name: 'Orange', nameEn: 'Orange', hsl: 'hsl(30, 95%, 52%)', hex: '#F0A500' },
+                { name: 'Gelb', nameEn: 'Yellow', hsl: 'hsl(55, 95%, 50%)', hex: '#E0D000' },
+                { name: 'Gelb-Grün', nameEn: 'Yellow-green', hsl: 'hsl(80, 70%, 45%)', hex: '#7DBB33' },
+                { name: 'Grün', nameEn: 'Green', hsl: 'hsl(120, 60%, 40%)', hex: '#2FA52F' },
+                { name: 'Blau-Grün', nameEn: 'Blue-green', hsl: 'hsl(160, 70%, 42%)', hex: '#20A5A5' },
+                { name: 'Grün-Blau', nameEn: 'Green-blue', hsl: 'hsl(190, 80%, 45%)', hex: '#1C82B8' },
+                { name: 'Blau', nameEn: 'Blue', hsl: 'hsl(220, 80%, 50%)', hex: '#1A5FCC' },
+                { name: 'Violett', nameEn: 'Violet', hsl: 'hsl(275, 65%, 48%)', hex: '#8B2BAA' },
+                { name: 'Rot-Violett', nameEn: 'Red-violet', hsl: 'hsl(315, 65%, 48%)', hex: '#AA2B8B' }
+            ];
+
+            const cx = 150, cy = 150, r = 120, innerR = 50;
+            const segAngle = (2 * Math.PI) / colors.length;
+
+            // SVG-Pfad für ein Ringesegment
+            function arcPath(i) {
+                const a1 = i * segAngle - Math.PI / 2;
+                const a2 = (i + 1) * segAngle - Math.PI / 2;
+                const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+                const x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
+                const ix1 = cx + innerR * Math.cos(a1), iy1 = cy + innerR * Math.sin(a1);
+                const ix2 = cx + innerR * Math.cos(a2), iy2 = cy + innerR * Math.sin(a2);
+                return `M${ix1},${iy1} L${x1},${y1} A${r},${r} 0 0,1 ${x2},${y2} L${ix2},${iy2} A${innerR},${innerR} 0 0,0 ${ix1},${iy1}Z`;
+            }
+
+            let activeIndex = -1;
+
+            function selectColorByIndex(i) {
+                // Alle zurücksetzen
+                svg.querySelectorAll('.cw-segment').forEach(s => {
+                    s.classList.remove('active', 'complement');
+                });
+
+                activeIndex = i;
+                const path = svg.querySelector(`.cw-segment[data-index="${i}"]`);
+                if (path) path.classList.add('active');
+
+                // Komplementärfarbe: 5 Segmente entfernt (180°)
+                const compIndex = (i + 5) % 10;
+                const compPath = svg.querySelector(`.cw-segment[data-index="${compIndex}"]`);
+                if (compPath) compPath.classList.add('complement');
+
+                // Info anzeigen
+                const isEn = document.documentElement.lang === 'en';
+                const lblAbsDe = 'Absorbiert:';
+                const lblAbsEn = 'Absorbed:';
+                const lblCompDe = 'Komplementärfarbe:';
+                const lblCompEn = 'Complementary colour:';
+
+                info.innerHTML =
+                    `<span data-de="${lblAbsDe}" data-en="${lblAbsEn}">${isEn ? lblAbsEn : lblAbsDe}</span> ` +
+                    `<span class="color-swatch-display" style="background:${colors[i].hsl}"></span> ` +
+                    `<strong data-de="${colors[i].name}" data-en="${colors[i].nameEn}">${isEn ? colors[i].nameEn : colors[i].name}</strong> ` +
+                    `→ <span data-de="${lblCompDe}" data-en="${lblCompEn}">${isEn ? lblCompEn : lblCompDe}</span> ` +
+                    `<span class="color-swatch-display" style="background:${colors[compIndex].hsl}"></span> ` +
+                    `<strong data-de="${colors[compIndex].name}" data-en="${colors[compIndex].nameEn}">${isEn ? colors[compIndex].nameEn : colors[compIndex].name}</strong>`;
+            }
+
+            colors.forEach((color, i) => {
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', arcPath(i));
+                path.setAttribute('fill', color.hsl);
+                path.setAttribute('class', 'cw-segment');
+                path.style.cursor = 'pointer';
+                path.dataset.index = i;
+
+                path.addEventListener('click', () => selectColorByIndex(i));
+
+                svg.appendChild(path);
+            });
+
+            // Mittlerer Beschriftungskreis
+            const centerCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            centerCircle.setAttribute('cx', cx);
+            centerCircle.setAttribute('cy', cy);
+            centerCircle.setAttribute('r', innerR - 2);
+            centerCircle.setAttribute('fill', 'var(--surface-2)');
+            centerCircle.setAttribute('stroke', 'var(--border)');
+            centerCircle.setAttribute('stroke-width', '1');
+            svg.appendChild(centerCircle);
+
+            const centerText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            centerText.setAttribute('x', cx);
+            centerText.setAttribute('y', cy + 4);
+            centerText.setAttribute('text-anchor', 'middle');
+            centerText.setAttribute('fill', 'var(--muted)');
+            centerText.setAttribute('font-size', '11');
+            centerText.setAttribute('font-family', 'Inter, Arial, sans-serif');
+            centerText.textContent = 'Farbrad';
+            centerText.setAttribute('data-en', 'Colour wheel');
+            svg.appendChild(centerText);
+
+            // Standardmäßig Grün auswählen, wenn das Details-Element geöffnet wird
+            const farbDetails = document.getElementById('detailsFarbigkeit');
+            if (farbDetails) {
+                farbDetails.addEventListener('toggle', function handleToggle() {
+                    if (farbDetails.open) {
+                        selectColorByIndex(4); // 4 ist der Index für Grün
+                        farbDetails.removeEventListener('toggle', handleToggle);
+                    }
+                });
+            }
+        })();
+
+        /* ===================================================================
+           TEXTAREA UND PASSWORT (Abschnitt 9)
+           =================================================================== */
+        (function () {
+            const textarea = document.getElementById('taskTextarea');
+            const counter = document.getElementById('charCounter');
+            const checkSolutionBtn = document.getElementById('checkSolutionBtn');
+            const passwordContainer = document.getElementById('passwordContainer');
+            const closePasswordBtn = document.getElementById('closePasswordBtn');
+            const pwInput = document.getElementById('teacherPassword');
+            const pwBtn = document.getElementById('submitPasswordBtn');
+            const pwError = document.getElementById('passwordError');
+            const content = document.getElementById('solutionContent');
+            const taskHint = document.getElementById('taskHint');
+            const PASSWORD_hash = '46bde0ab527b5270eeb57af2a93374a5636f81af3408b5cb6cc9b36f37d6168f';
+
+            if (textarea && counter) {
+                textarea.addEventListener('input', () => {
+                    counter.textContent = `${textarea.value.length} / 2500 ` + (document.getElementById('langEn') && document.getElementById('langEn').style.fontWeight === 'bold' ? 'Characters' : 'Zeichen');
+                });
+            }
+
+            if (checkSolutionBtn && passwordContainer) {
+                checkSolutionBtn.addEventListener('click', () => {
+                    checkSolutionBtn.style.display = 'none';
+                    passwordContainer.style.display = 'block';
+                    pwInput.focus();
+                });
+            }
+
+            if (closePasswordBtn) {
+                closePasswordBtn.addEventListener('click', () => {
+                    passwordContainer.style.display = 'none';
+                    checkSolutionBtn.style.display = 'inline-block';
+                });
+            }
+
+            pwBtn.addEventListener('click', async () => {
+                let inputvalue = pwInput.value;
+                let hashvalue = await sha256(inputvalue);
+                if (hashvalue === PASSWORD_hash) {
+                    content.style.display = 'block';
+                    pwError.style.display = 'none';
+                    passwordContainer.style.display = 'none';
+                    textarea.disabled = true;
+                } else {
+                    pwError.style.display = 'block';
+                    pwInput.value = '';
+                    setTimeout(() => { pwError.style.display = 'none'; }, 3000);
+                }
+            });
+
+            pwInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') pwBtn.click();
+            });
+        })();
+
+        /* ===================================================================
+           RANGY TEXT-HIGHLIGHTING
+           ===================================================================
+           Textmarker und Radiergummi für den gesamten Modulinhalt.
+           =================================================================== */
+        (function () {
+            const appliers = {};
+            let currentColor = 'yellow';
+            let isMarkerMode = false;
+            let isEraserMode = false;
+
+            const highlightBtn = document.querySelector('.highlight-btn');
+            const eraserBtn = document.querySelector('.eraser-btn');
+            const colorPicker = document.getElementById('colorPicker');
+
+            // Rangy initialisieren
+            window.addEventListener('load', () => {
+                if (typeof rangy !== 'undefined') {
+                    rangy.init();
+                    appliers['yellow'] = rangy.createClassApplier('highlight-yellow', { normalize: true });
+                    appliers['green'] = rangy.createClassApplier('highlight-green', { normalize: true });
+                    appliers['cyan'] = rangy.createClassApplier('highlight-cyan', { normalize: true });
+                    appliers['red'] = rangy.createClassApplier('highlight-red', { normalize: true });
+                }
+            });
+
+            // Farbauswahl
+            document.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.addEventListener('click', (e) => {
+                    currentColor = e.target.dataset.color;
+                    document.querySelectorAll('.color-swatch').forEach(s => {
+                        s.classList.remove('active');
+                        s.style.borderColor = 'transparent';
+                    });
+                    e.target.classList.add('active');
+                    e.target.style.borderColor = 'var(--text)';
+                    if (!isMarkerMode) highlightBtn.click();
+                });
+            });
+
+            // Marker-Modus umschalten
+            highlightBtn.addEventListener('click', () => {
+                isMarkerMode = !isMarkerMode;
+                if (isMarkerMode) {
+                    isEraserMode = false;
+                    eraserBtn.classList.remove('active');
+                    highlightBtn.classList.add('active');
+                    colorPicker.style.display = 'flex';
+                } else {
+                    highlightBtn.classList.remove('active');
+                    colorPicker.style.display = 'none';
+                }
+            });
+
+            // Radiergummi-Modus umschalten
+            eraserBtn.addEventListener('click', () => {
+                isEraserMode = !isEraserMode;
+                if (isEraserMode) {
+                    isMarkerMode = false;
+                    highlightBtn.classList.remove('active');
+                    eraserBtn.classList.add('active');
+                    colorPicker.style.display = 'none';
+                } else {
+                    eraserBtn.classList.remove('active');
+                }
+            });
+
+            // Touch-Unterstützung
+            const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+
+            // Highlighting anwenden
+            function applyHighlight() {
+                if (!isMarkerMode && !isEraserMode) return;
+                if (!rangy || !rangy.initialized) return;
+
+                const selection = rangy.getSelection();
+                if (!selection || selection.isCollapsed) return;
+
+                if (isMarkerMode) {
+                    try { appliers[currentColor].applyToSelection(); } catch (e) { }
+                } else if (isEraserMode) {
+                    try {
+                        appliers['yellow'].undoToSelection();
+                        appliers['green'].undoToSelection();
+                        appliers['cyan'].undoToSelection();
+                        appliers['red'].undoToSelection();
+                    } catch (e) { }
+                }
+
+                window.getSelection()?.removeAllRanges();
+                selection.removeAllRanges();
+            }
+
+            // Desktop: mouseup
+            document.addEventListener('mouseup', applyHighlight);
+
+            // Touch: pointerup + selectionchange
+            let touchPointerDown = false;
+            document.addEventListener('pointerdown', (e) => {
+                if (e.pointerType === 'touch' || e.pointerType === 'pen') touchPointerDown = true;
+            });
+            document.addEventListener('pointerup', (e) => {
+                if (e.pointerType === 'touch' || e.pointerType === 'pen') {
+                    touchPointerDown = false;
+                    setTimeout(applyHighlight, 80);
+                }
+            });
+            document.addEventListener('pointercancel', () => { touchPointerDown = false; });
+            document.addEventListener('selectionchange', () => {
+                if (!isTouchDevice) return; // Auf dem PC reicht 'mouseup' völlig aus, kein selectionchange nötig
+
+                if (!touchPointerDown) {
+                    clearTimeout(window._selectionTimer);
+                    window._selectionTimer = setTimeout(() => {
+                        const sel = window.getSelection();
+                        if (sel && !sel.isCollapsed) applyHighlight();
+                    }, 400); // 400ms Debounce, damit Griffe am Tablet in Ruhe gezogen werden können
+                }
+            });
+        })();
+
+        /* ===================================================================
+           SPRACH-TOGGLE (DE/EN)
+           ===================================================================
+           Schaltet zwischen Deutsch und Englisch um.
+           Übersetzungen werden über data-en Attribute bereitgestellt.
+           =================================================================== */
+        (function () {
+            let currentLang = 'de';
+            const langToggle = document.getElementById('langToggle');
+            const langDe = document.getElementById('langDe');
+            const langEn = document.getElementById('langEn');
+
+            function updateLanguage() {
+                const translatables = document.querySelectorAll('[data-en], [data-en-placeholder]');
+                document.documentElement.lang = currentLang;
+                if (currentLang === 'de') {
+                    langDe.style.fontWeight = 'bold';
+                    langDe.style.color = 'var(--primary)';
+                    langEn.style.fontWeight = 'normal';
+                    langEn.style.color = 'var(--muted)';
+                    translatables.forEach(el => {
+                        if (!el.dataset.de) el.dataset.de = el.innerHTML;
+                        el.innerHTML = el.dataset.de;
+                        if (el.hasAttribute('data-en-placeholder')) { el.placeholder = el.getAttribute('placeholder') || el.dataset.dePlaceholder || ''; if (!el.dataset.dePlaceholder && el.placeholder) el.dataset.dePlaceholder = el.placeholder; }
+                    });
+                } else {
+                    langEn.style.fontWeight = 'bold';
+                    langEn.style.color = 'var(--primary)';
+                    langDe.style.fontWeight = 'normal';
+                    langDe.style.color = 'var(--muted)';
+                    translatables.forEach(el => {
+                        if (!el.dataset.de) el.dataset.de = el.innerHTML;
+                        // Nur umschalten, wenn eine Übersetzung vorliegt
+                        if (el.dataset.en && el.dataset.en.trim() !== '') {
+                            el.innerHTML = el.dataset.en;
+                        }
+                        if (el.hasAttribute('data-en-placeholder')) { if (!el.dataset.dePlaceholder && el.placeholder) el.dataset.dePlaceholder = el.placeholder; el.placeholder = el.getAttribute('data-en-placeholder'); }
+                    });
+                }
+            }
+
+            if (langToggle) {
+                function toggleLanguage() {
+                    currentLang = currentLang === 'de' ? 'en' : 'de';
+                    updateLanguage();
+                    safeSetItem('hsab-lang', currentLang);
+                    const counter = document.getElementById('charCounter');
+                    const textarea = document.getElementById('taskTextarea');
+                    if (counter && textarea) {
+                        const charWord = currentLang === 'en' ? 'Characters' : 'Zeichen';
+                        counter.textContent = `${textarea.value.length} / 2500 ${charWord}`;
+                    }
+                }
+                langToggle.addEventListener('click', toggleLanguage);
+                const savedLang = safeGetItem('hsab-lang');
+                if (savedLang) {
+                    currentLang = savedLang;
+                    updateLanguage();
+                }
+                const counter = document.getElementById('charCounter');
+                const textarea = document.getElementById('taskTextarea');
+                if (counter && textarea) {
+                    const charWord = currentLang === 'en' ? 'Characters' : 'Zeichen';
+                    counter.textContent = `${textarea.value.length} / 2500 ${charWord}`;
+                }
+            }
+        })();
+
+        /* ===================================================================
+           THEME-TOGGLE (Hell/Dunkel)
+           =================================================================== */
+        (function () {
+            const themeToggle = document.querySelector('.theme-toggle');
+            function toggleTheme() {
+                const current = document.documentElement.getAttribute('data-theme') || 'light';
+                const next = current === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', next);
+                safeSetItem('hsab-theme', next);
+            }
+            themeToggle.addEventListener('click', toggleTheme);
+
+            // Gespeichertes Theme laden
+            window.addEventListener('DOMContentLoaded', () => {
+                const saved = safeGetItem('hsab-theme');
+                if (saved) {
+                    document.documentElement.setAttribute('data-theme', saved);
+                }
+            });
+        })();
+
+        /* ===================================================================
+           ENERGIESCHEMA-DIAGRAMM (dynamisch generiert)
+           =================================================================== */
+        (function () {
+            const schemaInput = document.getElementById('schemaInput');
+            const schemaGenBtn = document.getElementById('schemaGenBtn');
+            const schemaLevelsContainer = document.getElementById('schemaLevels');
+            const schemaLinesSvg = document.getElementById('schemaLines');
+
+            if (!schemaInput) return;
+
+            // Definition der Energieniveaus nach relativer Energie
+            // Aufbau-Reihenfolge ist: 1s, 2s, 2p, 3s, 3p, 4s, 3d, 4p, 5s, 4d, 5p, 6s, 4f, 5d, 6p, 7s, 5f, 6d, 7p
+            const levels = [
+                { name: '1s', n: 1, type: 's', e: 10 },
+                { name: '2s', n: 2, type: 's', e: 22 },
+                { name: '2p', n: 2, type: 'p', e: 28 },
+                { name: '3s', n: 3, type: 's', e: 40 },
+                { name: '3p', n: 3, type: 'p', e: 46 },
+                { name: '4s', n: 4, type: 's', e: 55 },
+                { name: '3d', n: 3, type: 'd', e: 60 },
+                { name: '4p', n: 4, type: 'p', e: 65 },
+                { name: '5s', n: 5, type: 's', e: 74 },
+                { name: '4d', n: 4, type: 'd', e: 79 },
+                { name: '5p', n: 5, type: 'p', e: 84 },
+                { name: '6s', n: 6, type: 's', e: 93 },
+                { name: '4f', n: 4, type: 'f', e: 97 },
+                { name: '5d', n: 5, type: 'd', e: 102 },
+                { name: '6p', n: 6, type: 'p', e: 107 },
+                { name: '7s', n: 7, type: 's', e: 116 },
+                { name: '5f', n: 5, type: 'f', e: 120 },
+                { name: '6d', n: 6, type: 'd', e: 125 },
+                { name: '7p', n: 7, type: 'p', e: 130 }
+            ];
+
+            const minE = 10;
+            const maxE = 135;
+
+            // X-Offsets in Pixel (fixiert, um Überlappungen zu vermeiden)
+            const xOffsets = {
+                's': '60px',
+                'p': '180px',
+                'd': '380px',
+                'f': '680px'
+            };
+
+            function getColor(n) {
+                return `var(--n${Math.min(7, Math.max(1, n))}-color)`;
+            }
+
+            function getBoxesHTML(orb, configBoxes) {
+                let html = '';
+                configBoxes.forEach(box => {
+                    let arrows = '';
+                    if (box.up) arrows += '<span class="arrow-up" style="line-height:1; font-size:14px;">↿</span>';
+                    if (box.down) arrows += '<span class="arrow-down" style="line-height:1; font-size:14px;">⇂</span>';
+                    html += `<div class="orbital-box" style="width:24px; height:24px; border-color: ${getColor(orb.n)}">${arrows}</div>`;
+                });
+                return html;
+            }
+
+            function renderSchema(z) {
+                const config = fillOrbitals(z);
+
+                const totalHeight = 550;
+                schemaLevelsContainer.style.height = totalHeight + 'px';
+
+                schemaLevelsContainer.innerHTML = '';
+                schemaLinesSvg.innerHTML = '';
+
+                levels.forEach((lvl) => {
+                    const cfg = config.find(c => c.name === lvl.name);
+                    if (!cfg) return;
+
+                    const bottomPercent = ((lvl.e - minE) / (maxE - minE)) * 100;
+
+                    const row = document.createElement('div');
+                    row.className = 'schema-level-row';
+                    row.style.bottom = bottomPercent + '%';
+
+                    const color = getColor(lvl.n);
+                    const offsetLeft = xOffsets[lvl.type];
+                    const opacity = cfg.electrons > 0 ? '1' : '0.25';
+
+                    const lineGradient = `linear-gradient(to right, ${color} 0%, ${color} calc(100% - 36px), transparent calc(100% - 36px), transparent calc(100% - 8px), ${color} calc(100% - 8px), ${color} 100%)`;
+
+                    row.innerHTML = `
+                        <div class="schema-level-line" style="background: ${lineGradient}; width: ${offsetLeft}; opacity: ${opacity};"></div>
+                        <div class="schema-level-label" style="color: ${color}; opacity: ${opacity}; left: calc(${offsetLeft} - 32px); background: transparent;">${lvl.name}</div>
+                        <div class="schema-level-boxes" style="left: ${offsetLeft}; opacity: ${opacity};" id="lvl-box-${lvl.name}">
+                            ${getBoxesHTML(lvl, cfg.boxes)}
+                        </div>
+                    `;
+
+                    schemaLevelsContainer.appendChild(row);
+                });
+
+                const svgRect = schemaLinesSvg.getBoundingClientRect();
+                let prevLvl = null;
+
+                config.forEach((cfg) => {
+                    const lvlInfo = levels.find(l => l.name === cfg.name);
+                    if (!lvlInfo) return;
+
+                    const boxEl = document.getElementById(`lvl-box-${cfg.name}`);
+                    if (!boxEl) return;
+
+                    const boxes = boxEl.querySelectorAll('.orbital-box');
+                    if (boxes.length === 0) return;
+
+                    const firstBox = boxes[0];
+                    const lastBox = boxes[boxes.length - 1];
+
+                    const firstBoxRect = firstBox.getBoundingClientRect();
+                    const lastBoxRect = lastBox.getBoundingClientRect();
+
+                    const leftX = firstBoxRect.left - svgRect.left;
+                    const rightX = lastBoxRect.right - svgRect.left;
+                    const midY = firstBoxRect.top - svgRect.top + firstBoxRect.height / 2;
+
+                    const color = getColor(lvlInfo.n);
+                    const opacity = cfg.electrons > 0 ? '0.6' : '0.15';
+
+                    if (prevLvl) {
+                        let startX, endX;
+                        if (prevLvl.leftX < leftX) {
+                            startX = prevLvl.rightX;
+                            endX = leftX;
+                        } else {
+                            startX = prevLvl.leftX;
+                            endX = rightX;
+                        }
+
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', startX);
+                        line.setAttribute('y1', prevLvl.midY);
+                        line.setAttribute('x2', endX);
+                        line.setAttribute('y2', midY);
+                        line.setAttribute('stroke', color);
+                        line.setAttribute('stroke-width', '1.5');
+                        line.setAttribute('opacity', opacity);
+                        schemaLinesSvg.appendChild(line);
+                    }
+
+                    prevLvl = {
+                        leftX: leftX,
+                        rightX: rightX,
+                        midY: midY
+                    };
+                });
+            }
+
+            function renderCurrentSchema() {
+                let val = schemaInput.value;
+                if (val === '') return;
+                let z = parseInt(val) || 118;
+                z = Math.max(1, Math.min(118, z));
+                renderSchema(z);
+            }
+
+            function sanitizeSchemaInput() {
+                let z = parseInt(schemaInput.value) || 118;
+                z = Math.max(1, Math.min(118, z));
+                schemaInput.value = z;
+                schemaInput.dispatchEvent(new Event('input'));
+            }
+
+            schemaInput.addEventListener('input', renderCurrentSchema);
+            schemaInput.addEventListener('change', sanitizeSchemaInput);
+            schemaInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') sanitizeSchemaInput();
+            });
+
+            const detailsParent = document.getElementById('fullEnergySchemaModule')?.closest('details');
+            let schemaRendered = false;
+            function initSchema() {
+                if (schemaRendered) return;
+                schemaRendered = true;
+                renderSchema(parseInt(schemaInput.value) || 118);
+            }
+            if (detailsParent) {
+                if (detailsParent.open) {
+                    initSchema();
+                } else {
+                    detailsParent.addEventListener('toggle', () => {
+                        if (detailsParent.open) {
+                            setTimeout(initSchema, 50);
+                        }
+                    });
+                }
+            } else {
+                setTimeout(initSchema, 100);
+            }
+            window.addEventListener('resize', () => {
+                if (schemaRendered) {
+                    renderSchema(parseInt(schemaInput.value) || 118);
+                }
+            });
+        })();
+
+        /* ===================================================================
+           Zusätzliche Funktionen: config-card highlight & Element-Symbol (Wiederholung)
+           =================================================================== */
+        (function () {
+            // Element Map
+            const elementMap = {
+                1: 'H', 2: 'He', 3: 'Li', 4: 'Be', 5: 'B', 6: 'C', 7: 'N', 8: 'O', 9: 'F', 10: 'Ne',
+                11: 'Na', 12: 'Mg', 13: 'Al', 14: 'Si', 15: 'P', 16: 'S', 17: 'Cl', 18: 'Ar',
+                19: 'K', 20: 'Ca', 21: 'Sc', 22: 'Ti', 23: 'V', 24: 'Cr', 25: 'Mn', 26: 'Fe', 27: 'Co', 28: 'Ni', 29: 'Cu', 30: 'Zn',
+                31: 'Ga', 32: 'Ge', 33: 'As', 34: 'Se', 35: 'Br', 36: 'Kr',
+                37: 'Rb', 38: 'Sr', 39: 'Y', 40: 'Zr', 41: 'Nb', 42: 'Mo', 43: 'Tc', 44: 'Ru', 45: 'Rh', 46: 'Pd', 47: 'Ag', 48: 'Cd',
+                49: 'In', 50: 'Sn', 51: 'Sb', 52: 'Te', 53: 'I', 54: 'Xe',
+                55: 'Cs', 56: 'Ba', 57: 'La', 58: 'Ce', 59: 'Pr', 60: 'Nd', 61: 'Pm', 62: 'Sm', 63: 'Eu', 64: 'Gd', 65: 'Tb', 66: 'Dy',
+                67: 'Ho', 68: 'Er', 69: 'Tm', 70: 'Yb', 71: 'Lu', 72: 'Hf', 73: 'Ta', 74: 'W', 75: 'Re', 76: 'Os', 77: 'Ir', 78: 'Pt',
+                79: 'Au', 80: 'Hg', 81: 'Tl', 82: 'Pb', 83: 'Bi', 84: 'Po', 85: 'At', 86: 'Rn',
+                87: 'Fr', 88: 'Ra', 89: 'Ac', 90: 'Th', 91: 'Pa', 92: 'U', 93: 'Np', 94: 'Pu', 95: 'Am', 96: 'Cm', 97: 'Bk', 98: 'Cf',
+                99: 'Es', 100: 'Fm', 101: 'Md', 102: 'No', 103: 'Lr', 104: 'Rf', 105: 'Db', 106: 'Sg', 107: 'Bh', 108: 'Hs', 109: 'Mt',
+                110: 'Ds', 111: 'Rg', 112: 'Cn', 113: 'Nh', 114: 'Fl', 115: 'Mc', 116: 'Lv', 117: 'Ts', 118: 'Og'
+            };
+
+            // Element-Anzeige für Lernmodus (Ziel-Ordnungszahl)
+            const learnTargetZ = document.getElementById('learnTargetZ');
+            const learnTargetElement = document.getElementById('learnTargetElement');
+            if (learnTargetZ && learnTargetElement) {
+                const updateElement = () => {
+                    const z = parseInt(learnTargetZ.value);
+                    if (isNaN(z)) {
+                        learnTargetElement.textContent = '?';
+                    } else {
+                        learnTargetElement.textContent = elementMap[z] || '?';
+                    }
+                };
+
+                const sanitizeLearnInput = () => {
+                    const z = Math.max(1, Math.min(118, parseInt(learnTargetZ.value) || 1));
+                    learnTargetZ.value = z;
+                    learnTargetZ.dispatchEvent(new Event('input'));
+                };
+
+                learnTargetZ.addEventListener('input', updateElement);
+                learnTargetZ.addEventListener('change', sanitizeLearnInput);
+                learnTargetZ.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') sanitizeLearnInput();
+                });
+
+                updateElement(); // Init
+            }
+
+            // Element-Anzeige für Orbital-Explorer
+            const orbitalInput = document.getElementById('orbitalInput');
+            const orbitalElement = document.getElementById('orbitalElement');
+            if (orbitalInput && orbitalElement) {
+                const updateOrbitalElement = () => {
+                    const z = parseInt(orbitalInput.value);
+                    if (isNaN(z)) {
+                        orbitalElement.textContent = '?';
+                    } else {
+                        orbitalElement.textContent = elementMap[z] || '?';
+                    }
+                };
+                orbitalInput.addEventListener('input', updateOrbitalElement);
+                updateOrbitalElement();
+            }
+
+            // Element-Anzeige für Energieniveaudiagramm
+            const schemaInput = document.getElementById('schemaInput');
+            const schemaElement = document.getElementById('schemaElement');
+            if (schemaInput && schemaElement) {
+                const updateSchemaElement = () => {
+                    const z = parseInt(schemaInput.value);
+                    if (isNaN(z)) {
+                        schemaElement.textContent = '?';
+                    } else {
+                        schemaElement.textContent = elementMap[z] || '?';
+                    }
+                };
+                schemaInput.addEventListener('input', updateSchemaElement);
+                updateSchemaElement();
+            }
+
+            // Initiale Hervorhebung für den jeweils ersten Button in config-controls setzen
+            const activeBtns = document.querySelectorAll('.orbital-controls .btn-secondary.active');
+            activeBtns.forEach(btn => {
+                const controls = btn.closest('.orbital-controls');
+                if (!controls) return;
+                const container = controls.parentElement.previousElementSibling;
+                if (container && container.classList.contains('config-example')) {
+                    const configCards = container.querySelectorAll('.config-card');
+                    if (configCards.length > 0) {
+                        configCards[0].style.border = '2px solid var(--primary)';
+                    }
+                }
+            });
+
+            // Hervorheben der config-card beim Klicken
+            document.addEventListener('click', (e) => {
+                const btn = e.target.closest('.orbital-controls .btn-secondary');
+                if (!btn) return;
+
+                const controls = btn.closest('.orbital-controls');
+                if (!controls) return;
+
+                const siblingBtns = Array.from(controls.querySelectorAll('.btn-secondary'));
+                const index = siblingBtns.indexOf(btn);
+                if (index === -1) return;
+
+                const container = controls.parentElement.previousElementSibling;
+                if (container && container.classList.contains('config-example')) {
+                    const configCards = container.querySelectorAll('.config-card');
+                    configCards.forEach((card, i) => {
+                        if (i === index) {
+                            card.style.border = '2px solid var(--primary)';
+                        } else {
+                            card.style.border = '1px solid rgba(80, 70, 60, .12)';
+                        }
+                    });
+                }
+            });
+        })();
+        // Pure JS SHA-256 implementation fallback
+        function jsSHA256(str) {
+            function rotateRight(n, x) {
+                return (x >>> n) | (x << (32 - n));
+            }
+            const K = [
+                0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+                0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+                0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+                0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+                0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+                0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+                0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+                0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+            ];
+            let H = [
+                0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+            ];
+            const words = [];
+            const utf8 = unescape(encodeURIComponent(str));
+            for (let i = 0; i < utf8.length; i++) {
+                words[i >> 2] |= (utf8.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
+            }
+            const bits = utf8.length * 8;
+            words[bits >> 5] |= 0x80 << (24 - (bits % 32));
+            words[(((bits + 64) >> 9) << 4) + 15] = bits;
+            for (let i = 0; i < words.length; i += 16) {
+                let a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+                const w = new Array(64);
+                for (let t = 0; t < 64; t++) {
+                    if (t < 16) {
+                        w[t] = words[i + t] || 0;
+                    } else {
+                        const s0 = rotateRight(7, w[t - 15]) ^ rotateRight(18, w[t - 15]) ^ (w[t - 15] >>> 3);
+                        const s1 = rotateRight(17, w[t - 2]) ^ rotateRight(19, w[t - 2]) ^ (w[t - 2] >>> 10);
+                        w[t] = (w[t - 16] + s0 + w[t - 7] + s1) | 0;
+                    }
+                    const S1 = rotateRight(6, e) ^ rotateRight(11, e) ^ rotateRight(25, e);
+                    const ch = (e & f) ^ (~e & g);
+                    const temp1 = (h + S1 + ch + K[t] + w[t]) | 0;
+                    const S0 = rotateRight(2, a) ^ rotateRight(13, a) ^ rotateRight(22, a);
+                    const maj = (a & b) ^ (a & c) ^ (b & c);
+                    const temp2 = (S0 + maj) | 0;
+                    h = g; g = f; f = e; e = (d + temp1) | 0; d = c; c = b; b = a; a = (temp1 + temp2) | 0;
+                }
+                H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+                H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+            }
+            return H.map(x => {
+                const hex = (x >>> 0).toString(16);
+                return '00000000'.substring(hex.length) + hex;
+            }).join('');
+        }
+
+        // Helper to calculate SHA-256 hash of a string with native fallback
+        async function sha256(str) {
+            if (typeof crypto !== 'undefined' && crypto.subtle) {
+                try {
+                    const buf = new TextEncoder().encode(str);
+                    const hashBuf = await crypto.subtle.digest('SHA-256', buf);
+                    const hashArray = Array.from(new Uint8Array(hashBuf));
+                    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                } catch (e) {
+                    console.warn("crypto.subtle.digest failed, using pure JS fallback:", e);
+                }
+            }
+            return jsSHA256(str);
+        }
+    </script>
+    <img src="../../Medien/logos/4f4f Logo.png" alt="CRC 1573 – 4f for Future" class="crc-logo-fixed">
+</body>
+
+</html>

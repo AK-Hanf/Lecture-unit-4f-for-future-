@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design System & Assets Referenz</title>
+  <style>
+    :root,
+    [data-theme="light"] {
+      --bg: #f7f4ef;
+      --surface: rgba(255, 255, 255, 0.84);
+      --surface-2: #fffdf9;
+      --border: #d9d2c8;
+      --text: #241f17;
+      --muted: #6f685f;
+      --primary: #8f3d1f;
+      --primary-2: #285f75;
+      --hard: #b13131;
+      --soft: #2355a5;
+      --ok: #3f7d2d;
+      --warn: #bf7a19;
+      --hl-yellow: rgba(255, 235, 59, 0.5);
+      --hl-green: rgba(76, 175, 80, 0.4);
+      --hl-cyan: rgba(0, 188, 212, 0.4);
+      --hl-red: rgba(244, 67, 54, 0.4);
+      --highlight-bg: rgba(239, 188, 109, 0.4);
+      --shadow: 0 14px 40px rgba(36, 31, 23, .08);
+      --r-sm: 14px;
+      --r-md: 22px;
+      --r-lg: 30px;
+      --space-1: .25rem;
+      --space-2: .5rem;
+      --space-3: .75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --text-xs: clamp(.75rem, .72rem+.2vw, .875rem);
+      --text-sm: clamp(.9rem, .84rem+.25vw, 1rem);
+      --text-base: clamp(1rem, .95rem+.25vw, 1.12rem);
+      --text-lg: clamp(1.15rem, 1rem+.6vw, 1.45rem);
+      --text-xl: clamp(1.6rem, 1.2rem+1.4vw, 2.4rem);
+      --text-2xl: clamp(2.2rem, 1.2rem+3vw, 4rem);
+      --font-display: Inter, Arial, sans-serif;
+      --font-body: Inter, Arial, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg: #161311;
+      --surface: rgba(30, 26, 23, 0.9);
+      --surface-2: #201c19;
+      --border: #3d332c;
+      --text: #f1e7dc;
+      --muted: #b7a99b;
+      --primary: #e49372;
+      --primary-2: #7bc0dd;
+      --hard: #ff8c8c;
+      --soft: #8ab6ff;
+      --ok: #97d480;
+      --warn: #efbc6d;
+      --hl-yellow: rgba(255, 235, 59, 0.3);
+      --hl-green: rgba(76, 175, 80, 0.3);
+      --hl-cyan: rgba(0, 188, 212, 0.3);
+      --hl-red: rgba(244, 67, 54, 0.3);
+      --highlight-bg: rgba(239, 188, 109, 0.3);
+      --shadow: 0 18px 45px rgba(0, 0, 0, .35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(143, 61, 31, .14), transparent 28%),
+        radial-gradient(circle at right bottom, rgba(40, 95, 117, .14), transparent 24%),
+        var(--bg);
+      line-height: 1.6;
+    }
+
+    .wrap {
+      width: min(1200px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 1rem 0 3rem;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      box-shadow: var(--shadow);
+      font-weight: bold;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: var(--text-lg);
+    }
+
+    .theme-toggle {
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      font-size: 1.15rem;
+    }
+
+    .lang-toggle {
+      min-width: 60px;
+      min-height: 44px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+      padding: 0 1rem;
+    }
+
+    .tool-btn {
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .tool-btn:hover,
+    .tool-btn.active {
+      background: var(--surface-2);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .theme-toggle,
+    .lang-toggle,
+    .tool-btn {
+      touch-action: manipulation;
+    }
+
+    /* iOS touch compatibility fixes */
+    button,
+    [role="button"],
+    .answer,
+    .btn,
+    .sort-item,
+    summary,
+    .color-swatch,
+    .mindmap-btn {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .highlight-yellow {
+      background-color: var(--hl-yellow);
+      border-radius: 3px;
+      padding: 0 2px;
+      transition: background-color 0.3s ease;
+    }
+
+    .highlight-green {
+      background-color: var(--hl-green);
+      border-radius: 3px;
+      padding: 0 2px;
+      transition: background-color 0.3s ease;
+    }
+
+    .highlight-cyan {
+      background-color: var(--hl-cyan);
+      border-radius: 3px;
+      padding: 0 2px;
+      transition: background-color 0.3s ease;
+    }
+
+    .highlight-red {
+      background-color: var(--hl-red);
+      border-radius: 3px;
+      padding: 0 2px;
+      transition: background-color 0.3s ease;
+    }
+
+    .color-picker {
+      display: none;
+      gap: 0.5rem;
+      align-items: center;
+      margin-left: 0.25rem;
+      padding-left: 0.75rem;
+      border-left: 1px solid var(--border);
+    }
+
+    .color-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+      touch-action: manipulation;
+      border: 2px solid transparent;
+      padding: 0;
+    }
+
+    .color-swatch:hover {
+      transform: scale(1.1);
+    }
+
+    .color-swatch.active {
+      border-color: var(--text) !important;
+    }
+
+    /* Typografie */
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      line-height: 1.08;
+    }
+
+    h1 {
+      font-size: var(--text-2xl);
+      margin-top: 1rem;
+    }
+
+    h2 {
+      font-size: var(--text-xl);
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: var(--text-lg);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 60ch;
+    }
+
+    /* Layout & Panels */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .panel {
+      background: var(--surface);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(80, 70, 60, .14);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+    }
+
+    .panel>h2:first-child {
+      margin-top: 0;
+    }
+
+    .mini-panel {
+      padding: 1rem;
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      border: 1px solid rgba(80, 70, 60, .1);
+    }
+
+    /* Buttons */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      min-height: 44px;
+      padding: .8rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-weight: 600;
+      transition: .18s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: var(--surface-2);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    /* Badges & Pills */
+    .badge,
+    .pill,
+    .counter {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      padding: .45rem .75rem;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .pill {
+      background: rgba(143, 61, 31, .1);
+      color: var(--primary);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .badge {
+      background: rgba(40, 95, 117, .1);
+      color: var(--primary-2);
+    }
+
+    .counter {
+      background: rgba(127, 127, 127, .12);
+      color: var(--muted);
+    }
+
+    /* Komponenten: Score / Feedback */
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .75rem;
+    }
+
+    .score-box {
+      padding: 1rem;
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      border: 1px solid rgba(80, 70, 60, .1);
+    }
+
+    .score-box strong {
+      display: block;
+      font-size: var(--text-lg);
+    }
+
+    .score-box span {
+      font-size: var(--text-xs);
+      color: var(--muted);
+    }
+
+    .feedback {
+      padding: 1rem;
+      border-radius: var(--r-md);
+      border: 1px solid rgba(80, 70, 60, .1);
+      background: var(--surface);
+      margin-top: 1rem;
+    }
+
+    .feedback.ok {
+      background: rgba(63, 125, 45, .12);
+      border-color: rgba(63, 125, 45, .25);
+    }
+
+    .feedback.bad {
+      background: rgba(177, 49, 49, .12);
+      border-color: rgba(177, 49, 49, .28);
+    }
+
+    /* Fortschrittsbalken */
+    .progress {
+      height: 12px;
+      background: rgba(127, 127, 127, .18);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: .5rem;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      background: var(--primary);
+      width: 50%;
+      /* Example width */
+      border-radius: 999px;
+    }
+
+    /* Sortier-Elemente */
+    .sort-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.1rem;
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      border: 1px solid rgba(80, 70, 60, .12);
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .sort-item strong {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+    }
+
+    .sort-rank {
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+
+    /* Formulare (Aufgabe 3 Styles) */
+    .task3-textarea {
+      width: 100%;
+      min-height: 140px;
+      padding: 0.85rem 1rem;
+      border-radius: var(--r-md);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      resize: vertical;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+      transition: border-color 0.2s, outline 0.2s;
+    }
+
+    .task3-textarea:focus {
+      border-color: var(--primary);
+      outline: 2px solid var(--primary);
+    }
+
+    .password-container {
+      position: relative;
+      margin-top: 1rem;
+      padding: 1.25rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      box-shadow: var(--shadow);
+    }
+
+    .password-input {
+      flex: 1;
+      min-width: 200px;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: var(--text-sm);
+      transition: border-color 0.2s, outline 0.2s;
+    }
+
+    .password-input:focus {
+      border-color: var(--primary);
+      outline: 2px solid var(--primary);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      line-height: 1;
+      transition: color 0.15s ease;
+    }
+
+    .close-btn:hover {
+      color: var(--primary);
+    }
+
+    /* Medien & Bilder */
+    .media-container {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .media-container img,
+    .media-container iframe {
+      display: block;
+      margin: 0 auto;
+      max-width: 400px;
+      width: 100%;
+      border-radius: var(--r-sm);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .media-caption {
+      margin-top: 0.75rem;
+      font-size: var(--text-sm);
+      color: var(--text);
+      max-width: 80ch;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    /* Helpers for the styleguide */
+    .color-swatch {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--border);
+    }
+
+    .color-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <a href="index.html"
+          style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: .9rem;">
+          <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="brand-title">Design System</div>
+            <div class="brand-sub">Assets & Komponenten</div>
+          </div>
+        </a>
+      </div>
+      <button class="theme-toggle" aria-label="Theme umschalten">◐</button>
+    </header>
+
+    <main class="grid-2">
+      <!-- Linke Spalte -->
+      <section class="panel">
+        <h2>Typografie</h2>
+        <h1>Heading 1 (H1)</h1>
+        <h2>Heading 2 (H2)</h2>
+        <h3>Heading 3 (H3)</h3>
+        <p class="lead">Dies ist ein Lead-Text (.lead). Er eignet sich gut für kurze Beschreibungen oder Einleitungen
+          unter einer Überschrift.</p>
+        <p>Dies ist der reguläre Fließtext. Er verwendet die standardmäßig definierte Textfarbe und Schriftgröße des
+          Body-Elements.</p>
+
+        <h2>Farben (CSS Variablen)</h2>
+        <div class="grid-2">
+          <div>
+            <div class="color-row">
+              <div class="color-swatch" style="background: var(--bg)"></div><span>--bg</span>
+            </div>
+            <div class="color-row">
+              <div class="color-swatch" style="background: var(--surface)"></div><span>--surface</span>
+            </div>
+            <div class="color-row">
+              <div class="color-swatch" style="background: var(--surface-2)"></div><span>--surface-2</span>
+            </div>
+            <div class="color-row">
+              <div class="color-swatch" style="background: var(--border)"></div><span>--border</span>
+            </div>
+          </div>
+          <div>
+            <div class="color-row">
+              <div class="color-swatch" style="background: var(--primary)"></div><span>--primary</span>
+            </div>
+            <div class="color-row">
+              <div class="color-swatch" style="background: var(--primary-2)"></div><span>--primary-2</span>
+            </div>
+            <div class="color-row">
+              <div class="color-swatch" style="background: var(--hard)"></div><span>--hard</span>
+            </div>
+            <div class="color-row">
+              <div class="color-swatch" style="background: var(--soft)"></div><span>--soft</span>
+            </div>
+            <div class="color-row">
+              <div class="color-swatch" style="background: var(--ok)"></div><span>--ok</span>
+            </div>
+          </div>
+        </div>
+
+        <h2>Buttons & Badges</h2>
+        <div class="controls">
+          <button class="btn btn-primary">Primary Button</button>
+          <button class="btn btn-secondary">Secondary Button</button>
+        </div>
+        <div class="controls" style="margin-top:1rem;">
+          <span class="pill">.pill</span>
+          <span class="badge">.badge</span>
+          <span class="counter">.counter</span>
+        </div>
+      </section>
+
+      <!-- Rechte Spalte -->
+      <section>
+        <div class="panel">
+          <h2>Komponenten</h2>
+
+          <h3>Sortier-Element (.sort-item)</h3>
+          <div class="sort-item">
+            <strong>Na⁺</strong>
+            <div class="controls" style="margin-top:0;">
+              <button class="btn btn-secondary" style="min-height:32px; padding:0 0.5rem;">↑</button>
+              <button class="btn btn-secondary" style="min-height:32px; padding:0 0.5rem;">↓</button>
+              <span class="sort-rank">Position 1</span>
+            </div>
+          </div>
+
+          <h3>Score Grid (.score-grid)</h3>
+          <div class="score-grid">
+            <div class="score-box"><span>Richtig</span><strong>4</strong></div>
+            <div class="score-box"><span>Falsch</span><strong>1</strong></div>
+          </div>
+
+          <h3>Fortschritt (.progress)</h3>
+          <div class="progress"><span style="width: 75%"></span></div>
+
+          <h3>Feedback-Boxen</h3>
+          <div class="feedback ok">Korrekt! (.feedback.ok)</div>
+          <div class="feedback bad">Falsch. (.feedback.bad)</div>
+        </div>
+
+        <div class="panel" style="margin-top: 1.5rem;">
+          <h2>Sprach-Umschalter (DE/EN)</h2>
+          <p class="lead" style="font-size: var(--text-sm); margin-bottom: 1.5rem;">Dies ist ein eigenständiges Asset
+            für den Sprach-Toggle inklusive funktionaler JavaScript-Logik.</p>
+
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <button class="lang-toggle" type="button" id="langToggle" aria-label="Sprache wechseln">
+              <span id="langDe" style="font-weight: bold; color: var(--primary);">DE</span>
+              <span style="margin: 0 6px; color: var(--border);">|</span>
+              <span id="langEn" style="color: var(--muted);">EN</span>
+            </button>
+            <button class="theme-toggle tool-btn" aria-label="Theme umschalten">◐</button>
+          </div>
+
+          <p id="demoText"
+            style="margin: 1rem 0 0; padding: 1rem; background: var(--surface-2); border-radius: var(--r-md); border: 1px solid rgba(80, 70, 60, .1); color: var(--text);">
+          </p>
+        </div>
+
+        <div class="panel" style="margin-top: 1.5rem;">
+          <h2>Formulare (Aufgabe 3 Assets)</h2>
+          <div class="textarea-wrapper">
+            <textarea placeholder="Begründe deine Antwort hier..."></textarea>
+            <div style="text-align: right; margin-top: 0.25rem;">
+              <span class="counter">0 / 1000</span>
+            </div>
+          </div>
+
+          <div class="password-container">
+            <button type="button" class="close-btn">&times;</button>
+            <p style="margin: 0 0 1rem 0; font-size: var(--text-sm);">Passwort-geschützte Musterlösung:</p>
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+              <input type="password" class="password-input" placeholder="Passwort eingeben" />
+              <button class="btn btn-primary">Bestätigen</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top: 1.5rem;">
+          <h2>Medien & Bilder (.media-container)</h2>
+          <div class="media-container">
+            <div
+              style="background: var(--surface-2); border: 1px dashed var(--border); border-radius: var(--r-sm); max-width: 400px; height: 200px; margin: 0 auto; display: grid; place-items: center; color: var(--muted);">
+              Platzhalter Bild</div>
+            <div class="media-caption"><b>Abb. 1:</b> Dies ist eine Beispielunterschrift. Die Farbe passt sich im Dark
+              Mode automatisch an den Haupttext an.</div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top: 1.5rem;">
+          <h2>Textmarkierung (Rangy)</h2>
+          <p class="lead" style="font-size: var(--text-sm); margin-bottom: 1.5rem;">Mit dem Textmarker-Button kann
+            ausgewählter Text markiert werden, mit dem Radiergummi können Markierungen entfernt werden.</p>
+          <div style="display: flex; gap: 1rem; align-items: flex-start;">
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; flex-shrink: 0;">
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <button class="tool-btn highlight-btn" type="button" aria-label="Text markieren"
+                  title="Marker aktivieren">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20h9"></path>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                  </svg>
+                </button>
+                <div class="color-picker" id="colorPicker"
+                  style="margin-left: 0; padding-left: 0; padding-right: 0.75rem; border-left: none; border-right: 1px solid var(--border);">
+                  <button class="color-swatch active" data-color="yellow"
+                    style="background: var(--hl-yellow); border-color: var(--text);"></button>
+                  <button class="color-swatch" data-color="green" style="background: var(--hl-green);"></button>
+                  <button class="color-swatch" data-color="cyan" style="background: var(--hl-cyan);"></button>
+                  <button class="color-swatch" data-color="red" style="background: var(--hl-red);"></button>
+                </div>
+                <button class="tool-btn eraser-btn" type="button" aria-label="Markierung entfernen"
+                  title="Radiergummi aktivieren">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21">
+                    </path>
+                    <path d="M22 21H7"></path>
+                    <path d="m5 11 9 9"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              style="padding: 1rem; background: var(--surface-2); border-radius: var(--r-md); border: 1px solid rgba(80, 70, 60, .1); flex-grow: 1;">
+              Aktiviere links den Marker, wähle eine Farbe und markiere <span class="highlight-yellow">einen Teil dieses
+                Textes</span>, um zu
+              sehen wie es funktioniert. Du kannst auch den Radiergummi aktivieren, um <span
+                class="highlight-cyan">Markierungen</span> wieder zu löschen.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ── Mind-Map Component (full-width) ────────────────────────── -->
+    <div class="wrap" style="padding-top: 0;">
+      <section style="grid-column: 1 / -1;">
+        <div class="panel" style="margin-top: 1.5rem;">
+          <h2 style="margin-top: 0;">Interaktive Mind-Map (.mindmap-module)</h2>
+          <p class="lead" style="font-size: var(--text-sm); margin-bottom: 0.5rem; max-width: none;">
+            Freies Canvas mit Drag &amp; Drop, Pan, Pinch-Zoom, Knotenverbindungen und Resize-Handles.
+            Desktop: Doppelklick auf freie Fläche → neuer Knoten · Leertaste + Ziehen → Panning.
+            Touch: Einfinger-Pan, Zwei-Finger-Zoom, ➕-Button für neuen Knoten, 🔗 für Verbindungsmodus.
+          </p>
+
+          <style>
+            /* ── Mind-Map Styles (assets demo) ─────────────────── */
+            .mindmap-module {
+              position: relative;
+              width: 100%;
+              height: 520px;
+              border: 2px solid var(--border);
+              border-radius: var(--r-md);
+              background-color: var(--surface-2);
+              background-image: radial-gradient(var(--border) 1px, transparent 1px);
+              background-size: 20px 20px;
+              background-position: 0 0;
+              overflow: hidden;
+              margin-top: 1.5rem;
+              box-shadow: inset 0 0 10px rgba(0, 0, 0, .05);
+              user-select: none;
+              font-family: var(--font-body);
+              touch-action: none;
+            }
+
+            [data-theme="dark"] .mindmap-module {
+              background-image: radial-gradient(rgba(255, 255, 255, .1) 1px, transparent 1px);
+            }
+
+            .mindmap-toolbar {
+              position: absolute;
+              top: 10px;
+              left: 10px;
+              z-index: 10;
+              display: flex;
+              gap: 8px;
+              background: var(--surface);
+              padding: 8px;
+              border-radius: var(--r-sm);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
+              border: 1px solid var(--border);
+              flex-wrap: wrap;
+            }
+
+            .mindmap-btn {
+              padding: 6px 12px;
+              background: var(--surface-2);
+              border: 1px solid var(--border);
+              border-radius: 6px;
+              cursor: pointer;
+              font-size: var(--text-sm);
+              color: var(--text);
+              transition: all .2s;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+            }
+
+            .mindmap-btn:hover {
+              background: var(--primary);
+              color: #fff;
+              border-color: var(--primary);
+            }
+
+            .mindmap-workspace {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              transform-origin: 0 0;
+              cursor: grab;
+            }
+
+            .mindmap-workspace:active {
+              cursor: grabbing;
+            }
+
+            .mindmap-node {
+              position: absolute;
+              min-width: 120px;
+              min-height: 40px;
+              background: var(--surface);
+              border: 2px solid var(--primary-2);
+              border-radius: 8px;
+              padding: 10px;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-start;
+              align-items: center;
+              cursor: move;
+              z-index: 2;
+              transition: box-shadow .2s, border-color .2s;
+            }
+
+            .mindmap-node:hover {
+              box-shadow: 0 6px 15px rgba(0, 0, 0, .15);
+              border-color: var(--primary);
+            }
+
+            .mindmap-node-text {
+              width: 100%;
+              height: 100%;
+              min-height: 20px;
+              outline: none;
+              text-align: center;
+              font-size: var(--text-base);
+              color: var(--text);
+              word-wrap: break-word;
+              cursor: text;
+            }
+
+            .mindmap-node-resize {
+              position: absolute;
+              right: 0;
+              bottom: 0;
+              width: 22px;
+              height: 22px;
+              cursor: nwse-resize;
+              opacity: 0;
+              transition: opacity .2s;
+              touch-action: none;
+            }
+
+            .mindmap-node:hover .mindmap-node-resize {
+              opacity: 1;
+            }
+
+            .mindmap-node-resize::after {
+              content: '';
+              position: absolute;
+              right: 4px;
+              bottom: 4px;
+              width: 8px;
+              height: 8px;
+              border-right: 2px solid var(--muted);
+              border-bottom: 2px solid var(--muted);
+            }
+
+            .mindmap-node-connect {
+              position: absolute;
+              bottom: -14px;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 26px;
+              height: 26px;
+              background: var(--primary-2);
+              border: 2px solid var(--surface);
+              border-radius: 50%;
+              cursor: crosshair;
+              opacity: 0;
+              transition: opacity .2s, transform .2s;
+              z-index: 3;
+              touch-action: none;
+            }
+
+            .mindmap-node:hover .mindmap-node-connect {
+              opacity: 1;
+            }
+
+            .mindmap-node-connect:hover {
+              transform: translateX(-50%) scale(1.2);
+            }
+
+            .mindmap-node-delete {
+              position: absolute;
+              top: -12px;
+              right: -12px;
+              width: 26px;
+              height: 26px;
+              background: var(--hard);
+              color: #fff;
+              border-radius: 50%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-size: 14px;
+              cursor: pointer;
+              opacity: 0;
+              transition: opacity .2s;
+              border: 2px solid var(--surface);
+              z-index: 3;
+              touch-action: manipulation;
+            }
+
+            .mindmap-node:hover .mindmap-node-delete {
+              opacity: 1;
+            }
+
+            .mindmap-node.connect-source {
+              border-color: var(--ok);
+              box-shadow: 0 0 0 3px rgba(63, 125, 45, .35);
+            }
+
+            @media (hover: none) {
+
+              .mindmap-node-resize,
+              .mindmap-node-connect,
+              .mindmap-node-delete {
+                opacity: 1 !important;
+              }
+            }
+
+            .mm-toast-a {
+              position: absolute;
+              bottom: 14px;
+              left: 50%;
+              transform: translateX(-50%);
+              background: rgba(36, 31, 23, .88);
+              color: #fff;
+              font-size: .82rem;
+              padding: 7px 16px;
+              border-radius: 20px;
+              pointer-events: none;
+              z-index: 20;
+              opacity: 0;
+              transition: opacity .3s;
+              white-space: nowrap;
+            }
+
+            .mm-toast-a.visible {
+              opacity: 1;
+            }
+
+            #mindmap-svg-a {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              overflow: visible;
+              pointer-events: none;
+              z-index: 1;
+            }
+
+            .mindmap-line-a {
+              stroke: var(--primary-2);
+              stroke-width: 3;
+              fill: none;
+              pointer-events: auto;
+              cursor: pointer;
+              transition: stroke .2s, stroke-width .2s;
+            }
+
+            .mindmap-line-a:hover {
+              stroke: var(--primary);
+              stroke-width: 5;
+            }
+          </style>
+
+          <div class="mindmap-module" id="mindmap-container-a">
+            <div class="mindmap-toolbar">
+              <button class="mindmap-btn" id="btn-mm-add-a" title="Knoten hinzufügen">➕ Neuer Knoten</button>
+              <button class="mindmap-btn" id="btn-mm-connect-a" title="Verbindungsmodus">🔗 Verbinden</button>
+              <button class="mindmap-btn" id="btn-mm-reset-a" title="Zoom/Position zurücksetzen">⌂ Ansicht
+                zentrieren</button>
+              <button class="mindmap-btn" id="btn-mm-reset-nodes-a" title="Startzustand">↺ Zurücksetzen</button>
+              <button class="mindmap-btn" id="btn-mm-clear-a" title="Alles löschen">🗑️ Alles löschen</button>
+            </div>
+            <div class="mindmap-workspace" id="mindmap-workspace-a">
+              <svg id="mindmap-svg-a"></svg>
+            </div>
+            <div class="mm-toast-a" id="mm-toast-a"></div>
+          </div>
+
+          <script>
+            (function () {
+              const container = document.getElementById('mindmap-container-a');
+              const workspace = document.getElementById('mindmap-workspace-a');
+              const svgLayer = document.getElementById('mindmap-svg-a');
+              const btnAdd = document.getElementById('btn-mm-add-a');
+              const btnConnect = document.getElementById('btn-mm-connect-a');
+              const btnReset = document.getElementById('btn-mm-reset-a');
+              const btnResetNodes = document.getElementById('btn-mm-reset-nodes-a');
+              const btnClear = document.getElementById('btn-mm-clear-a');
+              const toast = document.getElementById('mm-toast-a');
+
+              const isTouch = window.matchMedia('(hover: none)').matches;
+              let scale = 1, panX = 0, panY = 0;
+              let isPanning = false, startPanX = 0, startPanY = 0;
+              let activePointers = new Map(), initialPinchDistance = null, initialScale = 1;
+              let spacePressed = false;
+              let nodes = [], connections = [];
+              let draggedNode = null, dragOffsetX = 0, dragOffsetY = 0, didDrag = false;
+              let resizingNode = null, resizeStartX = 0, resizeStartY = 0, resizeStartW = 0, resizeStartH = 0;
+              let isDrawingLine = false, drawingStartNode = null, tempLine = null;
+              let connectModeActive = false, connectSourceId = null;
+              let lastTapTime = 0, lastTapTarget = null;
+              let toastTimer = null;
+
+              function showToast(msg, ms = 2500) {
+                toast.textContent = msg;
+                toast.classList.add('visible');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => toast.classList.remove('visible'), ms);
+              }
+
+              function updateTransform() {
+                workspace.style.transform = `translate(${panX}px,${panY}px) scale(${scale})`;
+                container.style.backgroundPosition = `${panX}px ${panY}px`;
+                container.style.backgroundSize = `${20 * scale}px ${20 * scale}px`;
+              }
+              function getWorkspacePos(clientX, clientY) {
+                const r = container.getBoundingClientRect();
+                return { x: (clientX - r.left - panX) / scale, y: (clientY - r.top - panY) / scale };
+              }
+              function generateId() { return Math.random().toString(36).substr(2, 9); }
+
+              function addNode(x, y, text = 'Neuer Knoten') {
+                const id = generateId();
+                const nodeEl = document.createElement('div');
+                nodeEl.className = 'mindmap-node';
+                nodeEl.dataset.id = id;
+                nodeEl.style.cssText = `left:${x}px;top:${y}px;touch-action:none`;
+                const textEl = document.createElement('div');
+                textEl.className = 'mindmap-node-text';
+                textEl.contentEditable = true;
+                textEl.setAttribute('enterkeyhint', 'done');
+                textEl.setAttribute('inputmode', 'text');
+                textEl.innerText = text;
+                textEl.addEventListener('pointerdown', e => e.stopPropagation());
+                textEl.addEventListener('input', () => updateConnections());
+                textEl.addEventListener('click', () => { if (!didDrag) { textEl.focus(); } });
+                const resizeH = document.createElement('div');
+                resizeH.className = 'mindmap-node-resize'; resizeH.style.touchAction = 'none';
+                resizeH.addEventListener('pointerdown', e => {
+                  e.stopPropagation(); resizingNode = nodeEl;
+                  resizeStartX = e.clientX; resizeStartY = e.clientY;
+                  resizeStartW = nodeEl.offsetWidth; resizeStartH = nodeEl.offsetHeight;
+                  container.setPointerCapture(e.pointerId); e.preventDefault();
+                });
+                const connectH = document.createElement('div');
+                connectH.className = 'mindmap-node-connect'; connectH.style.touchAction = 'none';
+                connectH.addEventListener('pointerdown', e => {
+                  e.stopPropagation(); isDrawingLine = true; drawingStartNode = id;
+                  tempLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                  tempLine.setAttribute('class', 'mindmap-line-a');
+                  tempLine.style.pointerEvents = 'none';
+                  svgLayer.appendChild(tempLine);
+                  updateTempLine(e.clientX, e.clientY);
+                  container.setPointerCapture(e.pointerId); e.preventDefault();
+                });
+                const delBtn = document.createElement('div');
+                delBtn.className = 'mindmap-node-delete'; delBtn.innerText = '✕';
+                delBtn.style.touchAction = 'manipulation';
+                delBtn.addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefault(); });
+                delBtn.addEventListener('click', e => { e.stopPropagation(); removeNode(id); });
+                nodeEl.append(textEl, resizeH, connectH, delBtn);
+                nodeEl.addEventListener('pointerdown', e => {
+                  if (connectModeActive) { e.stopPropagation(); handleConnectModeTap(id, nodeEl); return; }
+                  if (e.target !== nodeEl && e.target !== textEl) return;
+                  if (spacePressed || e.button === 1 || activePointers.size >= 2) return;
+                  e.stopPropagation(); didDrag = false; draggedNode = nodeEl;
+                  const rect = nodeEl.getBoundingClientRect();
+                  dragOffsetX = (e.clientX - rect.left) / scale;
+                  dragOffsetY = (e.clientY - rect.top) / scale;
+                  workspace.appendChild(nodeEl);
+                  container.setPointerCapture(e.pointerId);
+                });
+                workspace.appendChild(nodeEl);
+                nodes.push({ id, el: nodeEl });
+                return id;
+              }
+
+              function handleConnectModeTap(id, nodeEl) {
+                if (!connectSourceId) {
+                  connectSourceId = id; nodeEl.classList.add('connect-source');
+                  showToast('Jetzt Zielknoten antippen ✔', 2500);
+                } else if (connectSourceId === id) {
+                  nodeEl.classList.remove('connect-source'); connectSourceId = null;
+                  showToast('Auswahl aufgehoben', 1500);
+                } else {
+                  addConnection(connectSourceId, id);
+                  const src = nodes.find(n => n.id === connectSourceId);
+                  if (src) src.el.classList.remove('connect-source');
+                  connectSourceId = null; showToast('Verbindung erstellt ✔', 1500);
+                }
+              }
+              function exitConnectMode() {
+                connectModeActive = false; connectSourceId = null;
+                btnConnect.style.cssText = '';
+                nodes.forEach(n => n.el.classList.remove('connect-source'));
+              }
+              function removeNode(id) {
+                const i = nodes.findIndex(n => n.id === id);
+                if (i > -1) { nodes[i].el.remove(); nodes.splice(i, 1); }
+                connections = connections.filter(c => {
+                  if (c.from === id || c.to === id) { c.el.remove(); return false; }
+                  return true;
+                });
+              }
+              function addConnection(fromId, toId) {
+                if (fromId === toId) return;
+                if (connections.some(c => (c.from === fromId && c.to === toId) || (c.from === toId && c.to === fromId))) return;
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('class', 'mindmap-line-a');
+                const connObj = { from: fromId, to: toId, el: path };
+                path.addEventListener('click', e => {
+                  e.stopPropagation();
+                  if (confirm('Verbindung löschen?')) { path.remove(); connections = connections.filter(c => c !== connObj); }
+                });
+                svgLayer.appendChild(path); connections.push(connObj); updateConnections();
+              }
+              function getCenter(el) {
+                return { x: parseFloat(el.style.left) + el.offsetWidth / 2, y: parseFloat(el.style.top) + el.offsetHeight / 2 };
+              }
+              function drawPath(pathEl, p1, p2) {
+                const dx = p2.x - p1.x, dy = p2.y - p1.y;
+                const offset = Math.min(Math.abs(dx), Math.abs(dy)) * .5 + 20;
+                pathEl.setAttribute('d', `M ${p1.x} ${p1.y} C ${p1.x} ${p1.y + offset}, ${p2.x} ${p2.y - offset}, ${p2.x} ${p2.y}`);
+              }
+              function updateConnections() {
+                connections.forEach(conn => {
+                  const fn = nodes.find(n => n.id === conn.from), tn = nodes.find(n => n.id === conn.to);
+                  if (fn && tn) drawPath(conn.el, getCenter(fn.el), getCenter(tn.el));
+                });
+              }
+              function updateTempLine(cx, cy) {
+                if (!isDrawingLine || !tempLine || !drawingStartNode) return;
+                const fn = nodes.find(n => n.id === drawingStartNode);
+                if (fn) drawPath(tempLine, getCenter(fn.el), getWorkspacePos(cx, cy));
+              }
+
+              window.addEventListener('keydown', e => {
+                if (e.code === 'Space' && !(document.activeElement?.isContentEditable || document.activeElement?.tagName === 'INPUT')) {
+                  spacePressed = true; container.style.cursor = 'grab'; e.preventDefault();
+                }
+              });
+              window.addEventListener('keyup', e => { if (e.code === 'Space') { spacePressed = false; container.style.cursor = ''; } });
+
+              container.addEventListener('pointerdown', e => {
+                const isBg = e.target === workspace || e.target === container || e.target === svgLayer;
+                const now = Date.now();
+                if (isBg) {
+                  if (now - lastTapTime < 350 && e.target === lastTapTarget) {
+                    const pos = getWorkspacePos(e.clientX, e.clientY);
+                    addNode(pos.x, pos.y); lastTapTime = 0; return;
+                  }
+                  lastTapTime = now; lastTapTarget = e.target;
+                }
+                activePointers.set(e.pointerId, e);
+                if (e.button === 1 || spacePressed || (isBg && e.pointerType !== 'touch') || (e.pointerType === 'touch' && activePointers.size === 2)) {
+                  isPanning = true; startPanX = e.clientX - panX; startPanY = e.clientY - panY;
+                  container.style.cursor = 'grabbing'; e.preventDefault();
+                }
+                if (e.pointerType === 'touch' && isBg && activePointers.size === 1) {
+                  isPanning = true; startPanX = e.clientX - panX; startPanY = e.clientY - panY; e.preventDefault();
+                }
+                if (activePointers.size === 2) {
+                  const pts = Array.from(activePointers.values());
+                  initialPinchDistance = Math.hypot(pts[0].clientX - pts[1].clientX, pts[0].clientY - pts[1].clientY);
+                  initialScale = scale;
+                }
+              });
+
+              container.addEventListener('pointermove', e => {
+                if (activePointers.has(e.pointerId)) activePointers.set(e.pointerId, e);
+                if (draggedNode) {
+                  const r = container.getBoundingClientRect();
+                  draggedNode.style.left = ((e.clientX - r.left - panX) / scale - dragOffsetX) + 'px';
+                  draggedNode.style.top = ((e.clientY - r.top - panY) / scale - dragOffsetY) + 'px';
+                  didDrag = true; updateConnections(); e.preventDefault();
+                } else if (resizingNode) {
+                  const dx = (e.clientX - resizeStartX) / scale, dy = (e.clientY - resizeStartY) / scale;
+                  resizingNode.style.width = Math.max(100, resizeStartW + dx) + 'px';
+                  resizingNode.style.height = Math.max(40, resizeStartH + dy) + 'px';
+                  updateConnections(); e.preventDefault();
+                } else if (isDrawingLine) {
+                  updateTempLine(e.clientX, e.clientY); e.preventDefault();
+                } else if (isPanning) {
+                  if (activePointers.size === 1) {
+                    panX = e.clientX - startPanX; panY = e.clientY - startPanY; updateTransform();
+                  } else if (activePointers.size === 2) {
+                    const pts = Array.from(activePointers.values());
+                    const cd = Math.hypot(pts[0].clientX - pts[1].clientX, pts[0].clientY - pts[1].clientY);
+                    if (initialPinchDistance) {
+                      const ns = Math.min(Math.max(initialScale * cd / initialPinchDistance, .2), 3);
+                      const sr = ns / scale, cx = (pts[0].clientX + pts[1].clientX) / 2, cy = (pts[0].clientY + pts[1].clientY) / 2;
+                      const r = container.getBoundingClientRect();
+                      panX = (cx - r.left) - (cx - r.left - panX) * sr; panY = (cy - r.top) - (cy - r.top - panY) * sr;
+                      scale = ns; updateTransform();
+                    }
+                  }
+                  e.preventDefault();
+                }
+              });
+
+              function stopInteractions(e) {
+                activePointers.delete(e.pointerId);
+                if (draggedNode) draggedNode = null;
+                if (resizingNode) resizingNode = null;
+                if (isDrawingLine) {
+                  isDrawingLine = false;
+                  if (tempLine) { tempLine.remove(); tempLine = null; }
+                  const target = document.elementFromPoint(e.clientX, e.clientY);
+                  const tn = target?.closest('.mindmap-node');
+                  if (tn && tn.dataset.id !== drawingStartNode) addConnection(drawingStartNode, tn.dataset.id);
+                  drawingStartNode = null;
+                }
+                if (activePointers.size === 0) { isPanning = false; initialPinchDistance = null; if (!spacePressed) container.style.cursor = ''; }
+              }
+              container.addEventListener('pointerup', stopInteractions);
+              container.addEventListener('pointercancel', stopInteractions);
+              container.addEventListener('pointerleave', stopInteractions);
+
+              container.addEventListener('wheel', e => {
+                e.preventDefault();
+                const ns = Math.min(Math.max(scale - e.deltaY * .001 * scale, .2), 3);
+                const r = container.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+                const sr = ns / scale; panX = mx - (mx - panX) * sr; panY = my - (my - panY) * sr; scale = ns; updateTransform();
+              }, { passive: false });
+
+              function addNewNode() {
+                const toolbar = container.querySelector('.mindmap-toolbar');
+                const toolbarH = toolbar ? (toolbar.offsetTop + toolbar.offsetHeight + 20) : 60;
+                const rect = container.getBoundingClientRect();
+                const clientX = rect.left + container.offsetWidth / 2;
+                const clientY = rect.top + toolbarH + (container.offsetHeight - toolbarH) / 2;
+                const pos = getWorkspacePos(clientX, clientY);
+                const offset = Math.random() * 40 - 20;
+                addNode(pos.x + offset, pos.y + offset);
+                if (isTouch) showToast('Knoten hinzugefügt – tippe ihn zum Bearbeiten an', 2000);
+              }
+              btnAdd.addEventListener('click', addNewNode);
+
+              function toggleConnectMode() {
+                connectModeActive = !connectModeActive;
+                if (connectModeActive) {
+                  connectSourceId = null; btnConnect.style.background = 'var(--primary-2)';
+                  btnConnect.style.color = 'white'; btnConnect.style.borderColor = 'var(--primary-2)';
+                  showToast('Verbindungsmodus: Quellknoten antippen', 3000);
+                } else { exitConnectMode(); showToast('Verbindungsmodus beendet', 1200); }
+              }
+              btnConnect.addEventListener('click', toggleConnectMode);
+
+              btnReset.addEventListener('click', () => { scale = 1; panX = 0; panY = 0; updateTransform(); });
+
+              btnResetNodes.addEventListener('click', () => {
+                if (confirm('Mind-Map auf Startzustand zurücksetzen?')) {
+                  nodes.map(n => n.id).forEach(id => removeNode(id));
+                  panX = 0; panY = 0; scale = 1; updateTransform(); addInitialNodesAt(container.offsetWidth / 2, container.offsetHeight / 2);
+                }
+              });
+
+              btnClear.addEventListener('click', () => {
+                if (confirm('Gesamte Mind-Map löschen?')) {
+                  nodes.map(n => n.id).forEach(id => removeNode(id));
+                  panX = 0; panY = 0; scale = 1; updateTransform();
+                }
+              });
+
+              function addInitialNodesAt(cx, cy) {
+                const n1 = addNode(cx - 150, cy - 50, 'Seltene Erden');
+                const n2 = addNode(cx + 100, cy - 175, 'Ökonomie');
+                const n3 = addNode(cx + 100, cy - 100, 'Umwelt');
+                const n4 = addNode(cx + 100, cy - 25, 'Politik');
+                const n5 = addNode(cx + 100, cy + 50, 'Alltag');
+                const n6 = addNode(cx + 100, cy + 125, 'Anwendungsgebiete');
+                [n2, n3, n4, n5, n6].forEach(id => addConnection(n1, id));
+              }
+
+              let mindmapInitialized = false;
+              function initMindmap(forceFallback = false) {
+                if (mindmapInitialized) return true;
+
+                let w = container.offsetWidth;
+                let h = container.offsetHeight;
+
+                if (w === 0 || h === 0) {
+                  const rect = container.getBoundingClientRect();
+                  w = rect.width;
+                  h = rect.height;
+                }
+
+                if (w === 0 || h === 0) {
+                  const style = window.getComputedStyle(container);
+                  w = parseFloat(style.width);
+                  h = parseFloat(style.height);
+                }
+
+                if (isNaN(w) || w === 0 || isNaN(h) || h === 0) {
+                  if (!forceFallback) {
+                    return false; // Try again via ResizeObserver or fallback safety timeout
+                  }
+                  w = 800;
+                  h = 600;
+                }
+
+                const cx = w / 2;
+                const cy = h / 2;
+                mindmapInitialized = true;
+
+                addInitialNodesAt(cx, cy);
+                updateTransform();
+
+                if (isTouch) {
+                  setTimeout(() => showToast('Tipp: Doppeltippen zum Hinzufügen · 🔗 zum Verbinden', 4000), 600);
+                }
+                return true;
+              }
+
+              const mmResizeObserver = new ResizeObserver((entries) => {
+                for (let entry of entries) {
+                  if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+                    if (initMindmap()) {
+                      mmResizeObserver.disconnect();
+                    }
+                  }
+                }
+              });
+              mmResizeObserver.observe(container);
+
+              // Also add backup trigger in case ResizeObserver is delayed
+              setTimeout(() => {
+                if (initMindmap()) {
+                  mmResizeObserver.disconnect();
+                }
+              }, 200);
+
+              // Safety backup to force initialization after 1.5 seconds if still layout-inhibited
+              setTimeout(() => {
+                if (!mindmapInitialized) {
+                  initMindmap(true);
+                  mmResizeObserver.disconnect();
+                }
+              }, 1500);
+            })();
+          </script>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.1/rangy-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rangy/1.3.1/rangy-classapplier.min.js"></script>
+  <script>
+    // Safe localStorage wrapper
+    function safeGetItem(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (e) {
+        console.warn('localStorage not accessible:', e);
+        return null;
+      }
+    }
+    function safeSetItem(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (e) {
+        console.warn('localStorage not accessible:', e);
+      }
+    }
+
+
+
+    // Theme Toggle Logic
+    const root = document.documentElement;
+    const storedTheme = safeGetItem('hsab-theme');
+
+    if (storedTheme) {
+      root.setAttribute('data-theme', storedTheme);
+    } else {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    }
+
+    function toggleTheme() {
+      const currentTheme = root.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', newTheme);
+      safeSetItem('hsab-theme', newTheme);
+    }
+
+    document.querySelectorAll('.theme-toggle').forEach(btn => {
+      btn.addEventListener('click', toggleTheme);
+    });
+
+    // Rangy Highlighting & Eraser Logic
+    const appliers = {};
+    let currentColor = 'yellow';
+    let isMarkerMode = false;
+    let isEraserMode = false;
+
+    const colorPicker = document.getElementById('colorPicker');
+
+    window.addEventListener('load', () => {
+      rangy.init();
+      appliers['yellow'] = rangy.createClassApplier("highlight-yellow", { normalize: true });
+      appliers['green'] = rangy.createClassApplier("highlight-green", { normalize: true });
+      appliers['cyan'] = rangy.createClassApplier("highlight-cyan", { normalize: true });
+      appliers['red'] = rangy.createClassApplier("highlight-red", { normalize: true });
+    });
+
+    // Color Swatches Logic
+    document.querySelectorAll('.color-swatch').forEach(swatch => {
+      swatch.addEventListener('click', (e) => {
+        currentColor = swatch.dataset.color;
+        document.querySelectorAll('.color-swatch').forEach(s => {
+          s.classList.remove('active');
+          s.style.borderColor = 'transparent';
+        });
+        swatch.classList.add('active');
+        swatch.style.borderColor = 'var(--text)';
+
+        if (!isMarkerMode) {
+          document.querySelectorAll('.highlight-btn').forEach(btn => {
+            isMarkerMode = true;
+            isEraserMode = false;
+            document.querySelectorAll('.eraser-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            colorPicker.style.display = 'flex';
+          });
+        }
+      });
+    });
+
+    document.querySelectorAll('.highlight-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        isMarkerMode = !isMarkerMode;
+        if (isMarkerMode) {
+          isEraserMode = false;
+          document.querySelectorAll('.eraser-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          colorPicker.style.display = 'flex';
+        } else {
+          btn.classList.remove('active');
+          colorPicker.style.display = 'none';
+        }
+      });
+    });
+
+    document.querySelectorAll('.eraser-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        isEraserMode = !isEraserMode;
+        if (isEraserMode) {
+          isMarkerMode = false;
+          document.querySelectorAll('.highlight-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          colorPicker.style.display = 'none';
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    });
+
+    function handleSelection() {
+      if (!isMarkerMode && !isEraserMode) return;
+
+      const selection = rangy.getSelection();
+      if (selection.isCollapsed) return;
+
+      if (isMarkerMode) {
+        appliers[currentColor].applyToSelection();
+      } else if (isEraserMode) {
+        appliers['yellow'].undoToSelection();
+        appliers['green'].undoToSelection();
+        appliers['cyan'].undoToSelection();
+        appliers['red'].undoToSelection();
+      }
+      selection.removeAllRanges();
+    }
+
+    document.addEventListener('mouseup', handleSelection);
+    document.addEventListener('touchend', handleSelection);
+
+    // Language Toggle Logic
+    let currentLang = 'de';
+    const dict = {
+      demoText: {
+        de: 'Dies ist ein deutscher Beispieltext. Der Toggle-Button funktioniert auch hier in der Assets-Referenz!',
+        en: 'This is an English example text. The toggle button works here in the assets reference too!'
+      }
+    };
+
+    const langToggle = document.getElementById('langToggle');
+    const langDe = document.getElementById('langDe');
+    const langEn = document.getElementById('langEn');
+
+    function setElementText(selector, dictKey, isHtml = false) {
+      const el = document.querySelector(selector);
+      if (el && dict[dictKey]) {
+        if (isHtml) el.innerHTML = dict[dictKey][currentLang];
+        else el.textContent = dict[dictKey][currentLang];
+      }
+    }
+
+    function updateLanguage() {
+      if (currentLang === 'de') {
+        langDe.style.fontWeight = 'bold';
+        langDe.style.color = 'var(--primary)';
+        langEn.style.fontWeight = 'normal';
+        langEn.style.color = 'var(--muted)';
+      } else {
+        langEn.style.fontWeight = 'bold';
+        langEn.style.color = 'var(--primary)';
+        langDe.style.fontWeight = 'normal';
+        langDe.style.color = 'var(--muted)';
+      }
+      setElementText('#demoText', 'demoText');
+    }
+
+    if (langToggle) {
+      langToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'de' ? 'en' : 'de';
+        updateLanguage();
+      });
+      updateLanguage();
+    }
+  </script>
+</body>
+
+</html>

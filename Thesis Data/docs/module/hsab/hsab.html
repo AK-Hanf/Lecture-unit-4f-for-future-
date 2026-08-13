@@ -1,0 +1,2266 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HSAB-Trainer</title>
+
+  <!-- Fonts Preconnect & CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root,
+    [data-theme="light"] {
+      --bg: #f7f4ef;
+      --surface: rgba(255, 255, 255, 0.84);
+      --surface-2: #fffdf9;
+      --border: #d9d2c8;
+      --text: #241f17;
+      --muted: #6f685f;
+      --primary: #8f3d1f;
+      --primary-2: #285f75;
+      --hard: #b13131;
+      --soft: #2355a5;
+      --ok: #3f7d2d;
+      --warn: #bf7a19;
+      --hl-yellow: rgba(255, 235, 59, 0.5);
+      --hl-green: rgba(76, 175, 80, 0.4);
+      --hl-cyan: rgba(0, 188, 212, 0.4);
+      --hl-red: rgba(244, 67, 54, 0.4);
+      --highlight-bg: rgba(239, 188, 109, 0.4);
+      --shadow: 0 14px 40px rgba(36, 31, 23, .08);
+      --r-sm: 14px;
+      --r-md: 22px;
+      --r-lg: 30px;
+      --space-1: .25rem;
+      --space-2: .5rem;
+      --space-3: .75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --text-xs: clamp(.75rem, .72rem+.2vw, .875rem);
+      --text-sm: clamp(.9rem, .84rem+.25vw, 1rem);
+      --text-base: clamp(1rem, .95rem+.25vw, 1.12rem);
+      --text-lg: clamp(1.15rem, 1rem+.6vw, 1.45rem);
+      --text-xl: clamp(1.6rem, 1.2rem+1.4vw, 2.4rem);
+      --text-2xl: clamp(2.2rem, 1.2rem+3vw, 4rem);
+      --font-display: Inter, Arial, sans-serif;
+      --font-body: Inter, Arial, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg: #161311;
+      --surface: rgba(30, 26, 23, 0.9);
+      --surface-2: #201c19;
+      --border: #3d332c;
+      --text: #f1e7dc;
+      --muted: #b7a99b;
+      --primary: #e49372;
+      --primary-2: #7bc0dd;
+      --hard: #ff8c8c;
+      --soft: #8ab6ff;
+      --ok: #97d480;
+      --warn: #efbc6d;
+      --hl-yellow: rgba(255, 235, 59, 0.3);
+      --hl-green: rgba(76, 175, 80, 0.3);
+      --hl-cyan: rgba(0, 188, 212, 0.3);
+      --hl-red: rgba(244, 67, 54, 0.3);
+      --highlight-bg: rgba(239, 188, 109, 0.3);
+      --shadow: 0 18px 45px rgba(0, 0, 0, .35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(143, 61, 31, .14), transparent 28%),
+        radial-gradient(circle at right bottom, rgba(40, 95, 117, .14), transparent 24%),
+        var(--bg);
+      line-height: 1.6;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+      height: auto;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    /* iOS touch compatibility fixes */
+    button,
+    [role="button"],
+    .answer,
+    .btn,
+    .sort-item,
+    summary,
+    .theme-toggle,
+    .lang-toggle {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .panel,
+    .trainer,
+    .task-card {
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+
+    .wrap {
+      width: min(1200px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 1rem 0 3rem;
+    }
+
+    /* Skip Link for Accessibility */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      z-index: 1000;
+    }
+
+    .skip-link:focus {
+      left: 1rem;
+      top: 1rem;
+      background: var(--surface-2);
+      color: var(--text);
+      padding: .8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: var(--text-lg);
+    }
+
+    .brand-sub {
+      font-size: var(--text-xs);
+      color: var(--muted);
+    }
+
+    .lang-toggle {
+      min-width: 60px;
+      min-height: 44px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      padding: 0 1rem;
+    }
+
+    .theme-toggle {
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 1.5rem;
+    }
+
+    .panel {
+      background: var(--surface);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(80, 70, 60, .14);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .panel>h2:first-child {
+      margin-top: 0;
+    }
+
+    .hero-copy,
+    .side,
+    .trainer,
+    .help {
+      padding: clamp(1.2rem, 2.5vw, 2.2rem);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(143, 61, 31, .1);
+      color: var(--primary);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: var(--font-display);
+      line-height: 1.08;
+    }
+
+    h1 {
+      font-size: var(--text-xl);
+      margin-top: 1rem;
+      max-width: 100%;
+    }
+
+    h2 {
+      font-size: var(--text-lg);
+    }
+
+    .lead {
+      margin-top: 1rem;
+      color: var(--muted);
+      max-width: 100%;
+    }
+
+    .hero-actions,
+    .stats,
+    .answers,
+    .controls,
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+
+    .btn {
+      min-height: 44px;
+      padding: .8rem 1rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: var(--surface-2);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .stats {
+      margin-top: 1.25rem;
+    }
+
+    .stat {
+      flex: 1 1 145px;
+      padding: 1rem;
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      border: 1px solid rgba(80, 70, 60, .1);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: var(--text-lg);
+    }
+
+    .mini {
+      padding: 1rem;
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      border: 1px solid rgba(80, 70, 60, .1);
+    }
+
+    .mini+.mini {
+      margin-top: .9rem;
+    }
+
+    .mini p {
+      margin: .35rem 0 0;
+      color: var(--muted);
+    }
+
+    main {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .task-card {
+      margin-top: 1.25rem;
+      padding: 1.3rem;
+      background: var(--surface-2);
+      border: 1px solid rgba(80, 70, 60, .1);
+      border-radius: var(--r-md);
+    }
+
+    .task-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .counter,
+    .badge {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      padding: .45rem .75rem;
+      border-radius: 999px;
+    }
+
+    .badge {
+      background: rgba(40, 95, 117, .1);
+      color: var(--primary-2);
+    }
+
+    .counter {
+      background: rgba(127, 127, 127, .12);
+      color: var(--muted);
+    }
+
+    .formula {
+      margin-top: 1rem;
+      font-size: clamp(3rem, 8vw, 5.8rem);
+      font-family: var(--font-display);
+      letter-spacing: -.04em;
+    }
+
+    .prompt {
+      color: var(--text);
+      margin-top: .35rem;
+    }
+
+    .feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: var(--r-md);
+      border: 1px solid rgba(80, 70, 60, .1);
+      min-height: 78px;
+      background: var(--surface);
+    }
+
+    .feedback.ok {
+      background: rgba(63, 125, 45, .12);
+      border-color: rgba(63, 125, 45, .25);
+    }
+
+    .feedback.bad {
+      background: rgba(177, 49, 49, .12);
+      border-color: rgba(177, 49, 49, .28);
+    }
+
+    .answers {
+      margin-top: 1rem;
+    }
+
+    .answer {
+      flex: 1 1 180px;
+      text-align: left;
+      min-height: 86px;
+      padding: 1rem;
+      border-radius: var(--r-md);
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid rgba(80, 70, 60, .12);
+      cursor: pointer;
+    }
+
+    .answer strong {
+      display: block;
+      margin-bottom: .25rem;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .75rem;
+      margin-top: 1rem;
+    }
+
+    .score-box,
+    .help-card {
+      padding: 1rem;
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      border: 1px solid rgba(80, 70, 60, .1);
+    }
+
+    .score-box strong {
+      display: block;
+      font-size: var(--text-lg);
+    }
+
+    .progress {
+      height: 12px;
+      background: rgba(127, 127, 127, .18);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: .75rem;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--primary-2));
+    }
+
+    .legend {
+      margin-top: 1rem;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      font-size: var(--text-xs);
+      font-weight: 700;
+    }
+
+    .dot {
+      width: .75rem;
+      height: .75rem;
+      border-radius: 50%;
+    }
+
+    .help-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .help-card img {
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .help-card p {
+      margin: .75rem 0 0;
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+
+    .footnote {
+      padding: 1.25rem;
+      color: var(--muted);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .sort-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.1rem;
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      border: 1px solid rgba(80, 70, 60, .12);
+      cursor: grab;
+      color: var(--text);
+    }
+
+    .sort-item strong {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+    }
+
+    .sort-item.dragging {
+      opacity: .55;
+    }
+
+    .sort-rank {
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+
+    .sort-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 84px;
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .sort-scale {
+      border: 1px solid rgba(80, 70, 60, .12);
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem .5rem;
+      min-height: 100%;
+    }
+
+    .sort-scale .scale-label {
+      font-weight: 700;
+      color: var(--muted);
+      font-size: var(--text-sm);
+    }
+
+    .sort-arrow {
+      position: relative;
+      width: 4px;
+      flex: 1;
+      background: linear-gradient(180deg, var(--soft), var(--hard));
+      border-radius: 999px;
+      margin: .6rem 0;
+    }
+
+    .sort-arrow::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 16px solid var(--hard);
+    }
+
+    .sort-item.correct {
+      background: rgba(63, 125, 45, .16);
+      border-color: rgba(63, 125, 45, .45);
+    }
+
+    .sort-item.incorrect {
+      background: rgba(177, 49, 49, .14);
+      border-color: rgba(177, 49, 49, .45);
+    }
+
+    .sort-controls-inline {
+      display: flex;
+      gap: .5rem;
+      align-items: center;
+    }
+
+    .sort-move {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .help-card.active-help {
+      outline: 2px solid rgba(143, 61, 31, .35);
+    }
+
+    @media (max-width: 920px) {
+
+      .hero,
+      .grid-2,
+      .help-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .answer {
+        flex-basis: 100%;
+      }
+
+      h1 {
+        max-width: 100%;
+      }
+    }
+
+    /* styles for Aufgabe 3 */
+    .task3-textarea {
+      width: 100%;
+      min-height: 140px;
+      padding: 0.85rem 1rem;
+      border-radius: var(--r-md);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      resize: vertical;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+      transition: border-color 0.2s, outline 0.2s;
+    }
+
+    .task3-textarea:focus {
+      border-color: var(--primary);
+      outline: 2px solid var(--primary);
+    }
+
+    .password-container {
+      position: relative;
+      margin-top: 1rem;
+      padding: 1.25rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      box-shadow: var(--shadow);
+    }
+
+    .password-input {
+      flex: 1;
+      min-width: 200px;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: var(--text-sm);
+      transition: border-color 0.2s, outline 0.2s;
+    }
+
+    .password-input:focus {
+      border-color: var(--primary);
+      outline: 2px solid var(--primary);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      line-height: 1;
+      transition: color 0.15s ease;
+    }
+
+    .close-btn:hover {
+      color: var(--primary);
+    }
+
+    /* Transition and Easing Animations */
+    .lang-toggle,
+    .theme-toggle,
+    .btn,
+    .answer,
+    .sort-item,
+    .sort-move,
+    details,
+    summary,
+    .task3-textarea,
+    .password-input {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-delay: -1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        background-attachment: initial !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
+      }
+    }
+
+    /* CRC 1573 Logo – fixed bottom-right */
+    .crc-logo-fixed {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      width: 70px;
+      height: auto;
+      opacity: 0.55;
+      pointer-events: auto;
+      z-index: 9999;
+      transition: opacity 0.3s ease;
+      user-select: none;
+    }
+
+    .crc-logo-fixed:hover {
+      opacity: 1;
+    }
+
+    @media (max-width: 600px) {
+      .crc-logo-fixed {
+        width: 50px;
+        bottom: 12px;
+        right: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Mobile debug console to capture JS errors during mobile testing -->
+  <div id="mobile-debug-console"
+    style="display:none; position:fixed; bottom:0; left:0; right:0; max-height:200px; overflow-y:auto; background:rgba(180,0,0,0.95); color:white; font-family:monospace; font-size:12px; z-index:999999; padding:12px; border-top:3px solid red; pointer-events:auto;">
+    <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:5px;">
+      <span>⚠️ JAVASCRIPT FEHLER ERKANNT:</span>
+      <button onclick="this.parentElement.parentElement.remove()"
+        style="background:none; border:none; color:white; font-size:14px; cursor:pointer; font-weight:bold;">✕
+        Schließen</button>
+    </div>
+    <div id="mobile-debug-log"></div>
+  </div>
+  <script>
+    window.onerror = function (msg, url, line, col, error) {
+      var consoleEl = document.getElementById('mobile-debug-console');
+      var logEl = document.getElementById('mobile-debug-log');
+      if (consoleEl && logEl) {
+        consoleEl.style.display = 'block';
+        var p = document.createElement('div');
+        p.style.margin = '4px 0';
+        p.style.borderBottom = '1px solid rgba(255,255,255,0.2)';
+        p.style.paddingBottom = '4px';
+        var file = 'unknown';
+        if (url && typeof url === 'string') {
+          file = url.substring(url.lastIndexOf('/') + 1);
+        }
+        p.textContent = (line || '?') + ':' + (col || '?') + ' in ' + file + ' - ' + msg;
+        logEl.appendChild(p);
+      }
+      return false;
+    };
+  </script>
+
+  <a class="skip-link" href="#inhalt" data-en="Skip to content">Zum Inhalt springen</a>
+
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <a href="../../index.html"
+          style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: .9rem;">
+          <div class="logo" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="brand-title" id="brandTitle" data-en="HSAB Concept">HSAB-Konzept
+            </div>
+            <div class="brand-sub" id="brandSub" data-en="Exercises and applications of the HSAB concept">Übungen und
+              Anwendung des HSAB-Konzeptes</div>
+          </div>
+        </a>
+      </div>
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <button class="lang-toggle" type="button" id="langToggle" aria-label="Sprache wechseln"
+          data-en-aria-label="Change language">
+          <span id="langDe" style="font-weight: bold; color: var(--primary);">DE</span>
+          <span style="margin: 0 6px; color: var(--border);">|</span>
+          <span id="langEn" style="color: var(--muted);">EN</span>
+        </button>
+        <button class="theme-toggle tool-btn" type="button" aria-label="Farbschema wechseln"
+          data-en-aria-label="Toggle theme">◐</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="panel hero-copy">
+        <p class="lead" id="heroLead">
+          Lies dir zuerst den Info-Text durch, falls nötig, klicke auf die Pfeile um dir Beispiele
+          anzusehen.
+        </p>
+        <div class="mini" id="merkhilfeBlock" style="margin-top:1.25rem;">
+          <h3>Allgemeine Informationen zum HSAB-Konzept</h3>
+          <p>
+            <span style="color: var(--text);">Mit dem Hard-Soft-Acid-Base-(HSAB)-Konzept lassen sich Ionen/Moleküle in
+              die Kategorien weich und hart
+              unterteilen und somit Reaktionen vorhersagen. Denn es gilt:</span> <strong
+              style="color: rgba(239, 0, 0, 1);">Weich
+              reagiert gerne mit weich und hart mit hart.</strong>
+          </p>
+          <p style="margin-top: 1rem;"><strong>Ein Ion/Molekül gilt als umso härter, je...</strong></p>
+          <ul style="margin-top: 0.5rem; padding-left: 1.5rem; line-height: 1.8;">
+            <li style="margin-bottom: 0.75rem;">
+              <strong>...kleiner der Atom/Ionen-Radius ist.</strong>
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;">
+                <summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary>
+                <div
+                  style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">
+                  H<sup>+</sup> ist härter als Na<sup>+</sup>, da H<sup>+</sup> einen deutlich kleineren Ionen-Radius
+                  besitzt. Beide Ionen sind jedoch als hart zu betrachten.
+                </div>
+              </details>
+            </li>
+            <li style="margin-bottom: 0.75rem;">
+              <strong>...höher die Ladung ist.</strong> (In unseren Beispielen: ab einer Ladung von +3 sind Ionen
+              eher als hart anzusehen).
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;">
+                <summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary>
+                <div
+                  style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">
+                  Fe<sup>3+</sup> ist härter als Fe<sup>2+</sup> aufgrund der höheren Ladung. Fe<sup>2+</sup> liegt
+                  sogar im Übergangsbereich zwischen hart und weich.
+                </div>
+              </details>
+            </li>
+            <li style="margin-bottom: 0.75rem;">
+              <strong>...höher die Ladungsdichte ist.</strong> (= Verhältnis von Ladung [möglichst groß] zu Radius
+              [möglichst klein])
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;">
+                <summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary>
+                <div
+                  style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">
+                  Mg<sup>2+</sup> besitzt kleinen Radius, da es sich es in der 2. Periode befindet, und ist geladen.
+                  Damit ist die Ladungsdichte hoch. Dementsprechend wäre Mg<sup>2+</sup> hart.<br><br>
+                  Cd<sup>2+</sup> hingegen befindet sich in der 4. Periode, also hat einen deutlich größeren Ionenradius
+                  als Mg<sup>2+</sup>. Da es dieselbe +2 Ladung besitzt, ergibt sich somit eine geringe Ladungsdichte.
+                  Cd<sup>2+</sup> ist dementsprechend weich.
+                </div>
+              </details>
+            </li>
+            <li style="margin-bottom: 0.75rem;">
+              <strong>...höher die Oxidationsstufe ist.</strong>
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;">
+                <summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary>
+                <div
+                  style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">
+                  In ClO<sub>4</sub><sup>-</sup> ist die Oxidationsstufe von Chlor VII, und somit höher als in
+                  ClO<sub>3</sub><sup>-</sup> mit V. Folglich ist ClO<sub>4</sub><sup>-</sup> härter als
+                  ClO<sub>3</sub><sup>-</sup>.
+                </div>
+              </details>
+            </li>
+            <li style="margin-bottom: 0.75rem;">
+              <strong>...höher die Elektronegativität ist.</strong>
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;">
+                <summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary>
+                <div
+                  style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">
+                  BF<sub>3</sub> gilt als harte Säure, wohingegen BH<sub>3</sub> als weiche Säure gilt, was sich unter
+                  anderem auf die hohe Elektronegativität von Fluor (ΔEN(F)= 4,0) im Vergleich zum H (ΔEN(H)= 2,1)
+                  zurückführen lässt.
+                </div>
+              </details>
+            </li>
+            <li style="margin-bottom: 0.75rem;">
+              <strong>...schlechter die Polarisierbarkeit</strong> (= wie sehr reagiert ein Molekül/Ion auf äußere
+              elektrische Einwirkungen. Unter anderem abhängig von der Elektronegativität und Molekülgeometrie).
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;">
+                <summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary>
+                <div
+                  style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">
+                  F<sup>-</sup> (hart) ist schlechter polarisierbar als I<sup>-</sup> (weich). Denn die Elektronen der
+                  Valenzschale beim F<sup>-</sup> sind deutlich näher am Kern als bei I<sup>-</sup> und somit weniger
+                  beeinflussbar durch äußere Ladungseinflüsse (z.B. ein anderes Ion).<br><br>
+                  NH<sub>3</sub> gilt als harte Base, wohingegen PH<sub>3</sub> als weiche Base gilt. Beide sind
+                  prinzipiell polarisierbar. Aufgrund der hohen ΔEN(N)= 3,0 im Vergleich zu ΔEN(P)= 2,2, und der
+                  geringeren Größe von Stickstoff in Vergleich zu Phosphor, liegt der Ladungsschwerpunkt innerhalb der
+                  Moleküle deutlich mehr beim N als bei P. Das führt zu einer schlechteren Polarisierbarkeit von
+                  NH<sub>3</sub> im Vergleich zu PH<sub>3</sub>.
+                </div>
+              </details>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <main id="inhalt">
+      <section>
+        <section class="panel trainer" aria-labelledby="trainerTitle">
+          <h2 id="trainerTitle">Aufgabe 1</h2>
+          <p class="lead" style="margin-top:.5rem; color: var(--text);">Wähle zuerst, ob du Säuren oder Basen trainieren
+            möchtest. Danach
+            <strong>ordne</strong> jedes Teilchen als hart oder weich <strong>ein</strong>. Übersprungene Karten oder
+            falsch beantwortete Karten erscheinen am Ende automatisch erneut.
+          </p>
+
+          <div class="controls" style="margin-top:1rem;">
+            <button class="btn btn-primary" type="button" data-mode="acids">Säuren üben</button>
+            <button class="btn btn-secondary" type="button" data-mode="bases">Basen üben</button>
+            <button class="btn btn-secondary" type="button" id="resetBtn">Zurücksetzen</button>
+          </div>
+
+          <div class="task-card">
+            <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start;">
+
+              <!-- Left Column: Task -->
+              <div style="flex: 1; min-width: min(100%, 260px);">
+                <div class="task-top" style="justify-content: flex-start; gap: 0.5rem;">
+                  <span class="counter" id="counter">Karte 1</span>
+                </div>
+                <div class="formula" id="formula">H<sup>+</sup></div>
+                <p class="prompt" id="promptText">Ist dieses Teilchen im HSAB-Konzept eher hart oder weich?</p>
+                <div class="answers" role="group" aria-label="Antwortmöglichkeiten">
+                  <button class="answer" type="button" data-answer="hard">
+                    <strong>Hart</strong>
+                  </button>
+                  <button class="answer" type="button" data-answer="soft">
+                    <strong>Weich</strong>
+                  </button>
+                </div>
+                <div id="specificHintWrapper" style="margin-top: 1rem; display: none;">
+                  <details id="specificHint" style="font-size: var(--text-sm); cursor: pointer;">
+                    <summary style="font-weight: 600; color: var(--primary-2);">Molekül/Ion-spezifischer Tipp anzeigen
+                    </summary>
+                    <div id="specificHintText"
+                      style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text); line-height: 1.5;">
+                    </div>
+                  </details>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Bottom: Feedback, Actions & Lernhilfe -->
+          <div style="margin-top: 1.5rem;">
+            <div class="feedback" id="feedbackBox" style="margin-top: 0; color: var(--text);">Wähle mittels einem Klick
+              hart oder weich aus,
+              dann erscheint direkt eine kurze Rückmeldung.</div>
+
+            <div
+              style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; align-items: center; margin-top: 1.5rem;">
+              <div class="controls" style="margin-top: 0; justify-content: center; flex-wrap: wrap;">
+                <button class="btn btn-primary" type="button" id="nextBtn">Nächste Karte</button>
+                <button class="btn btn-secondary" type="button" id="shuffleBtn">Neu mischen</button>
+              </div>
+
+              <!-- Right Column: Lernhilfe -->
+              <aside style="flex: 0 1 340px; width: 100%;">
+                <div
+                  style="background: var(--surface); border: 1px solid rgba(80, 70, 60, .1); border-radius: var(--r-md); padding: 1rem;">
+
+                  <div class="score-grid" style="margin-top: 0; gap: 0.5rem; grid-template-columns: repeat(3, 1fr);">
+                    <div class="score-box" style="padding: 0.5rem 0.75rem;"><span
+                        class="brand-sub">Richtig</span><strong id="correctCount"
+                        style="font-size: var(--text-base);">0</strong></div>
+                    <div class="score-box" style="padding: 0.5rem 0.75rem;"><span class="brand-sub">Falsch</span><strong
+                        id="wrongCount" style="font-size: var(--text-base);">0</strong></div>
+                    <div class="score-box" style="padding: 0.5rem 0.75rem;"><span class="brand-sub">Quote</span><strong
+                        id="rateCount" style="font-size: var(--text-base);">0%</strong></div>
+                  </div>
+
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 1rem;">
+                    <strong id="progressLabel" style="font-size: var(--text-xs); margin:0;">Fortschritt</strong>
+                    <div style="display:flex; gap:.35rem;">
+                      <button class="btn btn-primary"
+                        style="min-height:32px; padding:.3rem .75rem; font-size:var(--text-sm);"
+                        id="statsAcidBtn">Säuren</button>
+                      <button class="btn btn-secondary"
+                        style="min-height:32px; padding:.3rem .75rem; font-size:var(--text-sm);"
+                        id="statsBaseBtn">Basen</button>
+                    </div>
+                  </div>
+                  <div class="progress" aria-hidden="true" style="margin-top: 0.35rem;"><span id="progressBar"></span>
+                  </div>
+
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+      </section>
+
+      <section class="panel footnote">
+        <h2 style="margin-bottom: .75rem; color: var(--text);">Aufgabe 2</h2>
+        <div
+          style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; gap: 1rem;">
+          <p id="aufgabe2Text" style="margin:0; color: var(--text);"><strong>Ordne</strong> die Moleküle/Ionen
+            den entsprechenden
+            Positionen von weich
+            zu hart anhand des HSAB-Konzeptes <strong>zu</strong>.</p>
+          <button class="btn btn-secondary" type="button" id="checkSort" style="flex-shrink: 0;">Antwort prüfen</button>
+        </div>
+        <div class="controls" style="margin-bottom:1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <button class="btn btn-primary" type="button" id="loadAcidSort">Säure-Sortierung</button>
+          <button class="btn btn-secondary" type="button" id="loadBaseSort">Basen-Sortierung</button>
+          <div style="width: 1rem;"></div>
+
+          <button class="btn btn-secondary" type="button" id="resetSortBtn">Zurücksetzen</button>
+          <button class="btn btn-secondary" type="button" id="restartSortBtn">Aufgabe erneut</button>
+        </div>
+        <div class="controls"
+          style="margin-bottom:1rem; align-items: center; justify-content: flex-start; gap: 0.5rem; flex-wrap: wrap;">
+          <span class="counter" id="sortCounter" style="margin-right: .5rem;">Teilaufgabe a)</span>
+          <button class="btn btn-secondary" type="button" id="prevSortTaskBtn" aria-label="Vorherige Teilaufgabe"
+            style="padding: .4rem .8rem;">←</button>
+          <button class="btn btn-secondary" type="button" id="nextSortTaskBtn" aria-label="Nächste Teilaufgabe"
+            style="padding: .4rem .8rem;">→</button>
+        </div>
+        <div class="sort-layout">
+          <div style="display:grid; gap:.75rem;" id="sortArea" aria-live="polite"></div>
+          <div class="sort-scale" aria-hidden="true"><span class="scale-label">weich</span>
+            <div class="sort-arrow"></div><span class="scale-label">hart</span>
+          </div>
+        </div>
+        <div id="sortHintWrapper" style="margin-top: 1rem; display: none;">
+          <details id="sortHint" style="font-size: var(--text-sm); cursor: pointer;">
+            <summary style="font-weight: 600; color: var(--primary-2);">Aufgaben-spezifischen Tipp anzeigen</summary>
+            <div id="sortHintText"
+              style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text); line-height: 1.5;">
+            </div>
+          </details>
+        </div>
+        <p id="sortFeedback" style="margin-top:1rem; color: var(--muted);"></p>
+      </section>
+
+      <section class="panel trainer" style="margin-top: 1.5rem;" id="aufgabe3Section">
+        <h2 style="margin-bottom: .75rem; color: var(--text);">Aufgabe 3</h2>
+        <p id="aufgabe3Text" style="margin:0 0 1.25rem 0; color: var(--text);">
+          Zu Beginn des Unterrichts hatten wir jeweils Kupfer(II)-chlorid (CuCl<sub>2</sub>) und Neodym(III)-chlorid
+          (NdCl<sub>3</sub>) in Wasser gelöst. <strong>Begründe</strong>
+          anhand des
+          HSAB-Konzeptes, welches der beiden Metalle bevorzugt mit Wasser reagiert.
+        </p>
+
+        <!-- Lösung überprüfen Button -->
+        <div id="task3ActionContainer"
+          style="margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+          <div>
+            <button class="btn btn-primary" type="button" id="checkSolutionBtn">Lösung überprüfen</button>
+          </div>
+
+          <!-- Passwort-Eingabeblock (versteckt) -->
+          <div class="password-container" id="passwordBlock" style="display: none;">
+            <button type="button" class="close-btn" id="closePasswordBtn"
+              aria-label="Passwortabfrage schließen">&times;</button>
+            <p style="margin: 0 0 1rem 0; padding-right: 1.5rem; font-size: var(--text-sm); color: var(--text);">
+              Zeige der Lehrkraft deine Lösung. Diese gibt dir dann ein Passwort zur Musterlösung.
+            </p>
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+              <input type="password" class="password-input" id="task3Password" placeholder="Passwort eingeben" />
+              <button class="btn btn-primary" type="button" id="submitPasswordBtn"
+                style="min-height: 38px; padding: 0.5rem 1.2rem; font-size: var(--text-sm);">Bestätigen</button>
+            </div>
+            <p id="passwordError"
+              style="margin-top: 0.6rem; margin-bottom: 0; color: var(--hard); font-size: var(--text-sm); font-weight: 600; display: none;">
+            </p>
+          </div>
+        </div>
+
+        <!-- Antwort-Textfeld -->
+        <div style="position: relative;">
+          <textarea class="task3-textarea" id="task3Textarea" maxlength="1000"
+            placeholder="Schreibe deine Begründung hier..."></textarea>
+        </div>
+
+        <!-- Tipp & Zeichenzählung auf einer Zeile -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+          <details id="task3Hint" class="hint-details" style="font-size: var(--text-sm); cursor: pointer;">
+            <summary style="font-weight: 600; color: var(--primary-2);">Tipp anzeigen</summary>
+            <div class="details-content"
+              style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text); line-height: 1.5;">
+              <p id="task3HintContent" style="margin: 0;">
+                Kupfer liegt im Wasser als Cu<sup>2+</sup> und Neodym als Nd<sup>3+</sup> vor.
+              </p>
+            </div>
+          </details>
+          <div id="task3CharCount" style="font-size: var(--text-xs); color: var(--muted);">
+            0 / 1000 Zeichen
+          </div>
+        </div>
+
+        <!-- Musterlösung (versteckt) -->
+        <div id="task3SolutionBlock"
+          style="display: none; margin-top: 1.5rem; padding: 1.25rem; background: rgba(63, 125, 45, 0.08); border-left: 4px solid var(--ok); border-radius: var(--r-md);">
+          <strong
+            style="display: block; font-size: var(--text-base); color: var(--ok); margin-bottom: 0.5rem;">Musterlösung:</strong>
+          <p style="margin: 0; color: var(--text); line-height: 1.6; font-size: var(--text-sm);">
+            Wasser ist aufgrund der hohen Elektronegativitätsdifferenz und hohen Ladungsdichte am Sauerstoff schlecht
+            polarisierbar. Dementsprechend handelt es sich bei Wasser um eine harte Base.<br><br>
+            Da nach dem HSAB-Konzept hart mit hart gut reagiert, wird das härtere Metallion besser mit Wasser als Säure
+            reagieren, indem es einen Komplex ausbildet. Da Neodym als Nd<sup>3+</sup> vorliegt besitzt es eine höhere
+            Ladung im Vergleich zum Cu<sup>2+</sup>. Zusätzlich besitzt das Nd<sup>3+</sup> kernnahe Elektronen, was zu
+            einer erhöhten Ladungsdichte führt, obwohl der Ionenradius von Cu<sup>2+</sup> (4. Periode) kleiner ist als
+            von Nd<sup>3+</sup> (6. Periode).<br><br>
+            Folglich ist Nd<sup>3+</sup> härter als Cu<sup>2+</sup> und reagiert besser mit Wasser.
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+
+
+  <script>
+    const datasets = {
+      acids: [
+        { formula: 'H<sup>+</sup>', type: 'hard', note: 'Kleiner Ionenradius, hohe Ladungsdichte, schlechte Polarisierbarkeit' },
+        { formula: 'Li<sup>+</sup>', type: 'hard', note: 'Kleiner Ionenradius, hohe Ladungsdichte, schlechte Polarisierbarkeit' },
+        { formula: 'Be<sup>2+</sup>', type: 'hard', note: 'Kleiner Ionenradius, hohe Ladungsdichte, schlechte Polarisierbarkeit' },
+        { formula: 'Na<sup>+</sup>', type: 'hard', note: 'Kleiner Ionenradius, hohe Ladungsdichte, schlechte Polarisierbarkeit' },
+        { formula: 'Al<sup>3+</sup>', type: 'hard', note: 'Kleiner Ionenradius, hohe Ladungsdichte, schlechte Polarisierbarkeit' },
+        { formula: 'Si<sup>4+</sup>', type: 'hard', note: 'Hohe Ladungsdichte, große Oxidationszahl, schlechte Polarisierbarkeit' },
+        { formula: 'Ca<sup>2+</sup>', type: 'hard', note: 'Kleiner Ionenradius, hohe Ladungsdichte, schlechte Polarisierbarkeit' },
+        { formula: 'Fe<sup>3+</sup>', type: 'hard', note: 'Hohe Ladungsdichte, große Oxidationszahl' },
+        { formula: 'Cu<sup>+</sup>', type: 'soft', note: 'Großer Ionenradius, niedrige Ladungsdichte, geringe Oxidationszahl' },
+        { formula: 'Pd<sup>2+</sup>', type: 'soft', note: 'Großer Ionenradius, niedrige Ladungsdichte' },
+        { formula: 'Ge<sup>4+</sup>', type: 'hard', note: 'Hohe Ladungsdichte, große Oxidationszahl, schlechte Polarisierbarkeit' },
+        { formula: 'Ag<sup>+</sup>', type: 'soft', note: 'Großer Ionenradius, niedrige Ladungsdichte, geringe Oxidationszahl' },
+        { formula: 'Au<sup>+</sup>', type: 'soft', note: 'Großer Ionenradius, niedrige Ladungsdichte, geringe Oxidationszahl' },
+        { formula: 'Hg<sup>2+</sup>', type: 'soft', note: 'Großer Ionenradius, niedrige Ladungsdichte' },
+        { formula: 'Ce<sup>4+</sup>', type: 'hard', note: 'Hohe Ladungsdichte vor allem durch kernnahe Elektronen (f-Orbitalelektronen), große Oxidationszahl' },
+        { formula: 'Nd<sup>3+</sup>', type: 'hard', note: 'Hohe Ladungsdichte vor allem durch kernnahe Elektronen (f-Orbitalelektronen)' },
+        { formula: 'Er<sup>3+</sup>', type: 'hard', note: 'Hohe Ladungsdichte vor allem durch kernnahe Elektronen (f-Orbitalelektronen)' }
+      ],
+      bases: [
+        { formula: 'H<sup>-</sup>', type: 'soft', note: 'Niedrige Ladungsdichte' },
+        { formula: 'F<sup>-</sup>', type: 'hard', note: 'Kleiner Ionenradius, hohe Elektronegativität, hohe Ladungsdichte' },
+        { formula: 'Cl<sup>-</sup>', type: 'hard', note: 'Kleiner Ionenradius, hohe Elektronegativität, hohe Ladungsdichte' },
+        { formula: 'I<sup>-</sup>', type: 'soft', note: 'Großer Ionenradius, niedrige Ladungsdichte' },
+        { formula: 'SO<sub>4</sub><sup>2-</sup>', type: 'hard', note: 'Hohe Oxidationszahl von Schwefel' },
+        { formula: 'S<sub>2</sub>O<sub>3</sub><sup>2-</sup>', type: 'soft', note: 'Niedrige Oxidationszahl von Schwefel' },
+        { formula: 'CO<sub>3</sub><sup>2-</sup>', type: 'hard', note: 'Hohe Oxidationszahl von Kohlenstoff' },
+        { formula: 'CO', type: 'soft', note: 'Niedrige Oxidationszahl von Kohlenstoff' },
+        { formula: 'H<sub>2</sub>O', type: 'hard', note: 'Schlechte Polarisierbarkeit (ΔEN(O)= 3,5)' },
+        { formula: 'H<sub>2</sub>S', type: 'soft', note: 'Mittlere Polarisierbarkeit (ΔEN(S)= 2,5), niedrige Ladungsdichte aufgrund der Größe von S' },
+        { formula: 'C<sub>6</sub>H<sub>6</sub>', type: 'soft', note: 'Niedrige Ladungsdichte des Benzols, aufgrund des delokalisierten Elektronensystems' },
+        { formula: 'ROH', type: 'hard', note: 'Schlechte Polarisierbarkeit (ΔEN(O)= 3,5)' },
+        { formula: 'OH<sup>-</sup>', type: 'hard', note: 'Schlechte Polarisierbarkeit (ΔEN(O)= 3,5)' }
+      ]
+    };
+
+    const tracking = {
+      acids: { order: [], index: 0, correct: 0, wrong: 0, streak: 0, answered: false, correctLast: false },
+      bases: { order: [], index: 0, correct: 0, wrong: 0, streak: 0, answered: false, correctLast: false }
+    };
+    let currentMode = 'acids';
+    let statsMode = 'acids';
+
+    const formulaEl = document.getElementById('formula');
+    const counterEl = document.getElementById('counter');
+    const feedbackBox = document.getElementById('feedbackBox');
+    const correctEl = document.getElementById('correctCount');
+    const wrongEl = document.getElementById('wrongCount');
+    const rateEl = document.getElementById('rateCount');
+    const progressBar = document.getElementById('progressBar');
+    const answerButtons = [...document.querySelectorAll('.answer')];
+
+    function shuffledIndices(length) {
+      const arr = Array.from({ length }, (_, i) => i);
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function resetDeck(mode, shuffle) {
+      tracking[mode].order = shuffle ? shuffledIndices(datasets[mode].length) : Array.from({ length: datasets[mode].length }, (_, i) => i);
+      tracking[mode].index = 0;
+      tracking[mode].answered = false;
+      tracking[mode].correctLast = false;
+    }
+
+    resetDeck('acids', false);
+    resetDeck('bases', false);
+
+    function currentSet() { return datasets[currentMode]; }
+    function currentItem() {
+      const t = tracking[currentMode];
+      if (t.order.length === 0) return null;
+      return currentSet()[t.order[t.index]];
+    }
+
+    function renderStats() {
+      const modeCorrect = tracking[statsMode].correct;
+      const modeWrong = tracking[statsMode].wrong;
+      const total = modeCorrect + modeWrong;
+      const rate = total ? Math.round((modeCorrect / total) * 100) : 0;
+      correctEl.textContent = modeCorrect;
+      wrongEl.textContent = modeWrong;
+      rateEl.textContent = rate + '%';
+
+      const totalCards = datasets[statsMode].length;
+      const remainingCards = tracking[statsMode].order.length;
+      const progressPercent = ((totalCards - remainingCards) / totalCards) * 100;
+      progressBar.style.width = progressPercent + '%';
+    }
+
+    function renderCard() {
+      const t = tracking[currentMode];
+      const item = currentItem();
+
+      const specificHintWrapper = document.getElementById('specificHintWrapper');
+      const specificHint = document.getElementById('specificHint');
+      const specificHintText = document.getElementById('specificHintText');
+
+      if (!item) {
+        formulaEl.innerHTML = '🎉';
+        counterEl.textContent = currentLang === 'en' ? 'Done!' : 'Geschafft!';
+        if (specificHintWrapper) specificHintWrapper.style.display = 'none';
+        document.getElementById('promptText').style.display = 'none';
+        document.querySelector('.answers').style.display = 'none';
+        document.getElementById('nextBtn').style.display = 'none';
+
+        feedbackBox.className = 'feedback ok';
+        feedbackBox.textContent = currentLang === 'en' ? 'All cards mastered! You can shuffle to practice again.' : 'Alle Karten gemeistert! Du kannst neu mischen, um nochmal zu üben.';
+        answerButtons.forEach(btn => btn.disabled = true);
+        renderStats();
+        return;
+      }
+
+      document.getElementById('promptText').style.display = '';
+      document.querySelector('.answers').style.display = '';
+      document.getElementById('nextBtn').style.display = '';
+
+      formulaEl.innerHTML = item.formula;
+
+      const totalCards = datasets[currentMode].length;
+      const currentCardNum = (totalCards - t.order.length) + t.index + 1;
+      counterEl.textContent = currentLang === 'en' ? `Card ${currentCardNum} of ${totalCards}` : `Karte ${currentCardNum} von ${totalCards}`;
+
+      if (specificHintWrapper) specificHintWrapper.style.display = 'block';
+      if (specificHint) specificHint.removeAttribute('open');
+      if (specificHintText) specificHintText.textContent = item.note.replace(/\s*\[[^\]]+\]/g, '');
+
+      if (!t.answered) {
+        feedbackBox.className = 'feedback';
+        feedbackBox.innerHTML = currentLang === 'en' ? 'Choose an answer, then brief feedback will appear immediately.' : 'Wähle eine Antwort, dann erscheint direkt eine kurze Rückmeldung.';
+        answerButtons.forEach(btn => btn.disabled = false);
+      } else {
+        answerButtons.forEach(btn => btn.disabled = true);
+        if (t.correctLast) {
+          feedbackBox.className = 'feedback ok';
+          feedbackBox.innerHTML = currentLang === 'en' ? 'Correct!' : 'Richtig!';
+        } else {
+          feedbackBox.className = 'feedback bad';
+          feedbackBox.innerHTML = currentLang === 'en' ? `Unfortunately wrong. Compare the info from the hint with the <a href="javascript:void(0)" onclick="document.getElementById('merkhilfeBlock').scrollIntoView({ behavior: 'smooth' })" style="color: inherit; text-decoration: underline; font-weight: 600;">General Information about the HSAB concept</a>.` : `Leider falsch. Vergleiche noch einmal Infos aus dem Tipp mit den <a href="javascript:void(0)" onclick="document.getElementById('merkhilfeBlock').scrollIntoView({ behavior: 'smooth' })" style="color: inherit; text-decoration: underline; font-weight: 600;">Allgemeinen Informationen zum HSAB-Konzept</a>.`;
+        }
+      }
+      renderStats();
+    }
+
+    function answer(choice) {
+      const t = tracking[currentMode];
+      if (t.answered || t.order.length === 0) return;
+      const item = currentItem();
+
+      t.answered = true;
+      answerButtons.forEach(btn => btn.disabled = true);
+
+      if (choice === item.type) {
+        t.correct++;
+        t.streak++;
+        t.correctLast = true;
+      } else {
+        t.wrong++;
+        t.streak = 0;
+        t.correctLast = false;
+      }
+      renderCard();
+    }
+
+    function nextCard() {
+      const t = tracking[currentMode];
+      if (t.order.length === 0) return;
+
+      if (t.answered && t.correctLast) {
+        t.order.splice(t.index, 1);
+        if (t.order.length > 0 && t.index >= t.order.length) {
+          t.index = 0;
+        }
+      } else {
+        t.index = (t.index + 1) % t.order.length;
+      }
+
+      t.answered = false;
+      t.correctLast = false;
+      renderCard();
+    }
+
+    function selectMode(btn) {
+      document.querySelectorAll('[data-mode]').forEach(b => {
+        b.classList.remove('btn-primary');
+        b.classList.add('btn-secondary');
+      });
+      btn.classList.remove('btn-secondary');
+      btn.classList.add('btn-primary');
+      currentMode = btn.dataset.mode;
+      renderCard();
+    }
+
+    document.querySelectorAll('[data-mode]').forEach(btn => {
+      btn.addEventListener('click', () => selectMode(btn));
+    });
+
+    const statsAcidBtn = document.getElementById('statsAcidBtn');
+    const statsBaseBtn = document.getElementById('statsBaseBtn');
+
+    function selectStatsAcid() {
+      statsMode = 'acids';
+      statsAcidBtn.className = 'btn btn-primary';
+      statsBaseBtn.className = 'btn btn-secondary';
+      renderStats();
+    }
+
+    function selectStatsBase() {
+      statsMode = 'bases';
+      statsBaseBtn.className = 'btn btn-primary';
+      statsAcidBtn.className = 'btn btn-secondary';
+      renderStats();
+    }
+
+    statsAcidBtn.addEventListener('click', selectStatsAcid);
+    statsBaseBtn.addEventListener('click', selectStatsBase);
+
+    answerButtons.forEach(btn => {
+      btn.addEventListener('click', () => answer(btn.dataset.answer));
+    });
+
+    const nextBtn = document.getElementById('nextBtn');
+    nextBtn.addEventListener('click', nextCard);
+
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    shuffleBtn.addEventListener('click', () => {
+      const t = tracking[currentMode];
+      // Only shuffle the remaining unmastered cards, don't reset
+      for (let i = t.order.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [t.order[i], t.order[j]] = [t.order[j], t.order[i]];
+      }
+      t.index = 0;
+      t.answered = false;
+      t.correctLast = false;
+      renderCard();
+    });
+
+    const resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        tracking[currentMode].correct = 0;
+        tracking[currentMode].wrong = 0;
+        tracking[currentMode].streak = 0;
+        resetDeck(currentMode, false);
+        renderCard();
+      });
+    }
+
+    const sortSetsNew = {
+      acids: [
+        {
+          id: 'a',
+          hint: 'Beachte die Ionenradien.',
+          items: [
+            { label: 'K<sup>+</sup>', rank: 1 },
+            { label: 'Na<sup>+</sup>', rank: 2 },
+            { label: 'Li<sup>+</sup>', rank: 3 },
+            { label: 'H<sup>+</sup>', rank: 4 }
+          ]
+        },
+        {
+          id: 'b',
+          hint: 'Beachte die Ladung.',
+          items: [
+            { label: 'Li<sup>+</sup>', rank: 1 },
+            { label: 'Be<sup>2+</sup>', rank: 2 },
+            { label: 'Al<sup>3+</sup>', rank: 3 },
+            { label: 'Si<sup>4+</sup>', rank: 4 }
+          ]
+        },
+        {
+          id: 'c',
+          hint: 'Beachte die Ladungsdichte. Bedenke bei Lanthan die kernnahen Elektronen.',
+          items: [
+            { label: 'Rb<sup>+</sup>', rank: 1 },
+            { label: 'Ag<sup>+</sup>', rank: 2 },
+            { label: 'La<sup>3+</sup>', rank: 3 }
+          ]
+        },
+        {
+          id: 'd',
+          hint: 'Beachte die Oxidationszahlen und Ladung.',
+          items: [
+            { label: 'SO<sub>2</sub>', rank: 1 },
+            { label: 'SO<sub>3</sub>', rank: 2 },
+            { label: 'Nd<sup>3+</sup>', rank: 3 },
+            { label: 'Ce<sup>4+</sup>', rank: 4 }
+          ]
+        },
+        {
+          id: 'e',
+          hint: 'Beachte die Ionenradien und Ladung.',
+          items: [
+            { label: 'Au<sup>+</sup>', rank: 1 },
+            { label: 'Cu<sup>+</sup>', rank: 2 },
+            { label: 'Hg<sup>2+</sup>', rank: 3 },
+            { label: 'Li<sup>+</sup>', rank: 4 },
+            { label: 'H<sup>+</sup>', rank: 5 }
+          ]
+        }
+      ],
+      bases: [
+        {
+          id: 'a',
+          hint: 'Beachte die Ladungsdichte.',
+          items: [
+            { label: 'I<sup>-</sup>', rank: 1 },
+            { label: 'Br<sup>-</sup>', rank: 2 },
+            { label: 'Cl<sup>-</sup>', rank: 3 },
+            { label: 'F<sup>-</sup>', rank: 4 }
+          ]
+        },
+        {
+          id: 'b',
+          hint: 'Beachte die Oxidationszahlen.',
+          items: [
+            { label: 'S<sub>2</sub>O<sub>3</sub><sup>2-</sup>', rank: 1 },
+            { label: 'SO<sub>3</sub><sup>2-</sup>', rank: 2 },
+            { label: 'SO<sub>4</sub><sup>2-</sup>', rank: 3 }
+          ]
+        },
+        {
+          id: 'c',
+          hint: 'Beachte die Oxidationszahlen.',
+          items: [
+            { label: 'CO', rank: 1 },
+            { label: 'CO<sub>2</sub>', rank: 2 },
+            { label: 'CO<sub>3</sub><sup>2-</sup>', rank: 3 }
+          ]
+        },
+        {
+          id: 'd',
+          hint: 'Beachte die Polarität.',
+          items: [
+            { label: 'C<sub>6</sub>H<sub>6</sub>', rank: 1 },
+            { label: 'H<sub>2</sub>S', rank: 2 },
+            { label: 'H<sub>2</sub>O', rank: 3 }
+          ]
+        },
+        {
+          id: 'e',
+          hint: 'Beachte Ladung und Polarität.',
+          items: [
+            { label: 'H<sup>-</sup>', rank: 1 },
+            { label: 'HS<sup>-</sup>', rank: 2 },
+            { label: 'HO<sup>-</sup>', rank: 3 },
+            { label: 'NO<sub>3</sub><sup>-</sup>', rank: 4 }
+          ]
+        }
+      ]
+    };
+
+    let sortTaskIndices = { acids: 0, bases: 0 };
+    let currentSortMode = 'acids';
+    let dragEl = null;
+    const sortArea = document.getElementById('sortArea');
+    const sortFeedback = document.getElementById('sortFeedback');
+
+    function shuffle(arr) {
+      const clone = [...arr];
+      for (let i = clone.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [clone[i], clone[j]] = [clone[j], clone[i]];
+      }
+      return clone;
+    }
+
+    function clearIncorrectColors() {
+      [...sortArea.children].forEach(el => el.classList.remove('incorrect'));
+      if (sortFeedback.textContent.includes('überlege dir nochmal') || sortFeedback.textContent.includes('think again')) {
+        sortFeedback.textContent = '';
+      }
+    }
+
+    function renderSort(mode) {
+      currentSortMode = mode;
+
+      document.getElementById('loadAcidSort').className = mode === 'acids' ? 'btn btn-primary' : 'btn btn-secondary';
+      document.getElementById('loadBaseSort').className = mode === 'bases' ? 'btn btn-primary' : 'btn btn-secondary';
+
+      const taskIndex = sortTaskIndices[mode];
+      const taskData = sortSetsNew[mode][taskIndex];
+
+      document.getElementById('sortCounter').textContent = (currentLang === 'en' ? 'Subtask ' : 'Teilaufgabe ') + taskData.id + ')';
+
+      const items = shuffle(taskData.items);
+      sortArea.innerHTML = '';
+
+      const sortHintWrapper = document.getElementById('sortHintWrapper');
+      if (sortHintWrapper) sortHintWrapper.style.display = 'block';
+      const sortHint = document.getElementById('sortHint');
+      if (sortHint) sortHint.removeAttribute('open');
+      document.getElementById('sortHintText').textContent = taskData.hint;
+
+      const prevBtn = document.getElementById('prevSortTaskBtn');
+      const nextBtn = document.getElementById('nextSortTaskBtn');
+
+      if (taskIndex > 0) {
+        prevBtn.disabled = false;
+        prevBtn.style.opacity = '1';
+      } else {
+        prevBtn.disabled = true;
+        prevBtn.style.opacity = '0.4';
+      }
+
+      if (taskIndex < sortSetsNew[mode].length - 1) {
+        nextBtn.disabled = false;
+        nextBtn.style.opacity = '1';
+      } else {
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = '0.4';
+      }
+
+      items.forEach((item, idx) => {
+        const el = document.createElement('div');
+        el.className = 'sort-item';
+        el.draggable = true;
+        el.dataset.rank = item.rank;
+        el.innerHTML = `<strong>${item.label}</strong><div class="sort-controls-inline"><button class="sort-move" type="button" aria-label="Nach oben">↑</button><button class="sort-move" type="button" aria-label="Nach unten">↓</button><span class="sort-rank">Position ${idx + 1}</span></div>`;
+
+        el.addEventListener('dragstart', () => { dragEl = el; el.classList.add('dragging'); });
+        el.addEventListener('dragend', () => { el.classList.remove('dragging'); dragEl = null; });
+        el.addEventListener('dragover', e => {
+          if (!el.classList.contains('correct')) e.preventDefault();
+        });
+
+        const moveUpBtn = el.querySelectorAll('.sort-move')[0];
+        const moveDownBtn = el.querySelectorAll('.sort-move')[1];
+
+        moveUpBtn.addEventListener('click', (ev) => { ev.stopPropagation(); moveItem(el, -1); });
+        moveDownBtn.addEventListener('click', (ev) => { ev.stopPropagation(); moveItem(el, 1); });
+
+        el.addEventListener('drop', e => {
+          e.preventDefault();
+          if (!dragEl || dragEl === el) return;
+          if (dragEl.classList.contains('correct') || el.classList.contains('correct')) return;
+
+          const nodes = [...sortArea.children];
+          const unlockedNodes = nodes.filter(n => !n.classList.contains('correct'));
+          const lockedInfo = nodes.map((n, i) => n.classList.contains('correct') ? { node: n, index: i } : null).filter(x => x);
+
+          const uDragIndex = unlockedNodes.indexOf(dragEl);
+          const uDropIndex = unlockedNodes.indexOf(el);
+
+          unlockedNodes.splice(uDragIndex, 1);
+          const newDrop = unlockedNodes.indexOf(el);
+          if (uDragIndex < uDropIndex) {
+            unlockedNodes.splice(newDrop + 1, 0, dragEl);
+          } else {
+            unlockedNodes.splice(newDrop, 0, dragEl);
+          }
+
+          const newNodes = new Array(nodes.length);
+          lockedInfo.forEach(info => {
+            newNodes[info.index] = info.node;
+          });
+          let uIdx = 0;
+          for (let i = 0; i < newNodes.length; i++) {
+            if (!newNodes[i]) {
+              newNodes[i] = unlockedNodes[uIdx++];
+            }
+          }
+
+          sortArea.innerHTML = '';
+          newNodes.forEach(n => sortArea.appendChild(n));
+          updateSortLabels();
+          clearIncorrectColors();
+        });
+        sortArea.appendChild(el);
+      });
+      updateSortLabels();
+      sortFeedback.textContent = '';
+    }
+
+    function moveItem(el, direction) {
+      if (el.classList.contains('correct')) return;
+
+      const nodes = [...sortArea.children];
+      const unlockedNodes = nodes.filter(n => !n.classList.contains('correct'));
+      const lockedInfo = nodes.map((n, i) => n.classList.contains('correct') ? { node: n, index: i } : null).filter(x => x);
+
+      const uIndex = unlockedNodes.indexOf(el);
+      const uTarget = uIndex + direction;
+
+      if (uTarget < 0 || uTarget >= unlockedNodes.length) return;
+
+      const temp = unlockedNodes[uIndex];
+      unlockedNodes[uIndex] = unlockedNodes[uTarget];
+      unlockedNodes[uTarget] = temp;
+
+      const newNodes = new Array(nodes.length);
+      lockedInfo.forEach(info => {
+        newNodes[info.index] = info.node;
+      });
+      let uIdx = 0;
+      for (let i = 0; i < newNodes.length; i++) {
+        if (!newNodes[i]) {
+          newNodes[i] = unlockedNodes[uIdx++];
+        }
+      }
+
+      sortArea.innerHTML = '';
+      newNodes.forEach(n => sortArea.appendChild(n));
+      updateSortLabels();
+      clearIncorrectColors();
+    }
+
+    function updateSortLabels() {
+      [...sortArea.children].forEach((el, idx) => {
+        const badge = el.querySelector('.sort-rank');
+        if (badge) badge.textContent = 'Position ' + (idx + 1);
+
+        const isCorrect = el.classList.contains('correct');
+        el.draggable = !isCorrect;
+        const btns = el.querySelectorAll('.sort-move');
+        btns.forEach(btn => btn.disabled = isCorrect);
+        btns.forEach(btn => btn.style.opacity = isCorrect ? '0.3' : '1');
+        btns.forEach(btn => btn.style.cursor = isCorrect ? 'not-allowed' : 'pointer');
+      });
+    }
+
+    function checkSort() {
+      const items = [...sortArea.children];
+      let ok = true;
+      items.forEach((el, idx) => {
+        const correct = Number(el.dataset.rank) === idx + 1;
+        el.classList.remove('correct', 'incorrect');
+        el.classList.add(correct ? 'correct' : 'incorrect');
+        if (!correct) ok = false;
+      });
+      sortFeedback.textContent = ok
+        ? (currentLang === 'en' ? 'All correct!' : 'Alles richtig!')
+        : (currentLang === 'en' ? 'Not quite yet, think again about which criteria could help you best here.' : 'Noch nicht ganz, überlege dir nochmal, welche Kriterien dir hier am besten weiterhelfen könnten.');
+      updateSortLabels();
+    }
+
+    const loadAcidSort = document.getElementById('loadAcidSort');
+    const loadBaseSort = document.getElementById('loadBaseSort');
+    const checkSortBtn = document.getElementById('checkSort');
+    const prevSortTaskBtn = document.getElementById('prevSortTaskBtn');
+    const nextSortTaskBtn = document.getElementById('nextSortTaskBtn');
+    const resetSortBtn = document.getElementById('resetSortBtn');
+    const restartSortBtn = document.getElementById('restartSortBtn');
+
+    loadAcidSort.addEventListener('click', () => renderSort('acids'));
+    loadBaseSort.addEventListener('click', () => renderSort('bases'));
+    checkSortBtn.addEventListener('click', checkSort);
+
+    function handlePrevSort() {
+      if (sortTaskIndices[currentSortMode] > 0) {
+        sortTaskIndices[currentSortMode]--;
+        renderSort(currentSortMode);
+      }
+    }
+    prevSortTaskBtn.addEventListener('click', handlePrevSort);
+
+    function handleNextSort() {
+      if (sortTaskIndices[currentSortMode] < sortSetsNew[currentSortMode].length - 1) {
+        sortTaskIndices[currentSortMode]++;
+        renderSort(currentSortMode);
+      }
+    }
+    nextSortTaskBtn.addEventListener('click', handleNextSort);
+
+    resetSortBtn.addEventListener('click', () => renderSort(currentSortMode));
+
+    function handleRestartSort() {
+      sortTaskIndices[currentSortMode] = 0;
+      renderSort(currentSortMode);
+    }
+    restartSortBtn.addEventListener('click', handleRestartSort);
+
+    // Safe localStorage wrappers
+    function safeGetItem(key) {
+      try { return localStorage.getItem(key); } catch (e) { return null; }
+    }
+    function safeSetItem(key, val) {
+      try { localStorage.setItem(key, val); } catch (e) { }
+    }
+
+    // Theme Toggle Logic
+    const htmlEl = document.documentElement;
+    const themeToggles = document.querySelectorAll('.theme-toggle');
+
+    function applyTheme(theme) {
+      htmlEl.setAttribute('data-theme', theme);
+    }
+
+    function toggleTheme() {
+      const currentTheme = htmlEl.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+      safeSetItem('hsab-theme', newTheme);
+    }
+
+    themeToggles.forEach(btn => {
+      btn.addEventListener('click', toggleTheme);
+    });
+
+    // === Aufgabe 3 Logic ===
+    const task3Textarea = document.getElementById('task3Textarea');
+    const task3CharCount = document.getElementById('task3CharCount');
+    const checkSolutionBtn = document.getElementById('checkSolutionBtn');
+    const passwordBlock = document.getElementById('passwordBlock');
+    const closePasswordBtn = document.getElementById('closePasswordBtn');
+    const task3PasswordInput = document.getElementById('task3Password');
+    const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+    const passwordError = document.getElementById('passwordError');
+    const task3SolutionBlock = document.getElementById('task3SolutionBlock');
+
+    // SHA-256 hash of "password"
+    const targetPasswordHash = '5663ee063d59c62f4a2467234f344218d6a3a93fccf4490cff01761fa7ee8a7f';
+
+    // Character counter for textarea
+    task3Textarea.addEventListener('input', () => {
+      const len = task3Textarea.value.length;
+      task3CharCount.textContent = `${len} / 1000 ${currentLang === 'en' ? 'Characters' : 'Zeichen'}`;
+    });
+
+    function showPasswordBlock() {
+      passwordBlock.style.display = 'block';
+      checkSolutionBtn.style.display = 'none';
+      passwordError.style.display = 'none';
+      task3PasswordInput.value = '';
+      task3PasswordInput.focus();
+    }
+    checkSolutionBtn.addEventListener('click', showPasswordBlock);
+
+    function hidePasswordBlock() {
+      passwordBlock.style.display = 'none';
+      checkSolutionBtn.style.display = 'block';
+    }
+    closePasswordBtn.addEventListener('click', hidePasswordBlock);
+
+    // Pure JS SHA-256 implementation fallback
+    function jsSHA256(str) {
+      function rotateRight(n, x) {
+        return (x >>> n) | (x << (32 - n));
+      }
+      const K = [
+        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+        0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+        0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+        0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+        0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+      ];
+      let H = [
+        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+      ];
+      const words = [];
+      const utf8 = unescape(encodeURIComponent(str));
+      for (let i = 0; i < utf8.length; i++) {
+        words[i >> 2] |= (utf8.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
+      }
+      const bits = utf8.length * 8;
+      words[bits >> 5] |= 0x80 << (24 - (bits % 32));
+      words[(((bits + 64) >> 9) << 4) + 15] = bits;
+      for (let i = 0; i < words.length; i += 16) {
+        let a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+        const w = new Array(64);
+        for (let t = 0; t < 64; t++) {
+          if (t < 16) {
+            w[t] = words[i + t] || 0;
+          } else {
+            const s0 = rotateRight(7, w[t - 15]) ^ rotateRight(18, w[t - 15]) ^ (w[t - 15] >>> 3);
+            const s1 = rotateRight(17, w[t - 2]) ^ rotateRight(19, w[t - 2]) ^ (w[t - 2] >>> 10);
+            w[t] = (w[t - 16] + s0 + w[t - 7] + s1) | 0;
+          }
+          const S1 = rotateRight(6, e) ^ rotateRight(11, e) ^ rotateRight(25, e);
+          const ch = (e & f) ^ (~e & g);
+          const temp1 = (h + S1 + ch + K[t] + w[t]) | 0;
+          const S0 = rotateRight(2, a) ^ rotateRight(13, a) ^ rotateRight(22, a);
+          const maj = (a & b) ^ (a & c) ^ (b & c);
+          const temp2 = (S0 + maj) | 0;
+          h = g; g = f; f = e; e = (d + temp1) | 0; d = c; c = b; b = a; a = (temp1 + temp2) | 0;
+        }
+        H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+        H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+      }
+      return H.map(x => {
+        const hex = (x >>> 0).toString(16);
+        return '00000000'.substring(hex.length) + hex;
+      }).join('');
+    }
+
+    // Helper to calculate SHA-256 hash of a string with native fallback
+    async function sha256(str) {
+      if (typeof crypto !== 'undefined' && crypto.subtle) {
+        try {
+          const buf = new TextEncoder().encode(str);
+          const hashBuf = await crypto.subtle.digest('SHA-256', buf);
+          const hashArray = Array.from(new Uint8Array(hashBuf));
+          return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        } catch (e) {
+          console.warn("crypto.subtle.digest failed, using pure JS fallback:", e);
+        }
+      }
+      return jsSHA256(str);
+    }
+
+    // Submit password verification
+    async function verifyPassword() {
+      const enteredPassword = task3PasswordInput.value;
+      const hashedVal = await sha256(enteredPassword);
+
+      if (hashedVal === targetPasswordHash) {
+        // Success
+        passwordBlock.style.display = 'none';
+        checkSolutionBtn.style.display = 'none';
+        task3SolutionBlock.style.display = 'block';
+      } else {
+        // Incorrect password
+        passwordError.textContent = currentLang === 'en' ? 'Incorrect password! Please ask your teacher.' : 'Falsches Passwort! Bitte frage deine Lehrkraft.';
+        passwordError.style.display = 'block';
+      }
+    }
+
+    submitPasswordBtn.addEventListener('click', verifyPassword);
+
+    task3PasswordInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        verifyPassword();
+      }
+    });
+
+    // === Language Toggle and Translation Logic ===
+    let currentLang = 'de';
+    const langToggle = document.getElementById('langToggle');
+    const langDe = document.getElementById('langDe');
+    const langEn = document.getElementById('langEn');
+
+    const dict = {
+      brandTitle: { de: 'HSAB-Konzept', en: 'HSAB Concept' },
+      brandSub: { de: 'Übungen und Anwendung des HSAB-Konzeptes', en: 'Exercises and applications of the HSAB concept' },
+      skipLink: { de: 'Zum Inhalt springen', en: 'Skip to content' },
+      heroLead: { de: 'Lies dir zuerst den Info-Text durch, falls nötig, klicke auf die Pfeile um dir Beispiele anzusehen.', en: 'Read the info text first if necessary, click the arrows to see examples.' },
+      legendHart: { de: '<span class="dot" style="background: var(--hard);"></span>hart', en: '<span class="dot" style="background: var(--hard);"></span>hard' },
+      legendWeich: { de: '<span class="dot" style="background: var(--soft);"></span>weich', en: '<span class="dot" style="background: var(--soft);"></span>soft' },
+      helpTitle: { de: 'Lernhilfe', en: 'Learning Aid' },
+      statsAcidBtn: { de: 'Säuren', en: 'Acids' },
+      statsBaseBtn: { de: 'Basen', en: 'Bases' },
+      lblRichtig: { de: 'Richtig', en: 'Correct' },
+      lblFalsch: { de: 'Falsch', en: 'Incorrect' },
+      lblQuote: { de: 'Quote', en: 'Rate' },
+      lblSerie: { de: 'Serie', en: 'Streak' },
+      lblFortschritt: { de: 'Fortschritt', en: 'Progress' },
+      trainerTitle: { de: 'Aufgabe 1', en: 'Task 1' },
+      trainerLead: { de: 'Wähle zuerst, ob du Säuren oder Basen trainieren möchtest. Danach <strong>ordne</strong> jedes Teilchen als hart oder weich <strong>ein</strong>. Übersprungene Karten oder falsch beantwortete Karten erscheinen am Ende automatisch erneut.', en: 'First, choose whether you want to practice acids or bases. Then, <strong>classify</strong> each particle as hard or soft. Skipped cards and incorrectly answered cards will automatically reappear at the end.' },
+      btnAcid: { de: 'Säuren üben', en: 'Practice Acids' },
+      btnBase: { de: 'Basen üben', en: 'Practice Bases' },
+      btnReset: { de: 'Zurücksetzen', en: 'Reset' },
+      promptText: { de: 'Ist dieses Teilchen im HSAB-Konzept eher hart oder weich?', en: 'Is this particle considered hard or soft according to the HSAB concept?' },
+      ansHard: { de: 'Hart', en: 'Hard' },
+      ansSoft: { de: 'Weich', en: 'Soft' },
+      hintSummary1: { de: 'Molekül/Ion-spezifischer Tipp anzeigen', en: 'Show molecule/ion specific hint' },
+      nextBtn: { de: 'Nächste Karte', en: 'Next Card' },
+      shuffleBtn: { de: 'Neu mischen', en: 'Shuffle' },
+      aufgabe2Title: { de: 'Aufgabe 2', en: 'Task 2' },
+      aufgabe2Text: { de: '<strong>Ordne</strong> die Moleküle/Ionen den entsprechenden Positionen von weich zu hart anhand des HSAB-Konzeptes <strong>zu</strong>.', en: '<strong>Arrange</strong> the molecules/ions in the correct positions from soft to hard based on the HSAB concept.' },
+      loadAcidSort: { de: 'Säure-Sortierung', en: 'Acid Sorting' },
+      loadBaseSort: { de: 'Basen-Sortierung', en: 'Base Sorting' },
+      checkSort: { de: 'Antwort prüfen', en: 'Check Answer' },
+      resetSortBtn: { de: 'Zurücksetzen', en: 'Reset' },
+      restartSortBtn: { de: 'Aufgabe erneut', en: 'Restart Task' },
+      scaleWeich: { de: 'weich', en: 'soft' },
+      scaleHart: { de: 'hart', en: 'hard' },
+      hintSummary2: { de: 'Aufgaben-spezifischen Tipp anzeigen', en: 'Show task specific hint' },
+      aufgabe3Title: { de: 'Aufgabe 3', en: 'Task 3' },
+      aufgabe3Text: { de: 'Zu Beginn des Unterrichts hatten wir jeweils Kupfer(II)-chlorid (CuCl<sub>2</sub>) und Neodym(III)-chlorid (NdCl<sub>3</sub>) in Wasser gelöst. <strong>Begründe</strong> anhand des HSAB-Konzeptes, welches der beiden Metalle bevorzugt mit Wasser reagiert.', en: 'At the beginning of the lesson, we dissolved copper(II) chloride (CuCl<sub>2</sub>) and neodymium(III) chloride (NdCl<sub>3</sub>) in water. <strong>Explain</strong> based on the HSAB concept which of the two metals reacts preferentially with water.' },
+      checkSolutionBtn: { de: 'Lösung überprüfen', en: 'Check Solution' },
+      pwdText: { de: 'Zeige der Lehrkraft deine Lösung. Diese gibt dir dann ein Passwort zur Musterlösung.', en: 'Show your solution to the teacher. They will then give you a password for the model solution.' },
+      submitPasswordBtn: { de: 'Bestätigen', en: 'Confirm' },
+      hintSummary3: { de: 'Tipp anzeigen', en: 'Show hint' },
+      task3HintContent: { de: 'Kupfer liegt im Wasser als Cu<sup>2+</sup> und Neodym als Nd<sup>3+</sup> vor.', en: 'Copper is present in water as Cu<sup>2+</sup>, and neodymium as Nd<sup>3+</sup>.' },
+      footerText: { de: '&copy; 2026 Unterrichtseinheit: Lanthanoide. Alle Rechte vorbehalten.', en: '&copy; 2026 Teaching Unit: Lanthanoids. All rights reserved.' },
+      merkhilfeBlock: {
+        de: `<h3>Allgemeine Informationen zum HSAB-Konzept</h3>
+          <p>
+            <span style="color: var(--text);">Mit dem Hard-Soft-Acid-Base-(HSAB)-Konzept lassen sich Ionen/Moleküle in die Kategorien weich und hart
+            unterteilen und somit Reaktionen vorhersagen. Denn es gilt:</span> <strong style="color: rgba(239, 0, 0, 1);">Weich
+              reagiert gerne mit weich und hart mit hart.</strong>
+          </p>
+          <p style="margin-top: 1rem;"><strong>Ein Ion/Molekül gilt als umso härter, je...</strong></p>
+          <ul style="margin-top: 0.5rem; padding-left: 1.5rem; line-height: 1.8;">
+            <li style="margin-bottom: 0.75rem;"><strong>...kleiner der Atom/Ionen-Radius ist.</strong>
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">H<sup>+</sup> ist härter als Na<sup>+</sup>, da H<sup>+</sup> einen deutlich kleineren Ionen-Radius besitzt. Beide Ionen sind jedoch als hart zu betrachten.</div></details>
+            </li>
+            <li style="margin-bottom: 0.75rem;"><strong>...höher die Ladung ist.</strong> (In unseren Beispielen: ab einer Ladung von +3 sind Ionen eher als hart anzusehen).
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">Fe<sup>3+</sup> ist härter als Fe<sup>2+</sup> aufgrund der höheren Ladung. Fe<sup>2+</sup> liegt sogar im Übergangsbereich zwischen hart und weich.</div></details>
+            </li>
+            <li style="margin-bottom: 0.75rem;"><strong>...höher die Ladungsdichte ist.</strong> (= Verhältnis von Ladung [möglichst groß] zu Radius [möglichst klein])
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">Mg<sup>2+</sup> besitzt kleinen Radius, da es sich es in der 2. Periode befindet, und ist geladen. Damit ist die Ladungsdichte hoch. Dementsprechend wäre Mg<sup>2+</sup> hart.<br><br> Cd<sup>2+</sup> hingegen befindet sich in der 4. Periode, also hat einen deutlich größeren Ionenradius als Mg<sup>2+</sup>. Da es dieselbe +2 Ladung besitzt, ergibt sich somit eine geringe Ladungsdichte. Cd<sup>2+</sup> ist dementsprechend weich.</div></details>
+            </li>
+            <li style="margin-bottom: 0.75rem;"><strong>...höher die Oxidationsstufe ist.</strong>
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">In ClO<sub>4</sub><sup>-</sup> ist die Oxidationsstufe von Chlor VII, und somit höher als in ClO<sub>3</sub><sup>-</sup> mit V. Folglich ist ClO<sub>4</sub><sup>-</sup> härter als ClO<sub>3</sub><sup>-</sup>.</div></details>
+            </li>
+            <li style="margin-bottom: 0.75rem;"><strong>...höher die Elektronegativität ist.</strong>
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">BF<sub>3</sub> gilt als harte Säure, wohingegen BH<sub>3</sub> als weiche Säure gilt, was sich unter anderem auf die hohe Elektronegativität von Fluor (ΔEN(F)= 4,0) im Vergleich zum H (ΔEN(H)= 2,1) zurückführen lässt.</div></details>
+            </li>
+            <li style="margin-bottom: 0.75rem;"><strong>...schlechter die Polarisierbarkeit</strong> (= wie sehr reagiert ein Molekül/Ion auf äußere elektrische Einwirkungen. Unter anderem abhängig von der Elektronegativität und Molekülgeometrie).
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">Beispiel ansehen</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">F<sup>-</sup> (hart) ist schlechter polarisierbar als I<sup>-</sup> (weich). Denn die Elektronen der Valenzschale beim F<sup>-</sup> sind deutlich näher am Kern als bei I<sup>-</sup> und somit weniger beeinflussbar durch äußere Ladungseinflüsse (z.B. ein anderes Ion).<br><br> NH<sub>3</sub> gilt als harte Base, wohingegen PH<sub>3</sub> als weiche Base gilt. Beide sind prinzipiell polarisierbar. Aufgrund der hohen ΔEN(N)= 3,0 im Vergleich zu ΔEN(P)= 2,2, und der geringeren Größe von Stickstoff in Vergleich zu Phosphor, liegt der Ladungsschwerpunkt innerhalb der Moleküle deutlich mehr beim N als bei P. Das führt zu einer schlechteren Polarisierbarkeit von NH<sub>3</sub> im Vergleich zu PH<sub>3</sub>.</div></details>
+            </li>
+          </ul>`,
+        en: `<h3>General Information about the HSAB Concept</h3>
+          <p>
+            <span style="color: var(--text);">The Hard-Soft-Acid-Base (HSAB) concept allows classifying ions/molecules into soft and hard categories, thus predicting reactions. The rule is:</span> <strong style="color: rgba(239, 0, 0, 1);">Soft reacts preferentially with soft, and hard with hard.</strong>
+          </p>
+          <p style="margin-top: 1rem; color: var(--text);"><strong>An ion/molecule is considered harder, the...</strong></p>
+          <ul style="margin-top: 0.5rem; padding-left: 1.5rem; line-height: 1.8;">
+            <li style="margin-bottom: 0.75rem;"><strong>...smaller its atomic/ionic radius is.</strong>
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">View example</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">H<sup>+</sup> is harder than Na<sup>+</sup>, although both are hard, because H<sup>+</sup> has a significantly smaller ionic radius. However, both ions should be considered hard.</div></details>
+            </li>
+            <li style="margin-bottom: 0.75rem;"><strong>...higher its charge is.</strong> (In our examples: ions with a charge of +3 or higher are considered hard).
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">View example</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">Fe<sup>3+</sup> is harder than Fe<sup>2+</sup> due to its higher charge. Fe<sup>2+</sup> is even in the borderline region between hard and soft.</div></details>
+            </li>
+            <li style="margin-bottom: 0.75rem;"><strong>...higher its charge density is.</strong> (= ratio of charge [as large as possible] to radius [as small as possible])
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">View example</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">Mg<sup>2+</sup> has a small radius, being in the 2nd period, and is charged. Thus its charge density is high. Accordingly, Mg<sup>2+</sup> would be hard.<br><br> Cd<sup>2+</sup>, on the other hand, is in the 4th period, so it has a much larger ionic radius than Mg<sup>2+</sup>. Since it has the same +2 charge, this results in a low charge density. Cd<sup>2+</sup> is accordingly soft.</div></details>
+            </li>
+            <li style="margin-bottom: 0.75rem;"><strong>...higher its oxidation state is.</strong>
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">View example</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">In ClO<sub>4</sub><sup>-</sup>, the oxidation state of chlorine is VII, which is higher than in ClO<sub>3</sub><sup>-</sup> with V. Consequently, ClO<sub>4</sub><sup>-</sup> is harder than ClO<sub>3</sub><sup>-</sup>.</div></details>
+            </li>
+            <li style="margin-bottom: 0.75rem;"><strong>...higher its electronegativity is.</strong>
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">View example</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">BF<sub>3</sub> is considered a hard acid, whereas BH<sub>3</sub> is considered a soft acid, which is partly due to the high electronegativity of fluorine (ΔEN(F)= 4.0) compared to H (ΔEN(H)= 2.1).</div></details>
+            </li>
+            <li style="margin-bottom: 0.75rem;"><strong>...lower its polarizability</strong> (= how strongly a molecule/ion reacts to external electric influences. Depends on electronegativity and molecular geometry, among other things).
+              <details style="margin-top: 0.25rem; font-size: var(--text-sm); cursor: pointer;"><summary style="font-weight: 600; color: var(--primary-2);">View example</summary><div style="padding: 0.75rem; background: var(--surface-2); border-left: 3px solid var(--primary-2); border-radius: 6px; margin-top: 0.35rem; color: var(--text);">F<sup>-</sup> (hard) is less polarizable than I<sup>-</sup> (soft). The valence electrons of F<sup>-</sup> are much closer to the nucleus than those of I<sup>-</sup> and are thus less affected by external charge influences (e.g., another ion).<br><br> NH<sub>3</sub> is considered a hard base, whereas PH<sub>3</sub> is considered a soft base. Both are polarizable in principle. Due to the high ΔEN(N)= 3.0 compared to ΔEN(P)= 2.2, and the smaller size of nitrogen compared to phosphorus, the center of charge is much closer to N than to P. This leads to lower polarizability for NH<sub>3</sub> compared to PH<sub>3</sub>.</div></details>
+            </li>
+          </ul>`
+      },
+      solutionBlock: {
+        de: `<strong style="display: block; font-size: var(--text-base); color: var(--ok); margin-bottom: 0.5rem;">Musterlösung:</strong>
+          <p style="margin: 0; color: var(--text); line-height: 1.6; font-size: var(--text-sm);">
+            Wasser ist aufgrund der hohen Elektronegativitätsdifferenz und hohen Ladungsdichte am Sauerstoff schlecht polarisierbar. Dementsprechend handelt es sich bei Wasser um eine harte Base.<br><br>
+            Da nach dem HSAB-Konzept hart mit hart gut reagiert, wird das härtere Metallion besser mit Wasser als Säure reagieren, indem es einen Komplex ausbildet. Da Neodym als Nd<sup>3+</sup> vorliegt besitzt es eine höhere Ladung im Vergleich zum Cu<sup>2+</sup>. Zusätzlich besitzt das Nd<sup>3+</sup> kernnahe Elektronen, was zu einer erhöhten Ladungsdichte führt, obwohl der Ionenradius von Cu<sup>2+</sup> (4. Periode) kleiner ist als von Nd<sup>3+</sup> (6. Periode).<br><br>
+            Folglich ist Nd<sup>3+</sup> härter als Cu<sup>2+</sup> und reagiert besser mit Wasser.
+          </p>`,
+        en: `<strong style="display: block; font-size: var(--text-base); color: var(--ok); margin-bottom: 0.5rem;">Model Solution:</strong>
+          <p style="margin: 0; color: var(--text); line-height: 1.6; font-size: var(--text-sm);">
+            Water is poorly polarizable due to the high electronegativity difference and high charge density around the oxygen. Accordingly, water is a hard base.<br><br>
+            Since hard reacts well with hard according to the HSAB concept, the harder metal ion will react better with water as an acid by forming a complex. Since neodymium is present as Nd<sup>3+</sup>, it has a higher charge compared to Cu<sup>2+</sup>. In addition, Nd<sup>3+</sup> has electrons close to the nucleus, which leads to an increased charge density, although the ionic radius of Cu<sup>2+</sup> (4th period) is smaller than that of Nd<sup>3+</sup> (6th period).<br><br>
+            Consequently, Nd<sup>3+</sup> is harder than Cu<sup>2+</sup> and reacts better with water.
+          </p>`
+      }
+    };
+
+    const noteTranslations = {
+      'Kleiner Ionenradius, hohe Ladungsdichte, schlechte Polarisierbarkeit': 'Small ionic radius, high charge density, low polarizability',
+      'Hohe Ladungsdichte, große Oxidationszahl, schlechte Polarisierbarkeit': 'High charge density, high oxidation state, low polarizability',
+      'Hohe Ladungsdichte, große Oxidationszahl': 'High charge density, high oxidation state',
+      'Großer Ionenradius, niedrige Ladungsdichte, geringe Oxidationszahl': 'Large ionic radius, low charge density, low oxidation state',
+      'Großer Ionenradius, niedrige Ladungsdichte': 'Large ionic radius, low charge density',
+      'Hohe Ladungsdichte vor allem durch kernnahe Elektronen (f-Orbitalelektronen), große Oxidationszahl': 'High charge density primarily due to electrons close to the nucleus (f-orbital electrons), high oxidation state',
+      'Hohe Ladungsdichte vor allem durch kernnahe Elektronen (f-Orbitalelektronen)': 'High charge density primarily due to electrons close to the nucleus (f-orbital electrons)',
+      'Niedrige Ladungsdichte': 'Low charge density',
+      'Kleiner Ionenradius, hohe Elektronegativität, hohe Ladungsdichte': 'Small ionic radius, high electronegativity, high charge density',
+      'Hohe Oxidationszahl von Schwefel': 'High oxidation state of sulfur',
+      'Niedrige Oxidationszahl von Schwefel': 'Low oxidation state of sulfur',
+      'Hohe Oxidationszahl von Kohlenstoff': 'High oxidation state of carbon',
+      'Niedrige Oxidationszahl von Kohlenstoff': 'Low oxidation state of carbon',
+      'Schlechte Polarisierbarkeit (ΔEN(O)= 3,5)': 'Low polarizability (ΔEN(O)= 3.5)',
+      'Mittlere Polarisierbarkeit (ΔEN(S)= 2,5), niedrige Ladungsdichte aufgrund der Größe von S': 'Medium polarizability (ΔEN(S)= 2.5), low charge density due to the size of S',
+      'Niedrige Ladungsdichte des Benzols, aufgrund des delokalisierten Elektronensystems': 'Low charge density of benzene, due to the delocalized electron system'
+    };
+
+    const hintTranslations = {
+      'Beachte die Ionenradien.': 'Consider the ionic radii.',
+      'Beachte die Ladung.': 'Consider the charge.',
+      'Beachte die Ladungsdichte. Bedenke bei Lanthan die kernnahen Elektronen.': 'Consider the charge density. Consider the inner electrons for lanthanum.',
+      'Beachte die Oxidationszahlen und Ladung.': 'Consider the oxidation states and charge.',
+      'Beachte die Ionenradien und Ladung.': 'Consider the ionic radii and charge.',
+      'Beachte die Ladungsdichte.': 'Consider the charge density.',
+      'Beachte die Oxidationszahlen.': 'Consider the oxidation states.',
+      'Beachte die Polarität.': 'Consider the polarity.',
+      'Beachte Ladung und Polarität.': 'Consider the charge and polarity.'
+    };
+
+    // Store original texts on datasets
+    datasets.acids.forEach(item => { item.noteDe = item.note; item.noteEn = noteTranslations[item.note] || item.note; });
+    datasets.bases.forEach(item => { item.noteDe = item.note; item.noteEn = noteTranslations[item.note] || item.note; });
+    sortSetsNew.acids.forEach(set => { set.hintDe = set.hint; set.hintEn = hintTranslations[set.hint] || set.hint; });
+    sortSetsNew.bases.forEach(set => { set.hintDe = set.hint; set.hintEn = hintTranslations[set.hint] || set.hint; });
+
+    function setElementText(selector, dictKey, isHtml = false) {
+      const el = document.querySelector(selector);
+      if (el && dict[dictKey]) {
+        if (isHtml) el.innerHTML = dict[dictKey][currentLang];
+        else el.textContent = dict[dictKey][currentLang];
+      }
+    }
+
+    function updateLanguage() {
+      htmlEl.setAttribute('lang', currentLang);
+
+      if (currentLang === 'de') {
+        langDe.style.fontWeight = 'bold';
+        langDe.style.color = 'var(--primary)';
+        langEn.style.fontWeight = 'normal';
+        langEn.style.color = 'var(--muted)';
+      } else {
+        langEn.style.fontWeight = 'bold';
+        langEn.style.color = 'var(--primary)';
+        langDe.style.fontWeight = 'normal';
+        langDe.style.color = 'var(--muted)';
+      }
+
+      setElementText('#brandTitle', 'brandTitle');
+      setElementText('#brandSub', 'brandSub');
+      setElementText('a.skip-link', 'skipLink');
+      setElementText('.hero-copy p.lead', 'heroLead');
+      setElementText('#merkhilfeBlock', 'merkhilfeBlock', true);
+
+
+      const legendDiv = document.querySelector('.legend');
+      if (legendDiv && legendDiv.children.length >= 2) {
+        legendDiv.children[0].innerHTML = dict.legendHart[currentLang];
+        legendDiv.children[1].innerHTML = dict.legendWeich[currentLang];
+      }
+
+      setElementText('#statsAcidBtn', 'statsAcidBtn');
+      setElementText('#statsBaseBtn', 'statsBaseBtn');
+
+      const scoreBoxes = document.querySelectorAll('.score-box .brand-sub');
+      if (scoreBoxes.length >= 3) {
+        scoreBoxes[0].textContent = dict.lblRichtig[currentLang];
+        scoreBoxes[1].textContent = dict.lblFalsch[currentLang];
+        scoreBoxes[2].textContent = dict.lblQuote[currentLang];
+      }
+      setElementText('#progressLabel', 'lblFortschritt');
+
+      setElementText('#trainerTitle', 'trainerTitle');
+      setElementText('#trainerTitle + p.lead', 'trainerLead', true);
+
+      document.querySelector('[data-mode="acids"]').textContent = dict.btnAcid[currentLang];
+      document.querySelector('[data-mode="bases"]').textContent = dict.btnBase[currentLang];
+      setElementText('#resetBtn', 'btnReset');
+      setElementText('#promptText', 'promptText');
+
+      document.querySelector('[data-answer="hard"] strong').textContent = dict.ansHard[currentLang];
+      document.querySelector('[data-answer="soft"] strong').textContent = dict.ansSoft[currentLang];
+
+      setElementText('#specificHint summary', 'hintSummary1');
+      setElementText('#nextBtn', 'nextBtn');
+      setElementText('#shuffleBtn', 'shuffleBtn');
+
+      setElementText('.footnote h2', 'aufgabe2Title');
+      setElementText('#aufgabe2Text', 'aufgabe2Text', true);
+      setElementText('#loadAcidSort', 'loadAcidSort');
+      setElementText('#loadBaseSort', 'loadBaseSort');
+      setElementText('#checkSort', 'checkSort');
+      setElementText('#resetSortBtn', 'resetSortBtn');
+      setElementText('#restartSortBtn', 'restartSortBtn');
+      setElementText('#sortHint summary', 'hintSummary2');
+
+      const scales = document.querySelectorAll('.scale-label');
+      if (scales.length >= 2) {
+        scales[0].textContent = dict.scaleWeich[currentLang];
+        scales[1].textContent = dict.scaleHart[currentLang];
+      }
+
+      setElementText('#aufgabe3Section h2', 'aufgabe3Title');
+      setElementText('#aufgabe3Text', 'aufgabe3Text', true);
+      setElementText('#checkSolutionBtn', 'checkSolutionBtn');
+      setElementText('#passwordBlock p', 'pwdText');
+      setElementText('#submitPasswordBtn', 'submitPasswordBtn');
+      setElementText('#task3Hint summary', 'hintSummary3');
+      setElementText('#task3HintContent', 'task3HintContent', true);
+      setElementText('#task3SolutionBlock', 'solutionBlock', true);
+      setElementText('#footerText', 'footerText', true);
+
+      document.getElementById('task3Password').placeholder = currentLang === 'en' ? 'Enter password' : 'Passwort eingeben';
+      document.getElementById('task3Textarea').placeholder = currentLang === 'en' ? 'Write your reasoning here...' : 'Schreibe deine Begründung hier...';
+      const len = task3Textarea.value.length;
+      document.getElementById('task3CharCount').textContent = `${len} / 1000 ${currentLang === 'en' ? 'Characters' : 'Zeichen'}`;
+
+      // Update active language in datasets
+      datasets.acids.forEach(item => { item.note = currentLang === 'en' ? item.noteEn : item.noteDe; });
+      datasets.bases.forEach(item => { item.note = currentLang === 'en' ? item.noteEn : item.noteDe; });
+      sortSetsNew.acids.forEach(set => { set.hint = currentLang === 'en' ? set.hintEn : set.hintDe; });
+      sortSetsNew.bases.forEach(set => { set.hint = currentLang === 'en' ? set.hintEn : set.hintDe; });
+
+      renderCard();
+      renderSort(currentSortMode);
+    }
+
+    if (langToggle) {
+      langToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'de' ? 'en' : 'de';
+        updateLanguage();
+        safeSetItem('hsab-lang', currentLang);
+      });
+
+      const savedLang = safeGetItem('hsab-lang');
+      if (savedLang) {
+        currentLang = savedLang;
+        updateLanguage();
+      }
+    }
+
+    // Patch existing functions for translations
+    const origRenderCard = renderCard;
+    renderCard = function () {
+      origRenderCard();
+      const t = tracking[currentMode];
+      if (t.order.length === 0) {
+        counterEl.textContent = currentLang === 'en' ? 'Done!' : 'Geschafft!';
+        feedbackBox.textContent = currentLang === 'en' ? 'All cards mastered! You can shuffle to practice again.' : 'Alle Karten gemeistert! Du kannst neu mischen, um nochmal zu üben.';
+      } else {
+        const totalCards = datasets[currentMode].length;
+        const currentCardNum = (totalCards - t.order.length) + t.index + 1;
+        counterEl.textContent = currentLang === 'en' ? `Card ${currentCardNum} of ${totalCards}` : `Karte ${currentCardNum} von ${totalCards}`;
+        if (!t.answered) {
+          feedbackBox.innerHTML = currentLang === 'en' ? 'Choose an answer, then brief feedback will appear immediately.' : 'Wähle eine Antwort, dann erscheint direkt eine kurze Rückmeldung.';
+        } else {
+          if (t.correctLast) {
+            feedbackBox.innerHTML = currentLang === 'en' ? 'Correct!' : 'Richtig!';
+          } else {
+            feedbackBox.innerHTML = currentLang === 'en' ? `Unfortunately wrong. Compare the info from the hint with the <a href="javascript:void(0)" onclick="document.getElementById('merkhilfeBlock').scrollIntoView({ behavior: 'smooth' })" style="color: inherit; text-decoration: underline; font-weight: 600;">General Information about the HSAB concept</a>.` : `Leider falsch. Vergleiche noch einmal Infos aus dem Tipp mit den <a href="javascript:void(0)" onclick="document.getElementById('merkhilfeBlock').scrollIntoView({ behavior: 'smooth' })" style="color: inherit; text-decoration: underline; font-weight: 600;">Allgemeinen Informationen zum HSAB-Konzept</a>.`;
+          }
+        }
+      }
+    };
+
+    const origRenderSort = renderSort;
+    renderSort = function (mode) {
+      origRenderSort(mode);
+      const taskIndex = sortTaskIndices[mode];
+      const taskData = sortSetsNew[mode][taskIndex];
+      document.getElementById('sortCounter').textContent = (currentLang === 'en' ? 'Subtask ' : 'Teilaufgabe ') + taskData.id + ')';
+
+      [...sortArea.children].forEach((el, idx) => {
+        const badge = el.querySelector('.sort-rank');
+        if (badge) badge.textContent = 'Position ' + (idx + 1);
+      });
+
+      if (sortFeedback.textContent) {
+        checkSort();
+      }
+    };
+
+    const origCheckSort = checkSort;
+    checkSort = function () {
+      origCheckSort();
+      if (sortFeedback.textContent) {
+        const ok = [...sortArea.children].every((el, idx) => Number(el.dataset.rank) === idx + 1);
+        sortFeedback.textContent = ok
+          ? (currentLang === 'en' ? 'All correct!' : 'Alles richtig!')
+          : (currentLang === 'en' ? 'Not quite yet, think again about which criteria could help you best here.' : 'Noch nicht ganz, überlege dir nochmal, welche Kriterien dir hier am besten weiterhelfen könnten.');
+      }
+    };
+
+    const origVerifyPassword = verifyPassword;
+    verifyPassword = async function () {
+      await origVerifyPassword();
+      if (passwordError.style.display === 'block') {
+        passwordError.textContent = currentLang === 'en' ? 'Incorrect password! Please ask your teacher.' : 'Falsches Passwort! Bitte frage deine Lehrkraft.';
+      }
+    };
+
+    const origClearIncorrectColors = clearIncorrectColors;
+    clearIncorrectColors = function () {
+      [...sortArea.children].forEach(el => el.classList.remove('incorrect'));
+      if (sortFeedback.textContent.includes('überlege dir nochmal') || sortFeedback.textContent.includes('think again')) {
+        sortFeedback.textContent = '';
+      }
+    };
+
+    document.getElementById('checkSort').removeEventListener('click', origCheckSort);
+    document.getElementById('checkSort').addEventListener('click', checkSort);
+
+    submitPasswordBtn.removeEventListener('click', origVerifyPassword);
+    submitPasswordBtn.addEventListener('click', verifyPassword);
+
+    // Initialize Theme and Language on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      // Language init
+      const savedLang = safeGetItem('hsab-lang');
+      if (savedLang) {
+        currentLang = savedLang;
+      }
+      updateLanguage();
+
+      // Theme init
+      const savedTheme = safeGetItem('hsab-theme');
+      if (savedTheme) {
+        applyTheme(savedTheme);
+      } else {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(prefersDark ? 'dark' : 'light');
+      }
+    });
+
+  </script>
+  <img src="../../Medien/logos/4f4f Logo.png" alt="CRC 1573 – 4f for Future" class="crc-logo-fixed">
+</body>
+
+</html>
