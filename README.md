@@ -1,73 +1,73 @@
-# Unterrichtseinheit: 4f for Future
+# Teaching Unit: 4f for Future
 
-Interaktive HTML-Lernmaterialien für eine Unterrichtseinheit zur **Komplexbildung, Farbigkeit und den Anwendungen von Lanthanoiden**. Das Projekt wurde im Rahmen der Masterarbeit von Aleksandar Lubinić erstellt.
+Interactive HTML learning materials for a teaching unit on **complex formation, colouration, and applications of lanthanoids**. This project was created as part of Aleksandar Lubinić's master's thesis.
 
-## Inhalte
+## Contents
 
-Das Repository enthält eine browserbasierte Lernumgebung ohne Build-Prozess und ohne externe JavaScript-Abhängigkeiten:
+The repository contains a browser-based learning environment with no build process and no external JavaScript dependencies:
 
-- **HSAB-Konzept** – Übungen zur Einordnung harter und weicher Säuren und Basen
-- **Farbigkeit** – interaktive Materialien zur Farbigkeit von Komplexverbindungen und Lichtabsorption
-- **Anwendungen** – Lerninhalte zu Alltags- und Industrieanwendungen der Lanthanoide
-- **Design-System und Assets** – wiederverwendbare Gestaltungskomponenten, Farbschemata und UI-Beispiele
-- **Thesis Data** – ergänzende Daten und Dokumente zur Masterarbeit
+- **HSAB Concept** – exercises for classifying hard and soft acids and bases
+- **Colouration** – interactive materials about the colouration of complex compounds and light absorption
+- **Applications** – learning content about everyday and industrial applications of lanthanoids
+- **Design System and Assets** – reusable design components, colour schemes, and UI examples
+- **Thesis Data** – supplementary data and documents related to the master's thesis
 
-Die Lernmaterialien unterstützen unter anderem:
+The learning materials include:
 
-- interaktive Multiple-Choice- und Sortieraufgaben
-- direkte Rückmeldungen und Fortschrittsanzeigen
-- Hell-/Dunkelmodus
-- Deutsch-/Englisch-Umschaltung in der erweiterten Version
-- zugängliche Bedienelemente und responsive Darstellung für mobile Geräte
+- Interactive multiple-choice and sorting exercises
+- Immediate feedback and progress indicators
+- Light and dark themes
+- German/English language switching in the extended version
+- Accessible controls and responsive layouts for mobile devices
 
-## Schnellstart
+## Quick Start
 
-Da das Projekt aus statischen HTML-Dateien besteht, kann es direkt im Browser geöffnet werden.
+Because the project consists of static HTML files, it can be opened directly in a web browser.
 
-### Variante 1: Direkt öffnen
+### Option 1: Open directly
 
-Öffne `index.html` in einem modernen Webbrowser und wähle dort das gewünschte Lernmodul aus.
+Open `index.html` in a modern web browser and select the learning module you want to use.
 
-### Variante 2: Lokaler Webserver
+### Option 2: Run a local web server
 
-Ein lokaler Webserver ist besonders empfehlenswert, damit relative Pfade und Browserfunktionen zuverlässig funktionieren.
+A local web server is recommended so that relative paths and browser features work reliably.
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Rufe anschließend <http://localhost:8000> im Browser auf.
+Then open <http://localhost:8000> in your browser.
 
-## Projektstruktur
+## Project Structure
 
 ```text
 .
-├── index.html                         # Startseite / Lernmodule-Dashboard
-├── HSAB Trainingseinheit 1.html       # HSAB-Übungseinheit
-├── assets.html                        # Design-System und UI-Referenz
-├── Thesis Data/                       # Daten und ergänzende Arbeitsmaterialien
-├── docs                               # Dokumentations-/Deployment-Datei
-├── LICENSE                            # Lizenzinformationen
+├── index.html                         # Landing page / learning-module dashboard
+├── HSAB Trainingseinheit 1.html       # HSAB training unit
+├── assets.html                        # Design system and UI reference
+├── Thesis Data/                       # Data and supplementary materials
+├── docs                               # Documentation/deployment file
+├── LICENSE                            # License information
 └── README.md
 ```
 
-Ein Teil der Lernmodule liegt innerhalb der jeweiligen Modul- beziehungsweise Dokumentationsstruktur. Verwende die Links auf der Startseite, um die verfügbaren Inhalte zu öffnen.
+Some learning modules are located within their respective module or documentation directories. Use the links on the landing page to open the available content.
 
-## Technologie
+## Technologies
 
 - HTML5
-- CSS3 mit responsivem Layout
+- CSS3 with responsive layouts
 - Vanilla JavaScript
-- Keine Installation von Paketen oder Build-Schritte erforderlich
+- No package installation or build step required
 
-## Anpassungen und Weiterentwicklung
+## Customisation and Development
 
-Die Lernmodule sind als eigenständige HTML-Dateien aufgebaut. Inhalte, Aufgaben und Fragen können direkt in den jeweiligen Dateien angepasst werden. Bei größeren Änderungen empfiehlt es sich, wiederverwendbare Styles und Komponenten im Design-System beziehungsweise in `assets.html` zu dokumentieren.
+The learning modules are implemented as standalone HTML files. Content, exercises, and questions can be edited directly in the relevant files. For larger changes, reusable styles and components should be documented in the design system and in `assets.html`.
 
-## Lizenz
+## License
 
-Siehe [`LICENSE`](LICENSE) für die geltenden Lizenzbedingungen.
+See [`LICENSE`](LICENSE) for the applicable license terms.
 
-## Hinweis zur Nutzung
+## Usage Note
 
-Die Materialien dienen als interaktive Lern- und Unterrichtsunterstützung. Fachliche Inhalte sollten vor dem Einsatz im Unterricht auf die jeweilige Zielgruppe und den verwendeten Lehrplan abgestimmt werden.
+These materials are intended as interactive learning and teaching support. Before classroom use, review the subject content and adapt it to the target audience and relevant curriculum.
