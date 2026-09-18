@@ -2,6 +2,14 @@
 
 Interactive HTML learning materials for a teaching unit on **complex formation, colouration, and applications of lanthanoids**. This project was created as part of Aleksandar Lubinić's master's thesis.
 
+## Website
+
+Explore the live interactive learning platform online:
+
+**[Open the Lanthanoid Teaching Unit](https://aleksl-creator.github.io/Lanthanoid-teaching-unit/)**
+
+The website provides browser-based learning modules, interactive exercises, feedback, progress tracking, and German/English language support.
+
 ## Contents
 
 The repository contains a browser-based learning environment with no build process and no external JavaScript dependencies:
@@ -62,7 +70,7 @@ Some learning modules are located within their respective module or documentatio
 
 ## Customisation and Development
 
-The learning modules are implemented as standalone HTML files. Content, exercises, and questions can be edited directly in the relevant files. For larger changes, reusable styles and components should be documented in the design system and in `assets.html`.
+The learning modules are implemented as standalone HTML files. Content, exercises, and questions can be edited directly in the relevant files. For larger changes, reusable styles and components should be kept consistent across the modules.
 
 ## License
 
